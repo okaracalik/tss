@@ -8,6 +8,12 @@
       >
     <h:head>
         <title>${msg.APPLICATION_NAME}</title>
+        <f:view locale="#{appMBean.currentLocale}"/>
+        <style>
+            select[class*="span"] {
+                margin-bottom: 0;
+            }
+        </style>
     </h:head>
     <h:body>
         <b:container>

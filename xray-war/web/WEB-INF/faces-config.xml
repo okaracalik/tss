@@ -9,7 +9,6 @@
         <locale-config>
             <default-locale>en</default-locale>
             <supported-locale>de</supported-locale>
-            <supported-locale>en</supported-locale>
         </locale-config>
         <resource-bundle>
             <base-name>jee18.i18n.Messages</base-name>
@@ -64,9 +63,4 @@
             <to-view-id>/timesheet-entry/timesheet-entry-form.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-    <managed-bean>
-        <managed-bean-name>appMBean</managed-bean-name>
-        <managed-bean-class>jee18.web.AppMBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
 </faces-config>

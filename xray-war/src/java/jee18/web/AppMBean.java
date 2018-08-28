@@ -5,43 +5,56 @@
  */
 package jee18.web;
 
+import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.Locale;
-import javax.annotation.PostConstruct;
+import java.util.Map;
+import java.util.Map.Entry;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.inject.Named;
 
 /**
  *
  * @author okaracalik
  */
-public class AppMBean {
+@Named
+@SessionScoped
+public class AppMBean implements Serializable {
 
-    private Locale locale;
-    
-    public AppMBean() {
-    }
-    
-    @PostConstruct
-    public void init() {
-        locale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
-    }
-    
-    public Locale getLocale() {
-        return locale;
-    }
+    private static final long serialVersionUID = 1523479642013931903L;
 
-    public String getLanguage() {
-        return locale.getLanguage();
+    private String currentLocale = Locale.ENGLISH.toString();
+
+    private static Map<String, Locale> availableLocales;
+
+    static {
+        availableLocales = new LinkedHashMap<String, Locale>();
+        availableLocales.put("English", Locale.ENGLISH);
+        availableLocales.put("Deutsch", Locale.GERMAN);
     }
 
-    public void setLanguage(String language) {
-        System.out.println("setLanguage");
-        locale = new Locale(language);
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(locale);
+    public void setCurrentLocale(String newLocale) {
+        this.currentLocale = newLocale;
+
+        for (Entry<String, Locale> entry : availableLocales.entrySet()) {
+            if (entry.getValue().toString().equals(newLocale)) {
+                FacesContext.getCurrentInstance().getViewRoot().setLocale(entry.getValue());
+            }
+        }
     }
-    
+
+    public Map<String, Locale> getAvailableLocales() {
+        return availableLocales;
+    }
+
+    public String getCurrentLocale() {
+        return currentLocale;
+    }
+
     public void clickSignOut() {
         System.out.println("clickSignOut");
     }
-    
-    
+
 }

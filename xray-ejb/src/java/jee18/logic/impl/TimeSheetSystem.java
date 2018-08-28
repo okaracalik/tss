@@ -34,7 +34,7 @@ public class TimeSheetSystem implements TimesheetSystemLocal {
         pe.setFirstName(p.getFirstName());
         pe.setLastName(p.getLastName());
         pe.setEmailAddress(p.getEmailAddress());
-        pe.setDateOfBirth(p.getDateOfBirth());
+        // pe.setDateOfBirth(p.getDateOfBirth());
         return createPersonTO(pa.addPerson(pe));
     }
 
