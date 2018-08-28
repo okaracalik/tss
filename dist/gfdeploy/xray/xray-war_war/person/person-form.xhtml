@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition 
+    template="/WEB-INF/templates/page-template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:b="http://bootsfaces.net/ui"
+    >
+
+    <ui:define name="content">
+        <h2>${msg.PERSON_FORM_TITLE}</h2>
+        <b:form>
+            <b:inputText type="text" label="${msg.PERSON_FIRST_NAME}" value="#{personMBean.person.firstName}" />
+            <b:inputText type="text" label="${msg.PERSON_LAST_NAME}" value="#{personMBean.person.lastName}" />
+            <b:inputText type="email" label="${msg.PERSON_EMAIL_ADDRESS}" value="#{personMBean.person.emailAddress}" />
+            
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{personMBean.createPerson()}"/>
+        </b:form>
+    </ui:define>
+
+</ui:composition>
+

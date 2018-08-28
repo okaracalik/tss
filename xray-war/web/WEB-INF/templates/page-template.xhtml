@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition 
+    template="/WEB-INF/templates/base-template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:b="http://bootsfaces.net/ui"
+    >
+    <ui:define name="navigation">
+        <b:navBar brand="TSS" brandHref="#" fluid="true">
+            <b:navbarLinks>
+                <b:dropMenu value="${msg.PERSON_LIST_TITLE}" iconAwesome="fa-user">
+                    <b:navLink value="${msg.PERSON_LIST_TITLE}" outcome="person-list"></b:navLink>
+                    <b:navLink value="${msg.PERSON_FORM_TITLE}" outcome="person-form"></b:navLink>
+                </b:dropMenu>
+                <b:dropMenu value="${msg.CONTRACT_LIST_TITLE}" iconAwesome="fa-book">
+                    <b:navLink value="${msg.CONTRACT_LIST_TITLE}" outcome="contract-list"></b:navLink>
+                    <b:navLink value="${msg.CONTRACT_FORM_TITLE}" outcome="contract-form"></b:navLink>
+                </b:dropMenu>
+                <b:dropMenu value="${msg.TIMESHEET_LIST_TITLE}" iconAwesome="fa-file-text-o">
+                    <b:navLink value="${msg.TIMESHEET_LIST_TITLE}" outcome="timesheet-list"></b:navLink>
+                    <b:navLink value="${msg.TIMESHEET_FORM_TITLE}" outcome="timesheet-form"></b:navLink>
+                </b:dropMenu>
+                <b:dropMenu value="${msg.TIMESHEET_ENTRY_LIST_TITLE}" iconAwesome="fa-tasks">
+                    <b:navLink value="${msg.TIMESHEET_ENTRY_LIST_TITLE}" outcome="timesheet-entry-list"></b:navLink>
+                    <b:navLink value="${msg.TIMESHEET_ENTRY_FORM_TITLE}" outcome="timesheet-entry-form"></b:navLink>
+                </b:dropMenu>
+            </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:dropMenu value="#{appMBean.language}" iconAwesome="language">
+                    <b:navLink value="en" onclick="#{appMBean.setLanguage('en')}" />
+                    <b:navLink value="de" onclick="#{appMBean.setLanguage('de')}" />
+                </b:dropMenu>
+                <b:navLink value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" outcome="sign-in" onclick="#{appMBean.clickSignOut()}"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+    </ui:define>
+</ui:composition>
+
