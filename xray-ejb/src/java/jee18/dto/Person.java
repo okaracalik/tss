@@ -6,7 +6,7 @@
 package jee18.dto;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  *
@@ -18,7 +18,7 @@ public class Person implements Serializable {
 
     private String firstName;
     private String lastName;
-    private LocalDate dateOfBirth;
+    private Date dateOfBirth;
     private String emailAddress;
 
     public String getFirstName() {
@@ -37,11 +37,11 @@ public class Person implements Serializable {
         this.lastName = lastName;
     }
 
-    public LocalDate getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

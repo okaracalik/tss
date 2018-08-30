@@ -5,6 +5,7 @@
  */
 package jee18.dao;
 
+import java.util.List;
 import javax.ejb.LocalBean;
 import jee18.entities.PersonEntity;
 import javax.ejb.Stateless;
@@ -24,6 +25,10 @@ public class PersonAccess extends AbstractAccess implements IAccess {
     public PersonEntity addPerson(PersonEntity person) {
         em.persist(person);
         return person;
+    }
+
+    public List<PersonEntity> getPersonList() {
+        return em.createNamedQuery("PersonEntity.getPersonList", PersonEntity.class).getResultList();
     }
 
 }

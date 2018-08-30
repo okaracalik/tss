@@ -14,7 +14,7 @@
             <b:inputText type="text" label="${msg.PERSON_FIRST_NAME}" value="#{personMBean.person.firstName}" />
             <b:inputText type="text" label="${msg.PERSON_LAST_NAME}" value="#{personMBean.person.lastName}" />
             <b:inputText type="email" label="${msg.PERSON_EMAIL_ADDRESS}" value="#{personMBean.person.emailAddress}" />
-            
+            <b:datepicker label="${msg.PERSON_DATE_OF_BIRTH}" mode="icon-popup" value="#{personMBean.person.dateOfBirth}" />
             <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{personMBean.createPerson()}"/>
         </b:form>
     </ui:define>

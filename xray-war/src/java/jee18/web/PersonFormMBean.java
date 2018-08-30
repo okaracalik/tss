@@ -19,7 +19,7 @@ import jee18.logic.TimesheetSystemLocal;
  */
 @ViewScoped
 @Named
-public class PersonMBean implements Serializable {
+public class PersonFormMBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,7 +28,7 @@ public class PersonMBean implements Serializable {
 
     private Person person;
 
-    public PersonMBean() {
+    public PersonFormMBean() {
 
     }
 

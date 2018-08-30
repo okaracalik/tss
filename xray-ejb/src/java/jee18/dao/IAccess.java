@@ -14,5 +14,5 @@ import jee18.entities.PersonEntity;
  */
 @Local
 public interface IAccess {
-    public PersonEntity addPerson(PersonEntity person);
+    
 }

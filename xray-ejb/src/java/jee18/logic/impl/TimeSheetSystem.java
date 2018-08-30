@@ -5,7 +5,10 @@
  */
 package jee18.logic.impl;
 
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import jee18.dao.PersonAccess;
@@ -25,25 +28,29 @@ public class TimeSheetSystem implements TimesheetSystemLocal {
 
     @Override
     public List<Person> getPersonList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return pa.getPersonList().stream().map(x -> convertToObject(x)).collect(Collectors.toList());
     }
 
     @Override
     public Person createPerson(Person p) {
+        return convertToObject(pa.addPerson(convertToEntity(p)));
+    }
+
+    private PersonEntity convertToEntity(Person p) {
         PersonEntity pe = PersonEntity.newInstance();
         pe.setFirstName(p.getFirstName());
         pe.setLastName(p.getLastName());
         pe.setEmailAddress(p.getEmailAddress());
-        // pe.setDateOfBirth(p.getDateOfBirth());
-        return createPersonTO(pa.addPerson(pe));
+        pe.setDateOfBirth(p.getDateOfBirth().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        return pe;
     }
 
-    private Person createPersonTO(PersonEntity pe) {
+    private Person convertToObject(PersonEntity pe) {
         Person to = new Person();
         to.setFirstName(pe.getFirstName());
         to.setLastName(pe.getLastName());
         to.setEmailAddress(pe.getEmailAddress());
-        to.setDateOfBirth(pe.getDateOfBirth());
+        to.setDateOfBirth(java.sql.Date.valueOf(pe.getDateOfBirth()));
         return to;
     }
 }

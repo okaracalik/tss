@@ -17,9 +17,9 @@
     </application>
     <managed-bean>
         <managed-bean-name>personMBean</managed-bean-name>
-        <managed-bean-class>jee18.web.PersonMBean</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
+        <managed-bean-class>jee18.web.PersonFormMBean</managed-bean-class>
+    
+        <managed-bean-scope>view</managed-bean-scope></managed-bean>
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>

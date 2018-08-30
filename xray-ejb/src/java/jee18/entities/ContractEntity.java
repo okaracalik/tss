@@ -7,12 +7,14 @@ package jee18.entities;
 
 import java.time.LocalDate;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  *
  * @author okaracalik
  */
 @Entity
+@Table(name = "contracts")
 public class ContractEntity extends AbstractEntity {
 
     private static final long serialVersionUID = 8164978510161170907L;

@@ -7,12 +7,22 @@ package jee18.entities;
 
 import java.time.LocalDate;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  *
  * @author okaracalik
  */
 @Entity
+@Table(name = "persons")
+@NamedQueries({
+    @NamedQuery(
+            name = "PersonEntity.getPersonList",
+            query = "SELECT p FROM PersonEntity p"
+    )
+})
 public class PersonEntity extends AbstractEntity {
 
     private static final long serialVersionUID = 8164978510161170908L;
@@ -21,7 +31,7 @@ public class PersonEntity extends AbstractEntity {
     private String lastName;
     private LocalDate dateOfBirth;
     private String emailAddress;
-    
+
     public PersonEntity() {
         this(false);
     }
