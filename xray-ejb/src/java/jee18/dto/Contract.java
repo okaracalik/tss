@@ -3,53 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jee18.entities;
+package jee18.dto;
 
-import java.time.LocalDate;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
  * @author okaracalik
  */
-@Entity
-@Table(name = "contracts")
-@NamedQueries({
-    @NamedQuery(
-            name = "ContractEntity.getContractList",
-            query = "SELECT c FROM ContractEntity c"
-    )
-})
-public class ContractEntity extends AbstractEntity {
+public class Contract implements Serializable {
 
-    private static final long serialVersionUID = 8164978510161170907L;
-    // TODO: contract status
-    // TODO: timesheet frequency
+    private static final long serialVersionUID = 3419675164523830832L;
+
     private String name;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private LocalDate terminationDate;
+    private Date startDate;
+    private Date endDate;
+    private Date terminationDate; // onUpdate
     private Double hoursPerWeek;
-    private Double vacationHours;
-    private Double hoursDue;
-    private Integer workingDaysPerWeek;
-    private Integer vacationDaysPerYear;
-    
-    public ContractEntity() {
-        this(false);
-    }
+    private Double vacationHours; // auto
+    private Double hoursDue; // auto
+    private Integer workingDaysPerWeek = 5; // default
+    private Integer vacationDaysPerYear = 20; // default
 
-    ContractEntity(boolean isNew) {
-        super(isNew);
-    }
-
-    public static ContractEntity newInstance() {
-        return new ContractEntity(true);
-    }
-    
     public String getName() {
         return name;
     }
@@ -58,27 +34,27 @@ public class ContractEntity extends AbstractEntity {
         this.name = name;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
-    public LocalDate getTerminationDate() {
+    public Date getTerminationDate() {
         return terminationDate;
     }
 
-    public void setTerminationDate(LocalDate terminationDate) {
+    public void setTerminationDate(Date terminationDate) {
         this.terminationDate = terminationDate;
     }
 
@@ -121,5 +97,10 @@ public class ContractEntity extends AbstractEntity {
     public void setVacationDaysPerYear(Integer vacationDaysPerYear) {
         this.vacationDaysPerYear = vacationDaysPerYear;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Contract{" + "name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + '}';
+    }
+
 }

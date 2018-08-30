@@ -5,6 +5,7 @@
  */
 package jee18.dao;
 
+import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import jee18.entities.ContractEntity;
@@ -24,6 +25,10 @@ public class ContractAccess extends AbstractAccess {
     public ContractEntity addContract(ContractEntity contract) {
         em.persist(contract);
         return contract;
+    }
+    
+    public List<ContractEntity> getContractList() {
+        return em.createNamedQuery("ContractEntity.getContractList", ContractEntity.class).getResultList();
     }
 
 }

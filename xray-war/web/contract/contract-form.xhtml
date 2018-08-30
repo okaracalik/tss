@@ -11,11 +11,13 @@
     <ui:define name="content">
         <h2>${msg.CONTRACT_FORM_TITLE}</h2>
         <b:form>
-            <b:inputText label="${msg.CONTRACT_NAME}" />
-            <b:datepicker label="${msg.CONTRACT_START_DATE}" />
-            <b:datepicker label="${msg.CONTRACT_END_DATE}" />
-            <b:inputText label="${msg.CONTRACT_HOURS_PER_WEEK}" />
-            <b:button look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}"/>
+            <b:inputText label="${msg.CONTRACT_NAME}" value="#{contractFormMBean.contract.name}" />
+            <b:datepicker label="${msg.CONTRACT_START_DATE}" mode="icon-popup" value="#{contractFormMBean.contract.startDate}" />
+            <b:datepicker label="${msg.CONTRACT_END_DATE}" mode="icon-popup" value="#{contractFormMBean.contract.endDate}" />
+            <b:inputText type="number" label="${msg.CONTRACT_HOURS_PER_WEEK}" value="#{contractFormMBean.contract.hoursPerWeek}"/>
+            <b:inputText type="number" label="${msg.CONTRACT_WORKING_DAYS_PER_WEEK}" value="#{contractFormMBean.contract.workingDaysPerWeek}"/>
+            <b:inputText type="number" label="${msg.CONTRACT_VACATION_DAYS_PER_YEAR}" value="#{contractFormMBean.contract.vacationDaysPerYear}"/>
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{contractFormMBean.createContract()}"/>
         </b:form>
     </ui:define>
 
