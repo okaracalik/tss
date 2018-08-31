@@ -5,6 +5,7 @@
  */
 package jee18.dao;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import jee18.entities.TimesheetEntity;
@@ -24,6 +25,10 @@ public class TimesheetAccess extends AbstractAccess {
     public TimesheetEntity addTimesheet(TimesheetEntity timesheet) {
         em.persist(timesheet);
         return timesheet;
+    }
+    
+    public List<TimesheetEntity> getTimesheetList() {
+        return em.createNamedQuery("TimesheetEntity.getTimesheetList", TimesheetEntity.class).getResultList();
     }
 
 }

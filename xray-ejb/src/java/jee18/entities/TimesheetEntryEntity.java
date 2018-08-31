@@ -6,8 +6,14 @@
 package jee18.entities;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import jee18.entities.enums.ReportType;
 
 /**
  *
@@ -15,14 +21,22 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "timesheet_entries")
+@NamedQueries({
+    @NamedQuery(
+            name = "TimesheetEntryEntity.getTimesheetEntryList",
+            query = "SELECT p FROM TimesheetEntryEntity p"
+    )
+})
 public class TimesheetEntryEntity extends AbstractEntity {
-    
+
     private static final long serialVersionUID = 8164978510161170905L;
-    // TODO: report type
+
+    @Enumerated(EnumType.STRING)
+    private ReportType type;
     private String description;
     private Double hours;
-    private LocalDate startTime;
-    private LocalDate endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private LocalDate entryDate;
 
     public TimesheetEntryEntity() {
@@ -36,7 +50,15 @@ public class TimesheetEntryEntity extends AbstractEntity {
     public static TimesheetEntryEntity newInstance() {
         return new TimesheetEntryEntity(true);
     }
-    
+
+    public ReportType getType() {
+        return type;
+    }
+
+    public void setType(ReportType type) {
+        this.type = type;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -53,19 +75,19 @@ public class TimesheetEntryEntity extends AbstractEntity {
         this.hours = hours;
     }
 
-    public LocalDate getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDate startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDate getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDate endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
@@ -76,5 +98,5 @@ public class TimesheetEntryEntity extends AbstractEntity {
     public void setEntryDate(LocalDate entryDate) {
         this.entryDate = entryDate;
     }
-    
+
 }

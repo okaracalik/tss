@@ -6,7 +6,6 @@
 package jee18.dao;
 
 import javax.ejb.Local;
-import jee18.entities.PersonEntity;
 
 /**
  *

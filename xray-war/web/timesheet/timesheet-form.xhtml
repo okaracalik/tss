@@ -11,9 +11,15 @@
     <ui:define name="content">
         <h2>${msg.TIMESHEET_FORM_TITLE}</h2>
         <b:form>
-            <b:datepicker label="${msg.TIMESHEET_START_DATE}" />
-            <b:datepicker label="${msg.TIMESHEET_END_DATE}" />
-            <b:button look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}"/>
+            <b:selectOneMenu label="${msg.TIMESHEET_STATUS}" value="#{timesheetFormMBean.timesheet.status}">
+                <f:selectItem itemValue="IN_PROGRESS" itemLabel="${msg.TIMESHEET_STATUS_IN_PROGRESS}" />
+                <f:selectItem itemValue="SIGNED_BY_EMPLOYEE" itemLabel="${msg.TIMESHEET_STATUS_SIGNED_BY_EMPLOYEE}" />
+                <f:selectItem itemValue="SIGNED_BY_SUPERVISOR" itemLabel="${msg.TIMESHEET_STATUS_SIGNED_BY_SUPERVISOR}" />
+                <f:selectItem itemValue="ARCHIVED" itemLabel="${msg.TIMESHEET_STATUS_ARCHIVED}" />
+            </b:selectOneMenu>
+            <b:datepicker label="${msg.TIMESHEET_START_DATE}" value="#{timesheetFormMBean.timesheet.startDate}" />
+            <b:datepicker label="${msg.TIMESHEET_END_DATE}" value="#{timesheetFormMBean.timesheet.endDate}" />
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{timesheetFormMBean.createTimesheet()}"/>
         </b:form>
     </ui:define>
 

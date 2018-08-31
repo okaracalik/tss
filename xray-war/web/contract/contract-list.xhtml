@@ -12,9 +12,11 @@
         <h2>${msg.CONTRACT_LIST_TITLE}</h2>
         <b:dataTable value="#{contractListMBean.contractList}" var="contract">
 
+            <b:dataTableColumn label="${msg.CONTRACT_STATUS}" value="#{contract.status}" />
             <b:dataTableColumn label="${msg.CONTRACT_NAME}" value="#{contract.name}" />
             <b:dataTableColumn label="${msg.CONTRACT_START_DATE}" value="#{contract.startDate}" />
             <b:dataTableColumn label="${msg.CONTRACT_END_DATE}" value="#{contract.endDate}" />
+            <b:dataTableColumn label="${msg.CONTRACT_FREQUENCY}" value="#{contract.frequency}" />
             <b:dataTableColumn label="${msg.CONTRACT_HOURS_PER_WEEK}" value="#{contract.hoursPerWeek}" />
             <b:dataTableColumn label="${msg.CONTRACT_WORKING_DAYS_PER_WEEK}" value="#{contract.workingDaysPerWeek}" />
             <b:dataTableColumn label="${msg.CONTRACT_VACATION_DAYS_PER_YEAR}" value="#{contract.vacationDaysPerYear}" />

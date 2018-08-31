@@ -7,7 +7,12 @@ package jee18.entities;
 
 import java.time.LocalDate;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import jee18.entities.enums.TimesheetStatus;
 
 /**
  *
@@ -15,11 +20,18 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "timesheets")
+@NamedQueries({
+    @NamedQuery(
+            name = "TimesheetEntity.getTimesheetList",
+            query = "SELECT p FROM TimesheetEntity p"
+    )
+})
 public class TimesheetEntity extends AbstractEntity {
-    
+
     private static final long serialVersionUID = 8164978510161170906L;
-    
-    // TODO: timeesheet status
+
+    @Enumerated(EnumType.STRING)
+    private TimesheetStatus status;
     private LocalDate startDate;
     private LocalDate endDate;
     private Double hoursDue;
@@ -37,7 +49,15 @@ public class TimesheetEntity extends AbstractEntity {
     public static TimesheetEntity newInstance() {
         return new TimesheetEntity(true);
     }
-    
+
+    public TimesheetStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TimesheetStatus status) {
+        this.status = status;
+    }
+
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -77,7 +97,5 @@ public class TimesheetEntity extends AbstractEntity {
     public void setSignedBySupervisor(LocalDate signedBySupervisor) {
         this.signedBySupervisor = signedBySupervisor;
     }
-    
-    
-    
+
 }

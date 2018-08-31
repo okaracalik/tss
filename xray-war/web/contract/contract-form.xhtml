@@ -14,6 +14,10 @@
             <b:inputText label="${msg.CONTRACT_NAME}" value="#{contractFormMBean.contract.name}" />
             <b:datepicker label="${msg.CONTRACT_START_DATE}" mode="icon-popup" value="#{contractFormMBean.contract.startDate}" />
             <b:datepicker label="${msg.CONTRACT_END_DATE}" mode="icon-popup" value="#{contractFormMBean.contract.endDate}" />
+            <b:selectOneMenu label="${msg.CONTRACT_FREQUENCY}" value="#{contractFormMBean.contract.frequency}">
+                <f:selectItem itemValue="WEEKLY" itemLabel="${msg.CONTRACT_FREQUENCY_WEEKLY}" />
+                <f:selectItem itemValue="MONTHLY" itemLabel="${msg.CONTRACT_FREQUENCY_MONTHLY}" />
+            </b:selectOneMenu>
             <b:inputText type="number" label="${msg.CONTRACT_HOURS_PER_WEEK}" value="#{contractFormMBean.contract.hoursPerWeek}"/>
             <b:inputText type="number" label="${msg.CONTRACT_WORKING_DAYS_PER_WEEK}" value="#{contractFormMBean.contract.workingDaysPerWeek}"/>
             <b:inputText type="number" label="${msg.CONTRACT_VACATION_DAYS_PER_YEAR}" value="#{contractFormMBean.contract.vacationDaysPerYear}"/>

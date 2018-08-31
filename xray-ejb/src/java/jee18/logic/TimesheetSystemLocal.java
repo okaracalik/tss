@@ -9,6 +9,8 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import jee18.dto.Contract;
 import jee18.dto.Person;
+import jee18.dto.Timesheet;
+import jee18.dto.TimesheetEntry;
 
 /**
  *
@@ -24,5 +26,13 @@ public interface TimesheetSystemLocal {
     public List<Contract> getContractList();
     
     public Contract createContract(Contract c);
+    
+    public List<Timesheet> getTimesheetList();
+    
+    public Timesheet createTimesheet(Timesheet t);
+    
+    public List<TimesheetEntry> getTimesheetEntryList();
+    
+    public TimesheetEntry createTimesheetEntry(TimesheetEntry te);
     
 }

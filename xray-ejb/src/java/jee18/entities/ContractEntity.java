@@ -7,9 +7,13 @@ package jee18.entities;
 
 import java.time.LocalDate;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import jee18.entities.enums.ContractStatus;
+import jee18.entities.enums.TimesheetFrequency;
 
 /**
  *
@@ -26,18 +30,21 @@ import javax.persistence.Table;
 public class ContractEntity extends AbstractEntity {
 
     private static final long serialVersionUID = 8164978510161170907L;
-    // TODO: contract status
-    // TODO: timesheet frequency
+
+    @Enumerated(EnumType.STRING)
+    private ContractStatus status;
     private String name;
     private LocalDate startDate;
     private LocalDate endDate;
+    @Enumerated(EnumType.STRING)
+    private TimesheetFrequency frequency;
     private LocalDate terminationDate;
     private Double hoursPerWeek;
     private Double vacationHours;
     private Double hoursDue;
     private Integer workingDaysPerWeek;
     private Integer vacationDaysPerYear;
-    
+
     public ContractEntity() {
         this(false);
     }
@@ -49,7 +56,7 @@ public class ContractEntity extends AbstractEntity {
     public static ContractEntity newInstance() {
         return new ContractEntity(true);
     }
-    
+
     public String getName() {
         return name;
     }
@@ -121,5 +128,21 @@ public class ContractEntity extends AbstractEntity {
     public void setVacationDaysPerYear(Integer vacationDaysPerYear) {
         this.vacationDaysPerYear = vacationDaysPerYear;
     }
-    
+
+    public ContractStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ContractStatus status) {
+        this.status = status;
+    }
+
+    public TimesheetFrequency getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(TimesheetFrequency frequency) {
+        this.frequency = frequency;
+    }
+
 }

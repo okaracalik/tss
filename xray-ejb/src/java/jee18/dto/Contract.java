@@ -7,6 +7,8 @@ package jee18.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import jee18.entities.enums.ContractStatus;
+import jee18.entities.enums.TimesheetFrequency;
 
 /**
  *
@@ -16,9 +18,11 @@ public class Contract implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830832L;
 
+    private ContractStatus status = ContractStatus.PREPARED;
     private String name;
     private Date startDate;
     private Date endDate;
+    private TimesheetFrequency frequency;
     private Date terminationDate; // onUpdate
     private Double hoursPerWeek;
     private Double vacationHours; // auto
@@ -97,6 +101,24 @@ public class Contract implements Serializable {
     public void setVacationDaysPerYear(Integer vacationDaysPerYear) {
         this.vacationDaysPerYear = vacationDaysPerYear;
     }
+
+    public ContractStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ContractStatus status) {
+        this.status = status;
+    }
+
+    public TimesheetFrequency getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(TimesheetFrequency frequency) {
+        this.frequency = frequency;
+    }
+    
+    
 
     @Override
     public String toString() {
