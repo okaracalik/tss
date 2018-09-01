@@ -5,27 +5,21 @@
  */
 package jee18.logic.impl;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import jee18.dao.ContractAccess;
-import jee18.dao.PersonAccess;
 import jee18.dao.TimesheetAccess;
 import jee18.dao.TimesheetEntryAccess;
 import jee18.dto.Contract;
-import jee18.dto.Person;
 import jee18.dto.Timesheet;
 import jee18.dto.TimesheetEntry;
 import jee18.entities.ContractEntity;
-import jee18.entities.PersonEntity;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.TimesheetEntryEntity;
 import jee18.logic.TimesheetSystemLocal;
+import jee18.utils.DateTimeUtil;
 
 /**
  *
@@ -35,9 +29,6 @@ import jee18.logic.TimesheetSystemLocal;
 public class TimeSheetSystem implements TimesheetSystemLocal {
 
     @EJB
-    private PersonAccess pa;
-
-    @EJB
     private ContractAccess ca;
 
     @EJB
@@ -45,35 +36,6 @@ public class TimeSheetSystem implements TimesheetSystemLocal {
 
     @EJB
     private TimesheetEntryAccess tea;
-
-    // PERSON
-    @Override
-    public List<Person> getPersonList() {
-        return pa.getPersonList().stream().map(x -> convertToPersonObject(x)).collect(Collectors.toList());
-    }
-
-    @Override
-    public Person createPerson(Person p) {
-        return convertToPersonObject(pa.addPerson(convertToPersonEntity(p)));
-    }
-
-    private PersonEntity convertToPersonEntity(Person p) {
-        PersonEntity pe = PersonEntity.newInstance();
-        pe.setFirstName(p.getFirstName());
-        pe.setLastName(p.getLastName());
-        pe.setEmailAddress(p.getEmailAddress());
-        pe.setDateOfBirth(convertDateToLocalDate(p.getDateOfBirth()));
-        return pe;
-    }
-
-    private Person convertToPersonObject(PersonEntity pe) {
-        Person to = new Person();
-        to.setFirstName(pe.getFirstName());
-        to.setLastName(pe.getLastName());
-        to.setEmailAddress(pe.getEmailAddress());
-        to.setDateOfBirth(convertLocalDateToDate(pe.getDateOfBirth()));
-        return to;
-    }
 
     // CONTRACT
     @Override
@@ -90,12 +52,12 @@ public class TimeSheetSystem implements TimesheetSystemLocal {
         ContractEntity ce = ContractEntity.newInstance();
         ce.setStatus(c.getStatus());
         ce.setName(c.getName());
-        ce.setStartDate(convertDateToLocalDate(c.getStartDate()));
-        ce.setEndDate(convertDateToLocalDate(c.getEndDate()));
+        ce.setStartDate(DateTimeUtil.convertDateToLocalDate(c.getStartDate()));
+        ce.setEndDate(DateTimeUtil.convertDateToLocalDate(c.getEndDate()));
         ce.setFrequency(c.getFrequency());
         ce.setHoursPerWeek(c.getHoursPerWeek());
         // FIXME: contract termination date: error when null
-        // ce.setTerminationDate(convertDateToLocalDate(c.getTerminationDate()));
+        // ce.setTerminationDate(DateTimeUtil.convertDateToLocalDate(c.getTerminationDate()));
         ce.setWorkingDaysPerWeek(c.getWorkingDaysPerWeek());
         ce.setVacationDaysPerYear(c.getVacationDaysPerYear());
         ce.setVacationHours(calculateVacationHours());
@@ -107,8 +69,8 @@ public class TimeSheetSystem implements TimesheetSystemLocal {
         Contract to = new Contract();
         to.setStatus(ce.getStatus());
         to.setName(ce.getName());
-        to.setStartDate(convertLocalDateToDate(ce.getStartDate()));
-        to.setEndDate(convertLocalDateToDate(ce.getEndDate()));
+        to.setStartDate(DateTimeUtil.convertLocalDateToDate(ce.getStartDate()));
+        to.setEndDate(DateTimeUtil.convertLocalDateToDate(ce.getEndDate()));
         to.setFrequency(ce.getFrequency());
         to.setHoursPerWeek(ce.getHoursPerWeek());
         //to.setTerminationDate(convertLocalDateToDate(ce.getTerminationDate()));
@@ -143,25 +105,24 @@ public class TimeSheetSystem implements TimesheetSystemLocal {
     private TimesheetEntity convertToTimesheetEntity(Timesheet t) {
         TimesheetEntity te = TimesheetEntity.newInstance();
         te.setStatus(t.getStatus());
-        te.setStartDate(convertDateToLocalDate(t.getStartDate()));
-        te.setEndDate(convertDateToLocalDate(t.getEndDate()));
+        te.setStartDate(DateTimeUtil.convertDateToLocalDate(t.getStartDate()));
+        te.setEndDate(DateTimeUtil.convertDateToLocalDate(t.getEndDate()));
         te.setHoursDue(calculateTimesheetHoursDue());
         return te;
     }
-    
 
     private Timesheet convertToTimesheetObject(TimesheetEntity te) {
         Timesheet to = new Timesheet();
         to.setStatus(te.getStatus());
-        to.setStartDate(convertLocalDateToDate(te.getStartDate()));
-        to.setEndDate(convertLocalDateToDate(te.getEndDate()));
+        to.setStartDate(DateTimeUtil.convertLocalDateToDate(te.getStartDate()));
+        to.setEndDate(DateTimeUtil.convertLocalDateToDate(te.getEndDate()));
         to.setHoursDue(te.getHoursDue());
         // FIXME: null dates
         // to.setSignedByEmployee(te.getSignedByEmployee());
         // to.setSignedBySupervisor(te.getSignedBySupervisor());
         return to;
     }
-    
+
     // FIXME: calculateTimesheetHoursDue
     private Double calculateTimesheetHoursDue() {
         return 0.00;
@@ -183,9 +144,9 @@ public class TimeSheetSystem implements TimesheetSystemLocal {
         tee.setType(te.getType());
         tee.setDescription(te.getDescription());
         tee.setHours(te.getHours());
-        tee.setStartTime(convertDateToLocalTime(te.getStartTime()));
-        tee.setEndTime(convertDateToLocalTime(te.getEndTime()));
-        tee.setEntryDate(convertDateToLocalDate(te.getEntryDate()));
+        tee.setStartTime(DateTimeUtil.convertDateToLocalTime(te.getStartTime()));
+        tee.setEndTime(DateTimeUtil.convertDateToLocalTime(te.getEndTime()));
+        tee.setEntryDate(DateTimeUtil.convertDateToLocalDate(te.getEntryDate()));
         return tee;
     }
 
@@ -194,27 +155,10 @@ public class TimeSheetSystem implements TimesheetSystemLocal {
         te.setType(tee.getType());
         te.setDescription(tee.getDescription());
         te.setHours(tee.getHours());
-        te.setStartTime(convertLocalTimeToDate(tee.getStartTime(), tee.getEntryDate()));
-        te.setEndTime(convertLocalTimeToDate(tee.getEndTime(), tee.getEntryDate()));
-        te.setEntryDate(convertLocalDateToDate(tee.getEntryDate()));
+        te.setStartTime(DateTimeUtil.convertLocalTimeToDate(tee.getStartTime(), tee.getEntryDate()));
+        te.setEndTime(DateTimeUtil.convertLocalTimeToDate(tee.getEndTime(), tee.getEntryDate()));
+        te.setEntryDate(DateTimeUtil.convertLocalDateToDate(tee.getEntryDate()));
         return te;
-    }
-
-    // UTILS
-    private LocalDate convertDateToLocalDate(Date d) {
-        return d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-
-    private Date convertLocalDateToDate(LocalDate d) {
-        return java.sql.Date.valueOf(d);
-    }
-    
-    private LocalTime convertDateToLocalTime(Date d) {
-        return d.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
-    }
-    
-    private Date convertLocalTimeToDate(LocalTime d, LocalDate l) {
-        return Date.from(d.atDate(l).atZone(ZoneId.systemDefault()).toInstant());
     }
 
 }

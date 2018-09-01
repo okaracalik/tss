@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import jee18.dto.Person;
-import jee18.logic.TimesheetSystemLocal;
+import jee18.logic.ITimesheetSystem;
 
 /**
  *
@@ -24,7 +24,7 @@ public class PersonFormMBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private TimesheetSystemLocal timeSheetSystem;
+    private ITimesheetSystem personSystem;
 
     private Person person;
 
@@ -43,7 +43,7 @@ public class PersonFormMBean implements Serializable {
 
     public void createPerson() {
         try {
-            timeSheetSystem.createPerson(person);
+            personSystem.create(person);
             System.out.println(person);
         } catch (Exception e) {
             System.out.println(e.toString());

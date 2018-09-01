@@ -12,8 +12,8 @@
         <h2>${msg.CONTRACT_FORM_TITLE}</h2>
         <b:form>
             <b:inputText label="${msg.CONTRACT_NAME}" value="#{contractFormMBean.contract.name}" />
-            <b:datepicker label="${msg.CONTRACT_START_DATE}" mode="icon-popup" value="#{contractFormMBean.contract.startDate}" />
-            <b:datepicker label="${msg.CONTRACT_END_DATE}" mode="icon-popup" value="#{contractFormMBean.contract.endDate}" />
+            <b:dateTimePicker label="${msg.CONTRACT_START_DATE}" format="MM/YYYY" viewMode="months" value="#{contractFormMBean.contract.startDate}" />
+            <b:dateTimePicker label="${msg.CONTRACT_START_DATE}" format="MM/YYYY" viewMode="months" value="#{contractFormMBean.contract.endDate}" />
             <b:selectOneMenu label="${msg.CONTRACT_FREQUENCY}" value="#{contractFormMBean.contract.frequency}">
                 <f:selectItem itemValue="WEEKLY" itemLabel="${msg.CONTRACT_FREQUENCY_WEEKLY}" />
                 <f:selectItem itemValue="MONTHLY" itemLabel="${msg.CONTRACT_FREQUENCY_MONTHLY}" />

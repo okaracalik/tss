@@ -6,7 +6,6 @@
 package jee18.dao;
 
 import java.util.List;
-import javax.ejb.LocalBean;
 import jee18.entities.PersonEntity;
 import javax.ejb.Stateless;
 
@@ -14,9 +13,8 @@ import javax.ejb.Stateless;
  *
  * @author okaracalik
  */
-@Stateless
-@LocalBean
-public class PersonAccess extends AbstractAccess implements IAccess {
+@Stateless(name="PersonAccess")
+public class PersonAccess extends AbstractAccess implements IAccess<PersonEntity> {
 
     public PersonAccess() {
         super(PersonEntity.class);
@@ -28,6 +26,17 @@ public class PersonAccess extends AbstractAccess implements IAccess {
     }
 
     public List<PersonEntity> getPersonList() {
+        return em.createNamedQuery("PersonEntity.getPersonList", PersonEntity.class).getResultList();
+    }
+
+    @Override
+    public PersonEntity create(PersonEntity person) {
+        em.persist(person);
+        return person;
+    }
+
+    @Override
+    public List<PersonEntity> getList() {
         return em.createNamedQuery("PersonEntity.getPersonList", PersonEntity.class).getResultList();
     }
 

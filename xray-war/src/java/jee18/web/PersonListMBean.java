@@ -10,7 +10,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import jee18.dto.Person;
-import jee18.logic.TimesheetSystemLocal;
+import jee18.logic.ITimesheetSystem;
 
 /**
  *
@@ -21,7 +21,7 @@ import jee18.logic.TimesheetSystemLocal;
 public class PersonListMBean {
 
     @EJB
-    private TimesheetSystemLocal timeSheetSystem;
+    private ITimesheetSystem personSystem;
 
     private List<Person> personList;
 
@@ -30,7 +30,7 @@ public class PersonListMBean {
 
     public List<Person> getPersonList() {
         if (personList == null) {
-            personList = timeSheetSystem.getPersonList();
+            personList = personSystem.getList();
         }
         return personList;
     }

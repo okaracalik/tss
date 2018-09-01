@@ -8,7 +8,6 @@ package jee18.logic;
 import java.util.List;
 import javax.ejb.LocalBean;
 import jee18.dto.Contract;
-import jee18.dto.Person;
 import jee18.dto.Timesheet;
 import jee18.dto.TimesheetEntry;
 
@@ -18,10 +17,6 @@ import jee18.dto.TimesheetEntry;
  */
 @LocalBean
 public interface TimesheetSystemLocal {
-    
-    public List<Person> getPersonList();
-    
-    public Person createPerson(Person p);
     
     public List<Contract> getContractList();
     

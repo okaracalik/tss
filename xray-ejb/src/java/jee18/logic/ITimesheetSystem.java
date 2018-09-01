@@ -3,22 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jee18.dao;
+package jee18.logic;
 
 import java.util.List;
-import javax.ejb.Local;
-import jee18.entities.AbstractEntity;
 
 /**
  *
  * @author okaracalik
- * @param <A>
  */
-@Local
-public interface IAccess<A extends AbstractEntity> {
-
-    public A create(A a);
-
+public interface ITimesheetSystem<A> {
+    
     public List<A> getList();
-
+    
+    public A create(A a);
+    
 }
