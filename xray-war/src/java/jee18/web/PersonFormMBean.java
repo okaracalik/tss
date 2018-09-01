@@ -23,7 +23,7 @@ public class PersonFormMBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @EJB
+    @EJB(beanName = "PersonSystem")
     private ITimesheetSystem personSystem;
 
     private Person person;

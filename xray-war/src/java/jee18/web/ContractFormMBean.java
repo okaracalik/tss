@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.Contract;
-import jee18.logic.TimesheetSystemLocal;
+import jee18.logic.ITimesheetSystem;
 
 /**
  *
@@ -21,10 +21,11 @@ import jee18.logic.TimesheetSystemLocal;
 @ViewScoped
 public class ContractFormMBean implements Serializable {
 
+
     private static final long serialVersionUID = 1L;
 
-    @EJB
-    private TimesheetSystemLocal timeSheetSystem;
+    @EJB(beanName = "ContractSystem")
+    private ITimesheetSystem contractSystem;
 
     private Contract contract;
 
@@ -45,7 +46,7 @@ public class ContractFormMBean implements Serializable {
 
     public void createContract() {
         try {
-            timeSheetSystem.createContract(contract);
+            contractSystem.create(contract);
             System.out.println(contract);
         } catch (Exception e) {
             System.out.println(e.toString());

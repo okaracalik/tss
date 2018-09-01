@@ -10,7 +10,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import jee18.dto.Timesheet;
-import jee18.logic.TimesheetSystemLocal;
+import jee18.logic.ITimesheetSystem;
 
 /**
  *
@@ -20,8 +20,8 @@ import jee18.logic.TimesheetSystemLocal;
 @RequestScoped
 public class TimesheetListMBean {
 
-    @EJB
-    private TimesheetSystemLocal timeSheetSystem;
+    @EJB(beanName = "TimesheetSystem")
+    private ITimesheetSystem timesheetSystem;
 
     private List<Timesheet> timesheetList;
 
@@ -30,9 +30,9 @@ public class TimesheetListMBean {
 
     public List<Timesheet> getTimesheetList() {
         if (timesheetList == null) {
-            timesheetList = timeSheetSystem.getTimesheetList();
+            timesheetList = timesheetSystem.getList();
         }
         return timesheetList;
     }
-    
+
 }

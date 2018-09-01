@@ -15,8 +15,7 @@ import jee18.entities.TimesheetEntity;
  * @author okaracalik
  */
 @Stateless
-@LocalBean
-public class TimesheetAccess extends AbstractAccess {
+public class TimesheetAccess extends AbstractAccess implements IAccess<TimesheetEntity> {
 
     public TimesheetAccess() {
         super(TimesheetEntity.class);
@@ -28,6 +27,17 @@ public class TimesheetAccess extends AbstractAccess {
     }
     
     public List<TimesheetEntity> getTimesheetList() {
+        return em.createNamedQuery("TimesheetEntity.getTimesheetList", TimesheetEntity.class).getResultList();
+    }
+
+    @Override
+    public TimesheetEntity create(TimesheetEntity timesheet) {
+        em.persist(timesheet);
+        return timesheet;
+    }
+
+    @Override
+    public List<TimesheetEntity> getList() {
         return em.createNamedQuery("TimesheetEntity.getTimesheetList", TimesheetEntity.class).getResultList();
     }
 

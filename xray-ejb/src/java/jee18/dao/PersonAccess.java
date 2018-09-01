@@ -20,15 +20,6 @@ public class PersonAccess extends AbstractAccess implements IAccess<PersonEntity
         super(PersonEntity.class);
     }
 
-    public PersonEntity addPerson(PersonEntity person) {
-        em.persist(person);
-        return person;
-    }
-
-    public List<PersonEntity> getPersonList() {
-        return em.createNamedQuery("PersonEntity.getPersonList", PersonEntity.class).getResultList();
-    }
-
     @Override
     public PersonEntity create(PersonEntity person) {
         em.persist(person);

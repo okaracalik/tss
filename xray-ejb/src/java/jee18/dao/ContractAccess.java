@@ -6,39 +6,30 @@
 package jee18.dao;
 
 import java.util.List;
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import jee18.entities.ContractEntity;
+import jee18.entities.PersonEntity;
 
 /**
  *
  * @author okaracalik
  */
-@Stateless(name="ContractAccess")
-public class ContractAccess extends AbstractAccess{
+@Stateless(name = "ContractAccess")
+public class ContractAccess extends AbstractAccess implements IAccess<ContractEntity> {
 
     public ContractAccess() {
         super(ContractEntity.class);
     }
-    
-    public ContractEntity addContract(ContractEntity contract) {
+
+    @Override
+    public ContractEntity create(ContractEntity contract) {
         em.persist(contract);
         return contract;
     }
-    
-    public List<ContractEntity> getContractList() {
+
+    @Override
+    public List<ContractEntity> getList() {
         return em.createNamedQuery("ContractEntity.getContractList", ContractEntity.class).getResultList();
     }
-
-//    @Override
-//    public ContractEntity create(ContractEntity contract) {
-//        em.persist(contract);
-//        return contract;
-//    }
-//
-//    @Override
-//    public List<ContractEntity> getList() {
-//        return em.createNamedQuery("ContractEntity.getContractList", ContractEntity.class).getResultList();
-//    }
 
 }

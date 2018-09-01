@@ -20,7 +20,7 @@ import jee18.logic.ITimesheetSystem;
 @RequestScoped
 public class PersonListMBean {
 
-    @EJB
+    @EJB(beanName = "PersonSystem")
     private ITimesheetSystem personSystem;
 
     private List<Person> personList;

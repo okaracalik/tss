@@ -7,7 +7,8 @@ package jee18.logic;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.ejb.EJB;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import jee18.dao.IAccess;
 import jee18.entities.AbstractEntity;
 
@@ -19,9 +20,14 @@ import jee18.entities.AbstractEntity;
  */
 abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> implements ITimesheetSystem<A> {
 
-    @EJB
     private IAccess<B> accessor;
-    
+
+    public AbstractTimesheetSystem(String name) throws NamingException {
+        InitialContext ctx = new InitialContext();
+        Object fObj = ctx.lookup("java:global/xray/xray-ejb/" + name + "!jee18.dao.IAccess");
+        accessor = (IAccess<B>) fObj;
+    }
+
     @Override
     public List<A> getList() {
         return accessor.getList().stream().map(x -> convertToObject(x)).collect(Collectors.toList());

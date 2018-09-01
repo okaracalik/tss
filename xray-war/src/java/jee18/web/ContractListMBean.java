@@ -10,7 +10,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import jee18.dto.Contract;
-import jee18.logic.TimesheetSystemLocal;
+import jee18.logic.ITimesheetSystem;
 
 /**
  *
@@ -20,8 +20,8 @@ import jee18.logic.TimesheetSystemLocal;
 @RequestScoped
 public class ContractListMBean {
 
-    @EJB
-    private TimesheetSystemLocal timeSheetSystem;
+    @EJB(beanName = "ContractSystem")
+    private ITimesheetSystem contractSystem;
 
     private List<Contract> contractList;
 
@@ -30,7 +30,7 @@ public class ContractListMBean {
 
     public List<Contract> getContractList() {
         if (contractList == null) {
-            contractList = timeSheetSystem.getContractList();
+            contractList = contractSystem.getList();
         }
         return contractList;
     }

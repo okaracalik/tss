@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.Timesheet;
-import jee18.logic.TimesheetSystemLocal;
+import jee18.logic.ITimesheetSystem;
 
 /**
  *
@@ -22,31 +22,32 @@ import jee18.logic.TimesheetSystemLocal;
 public class TimesheetFormMBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    @EJB
-    private TimesheetSystemLocal timeSheetSystem;
-    
+
+    @EJB(beanName = "TimesheetSystem")
+    private ITimesheetSystem timesheetSystem;
+
     private Timesheet timesheet;
-    
+
     public TimesheetFormMBean() {
     }
-    
+
     @PostConstruct
     public void init() {
         timesheet = new Timesheet();
     }
-    
+
     public Timesheet getTimesheet() {
         return timesheet;
     }
 
     public void createTimesheet() {
         try {
-            timeSheetSystem.createTimesheet(timesheet);
+            timesheetSystem.create(timesheet);
             System.out.println(timesheet);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println(e.toString());
         }
     }
-    
+
 }

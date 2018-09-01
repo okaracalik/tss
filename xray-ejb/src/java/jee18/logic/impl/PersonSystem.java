@@ -6,6 +6,7 @@
 package jee18.logic.impl;
 
 import javax.ejb.Stateless;
+import javax.naming.NamingException;
 import jee18.dto.Person;
 import jee18.entities.PersonEntity;
 import jee18.logic.AbstractTimesheetSystem;
@@ -16,8 +17,12 @@ import jee18.utils.DateTimeUtil;
  *
  * @author okaracalik
  */
-@Stateless(name="PersonSystem")
-public class PersonSystem extends AbstractTimesheetSystem<Person, PersonEntity> implements ITimesheetSystem<Person>{
+@Stateless(name = "PersonSystem")
+public class PersonSystem extends AbstractTimesheetSystem<Person, PersonEntity> implements ITimesheetSystem<Person> {
+
+    public PersonSystem() throws NamingException {
+        super("PersonAccess");
+    }
 
     @Override
     protected PersonEntity convertToEntity(Person p) {
