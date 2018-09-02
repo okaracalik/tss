@@ -12,6 +12,11 @@
         <h2>${msg.TIMESHEET_ENTRY_LIST_TITLE}</h2>
         <b:dataTable value="#{timesheetEntryListMBean.timesheetEntryList}" var="timesheetEntry">
 
+            <b:dataTableColumn label="${msg.FORM_EDIT_TITLE}" style="width: 50px; text-align: center;">
+                <b:button look="info" iconAwesome="edit" outcome="timesheet-entry-form">
+                    <f:param name="uuid" value="#{timesheetEntry.uuid}" />
+                </b:button>
+            </b:dataTableColumn>
             <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_TYPE}" value="#{timesheetEntry.type}"/>
             <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_DESCRIPTION}" value="#{timesheetEntry.description}"/>
             <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_DATE}" value="#{timesheetEntry.entryDate}"/>

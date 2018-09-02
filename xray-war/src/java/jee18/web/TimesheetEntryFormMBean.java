@@ -25,6 +25,7 @@ public class TimesheetEntryFormMBean implements Serializable {
 
     @EJB(beanName = "TimesheetEntrySystem")
     private ITimesheetSystem timesheetEntrySystem;
+    private String uuid;
 
     private TimesheetEntry timesheetEntry;
 
@@ -33,17 +34,41 @@ public class TimesheetEntryFormMBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        timesheetEntry = new TimesheetEntry();
+        if (uuid == null) {
+            timesheetEntry = new TimesheetEntry();
+        }
+        timesheetEntry = (TimesheetEntry) timesheetEntrySystem.getByUuid(uuid);
     }
 
     public TimesheetEntry getTimesheetEntry() {
         return timesheetEntry;
     }
 
-    public void createTimesheetEntry() {
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void save() {
         try {
-            timesheetEntrySystem.create(timesheetEntry);
-            System.out.println(timesheetEntry);
+            if (uuid == null) {
+                timesheetEntrySystem.create(timesheetEntry);
+            }
+            else {
+                timesheetEntrySystem.updateByUuid(uuid, timesheetEntry);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    public void delete() {
+        try {
+            timesheetEntrySystem.deleteByUuid(uuid);
         }
         catch (Exception e) {
             System.out.println(e.toString());

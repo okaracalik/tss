@@ -8,6 +8,11 @@
     xmlns:b="http://bootsfaces.net/ui"
     >
 
+    <f:metadata>
+        <f:viewParam name="uuid" value="#{timesheetEntryFormMBean.uuid}" />
+        <f:viewAction action="#{timesheetEntryFormMBean.init()}" />
+    </f:metadata>
+
     <ui:define name="content">
         <h2>${msg.TIMESHEET_ENTRY_FORM_TITLE}</h2>
         <b:form>
@@ -20,7 +25,8 @@
             <b:datepicker label="${msg.TIMESHEET_ENTRY_DATE}" value="#{timesheetEntryFormMBean.timesheetEntry.entryDate}"/>
             <b:dateTimePicker label="${msg.TIMESHEET_ENTRY_START_TIME}" value="#{timesheetEntryFormMBean.timesheetEntry.startTime}" />
             <b:dateTimePicker label="${msg.TIMESHEET_ENTRY_END_TIME}" value="#{timesheetEntryFormMBean.timesheetEntry.endTime}" />
-            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{timesheetEntryFormMBean.createTimesheetEntry()}"/>
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{timesheetEntryFormMBean.save()}"/>
+            <b:commandButton look="danger" iconAwesome="trash" value="${msg.FORM_DELETE_TITLE}" action="#{timesheetEntryFormMBean.delete()}" rendered="${timesheetEntryFormMBean.uuid != null}" class="pull-right"/>
         </b:form>
     </ui:define>
 

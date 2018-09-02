@@ -38,6 +38,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
     @Override
     protected Timesheet convertToObject(TimesheetEntity te) {
         Timesheet to = new Timesheet();
+        to.setUuid(te.getUuid());
         to.setStatus(te.getStatus());
         to.setStartDate(DateTimeUtil.convertLocalDateToDate(te.getStartDate()));
         to.setEndDate(DateTimeUtil.convertLocalDateToDate(te.getEndDate()));

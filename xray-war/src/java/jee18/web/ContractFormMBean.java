@@ -28,27 +28,50 @@ public class ContractFormMBean implements Serializable {
     private ITimesheetSystem contractSystem;
 
     private Contract contract;
+    private String uuid;
 
-    /**
-     * Creates a new instance of ContractFormMBean
-     */
     public ContractFormMBean() {
     }
 
     @PostConstruct
     public void init() {
-        contract = new Contract();
+        if (uuid == null) {
+            contract = new Contract();
+        }
+        contract = (Contract) contractSystem.getByUuid(uuid);
     }
 
     public Contract getContract() {
         return contract;
     }
 
-    public void createContract() {
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void save() {
         try {
-            contractSystem.create(contract);
-            System.out.println(contract);
-        } catch (Exception e) {
+            if (uuid == null) {
+                contractSystem.create(contract);
+            }
+            else {
+                contractSystem.updateByUuid(uuid, contract);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    public void delete() {
+        try {
+            contractSystem.deleteByUuid(uuid);
+        }
+        catch (Exception e) {
             System.out.println(e.toString());
         }
     }

@@ -26,6 +26,21 @@ import jee18.entities.enums.TimesheetFrequency;
             name = "ContractEntity.getContractList",
             query = "SELECT c FROM ContractEntity c"
     )
+    ,
+    @NamedQuery(
+            name = "ContractEntity.getContractEntityByUUID",
+            query = "SELECT c FROM ContractEntity c WHERE c.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "ContractEntity.updateContractEntityByUUID",
+            query = "UPDATE ContractEntity e SET e.status = :status, e.name = :name, e.startDate = :startDate, e.endDate = :endDate, e.frequency = :frequency, e.terminationDate = :terminationDate, e.hoursPerWeek = :hoursPerWeek, e.vacationHours = :vacationHours, e.hoursDue = :hoursDue, e.workingDaysPerWeek = :workingDaysPerWeek, e.vacationDaysPerYear = :vacationDaysPerYear WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "ContractEntity.deleteContractEntityByUUID",
+            query = "DELETE FROM ContractEntity e WHERE e.uuid = :uuid"
+    )
 })
 public class ContractEntity extends AbstractEntity {
 
@@ -143,6 +158,11 @@ public class ContractEntity extends AbstractEntity {
 
     public void setFrequency(TimesheetFrequency frequency) {
         this.frequency = frequency;
+    }
+
+    @Override
+    public String toString() {
+        return "ContractEntity{" + "status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + '}';
     }
 
 }

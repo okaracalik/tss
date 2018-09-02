@@ -27,23 +27,48 @@ public class TimesheetFormMBean implements Serializable {
     private ITimesheetSystem timesheetSystem;
 
     private Timesheet timesheet;
+    private String uuid;
 
     public TimesheetFormMBean() {
     }
 
     @PostConstruct
     public void init() {
-        timesheet = new Timesheet();
+        if (uuid == null) {
+            timesheet = new Timesheet();
+        }
+        timesheet = (Timesheet) timesheetSystem.getByUuid(uuid);
     }
 
     public Timesheet getTimesheet() {
         return timesheet;
     }
 
-    public void createTimesheet() {
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void save() {
         try {
-            timesheetSystem.create(timesheet);
-            System.out.println(timesheet);
+            if (uuid == null) {
+                timesheetSystem.create(timesheet);
+            }
+            else {
+                timesheetSystem.updateByUuid(uuid, timesheet);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    public void delete() {
+        try {
+            timesheetSystem.deleteByUuid(uuid);
         }
         catch (Exception e) {
             System.out.println(e.toString());

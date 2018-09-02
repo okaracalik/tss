@@ -12,6 +12,11 @@
         <h2>${msg.PERSON_LIST_TITLE}</h2>
         <b:dataTable value="#{personListMBean.personList}" var="person">
 
+            <b:dataTableColumn label="${msg.FORM_EDIT_TITLE}" style="width: 50px; text-align: center;">
+                <b:button look="info" iconAwesome="edit" outcome="person-form">
+                    <f:param name="uuid" value="#{person.uuid}" />
+                </b:button>
+            </b:dataTableColumn>
             <b:dataTableColumn label="${msg.PERSON_FIRST_NAME}" value="#{person.firstName}"/>
             <b:dataTableColumn label="${msg.PERSON_LAST_NAME}" value="#{person.lastName}"/>
             <b:dataTableColumn label="${msg.PERSON_EMAIL_ADDRESS}" value="#{person.emailAddress}"/>

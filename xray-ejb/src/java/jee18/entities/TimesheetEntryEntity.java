@@ -24,7 +24,22 @@ import jee18.entities.enums.ReportType;
 @NamedQueries({
     @NamedQuery(
             name = "TimesheetEntryEntity.getTimesheetEntryList",
-            query = "SELECT p FROM TimesheetEntryEntity p"
+            query = "SELECT e FROM TimesheetEntryEntity e"
+    )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntryEntity.getTimesheetEntryEntityByUUID",
+            query = "SELECT e FROM TimesheetEntryEntity e WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntryEntity.updateTimesheetEntryEntityByUUID",
+            query = "UPDATE TimesheetEntryEntity e SET e.type = :type, e.description = :description, e.hours = :hours, e.startTime = :startTime, e.endTime = :endTime, e.entryDate = :entryDate WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntryEntity.deleteTimesheetEntryEntityByUUID",
+            query = "DELETE FROM TimesheetEntryEntity e WHERE e.uuid = :uuid"
     )
 })
 public class TimesheetEntryEntity extends AbstractEntity {

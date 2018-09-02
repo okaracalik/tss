@@ -39,6 +39,7 @@ public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry
     @Override
     protected TimesheetEntry convertToObject(TimesheetEntryEntity tee) {
         TimesheetEntry te = new TimesheetEntry();
+        te.setUuid(tee.getUuid());
         te.setType(tee.getType());
         te.setDescription(tee.getDescription());
         te.setHours(tee.getHours());

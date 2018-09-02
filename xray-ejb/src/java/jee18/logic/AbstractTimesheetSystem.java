@@ -38,6 +38,25 @@ abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> imple
         return convertToObject(accessor.create(convertToEntity(a)));
     }
 
+    @Override
+    public A getByUuid(String uuid) {
+        B entity = accessor.getByUuid(uuid);
+        if (entity == null) {
+            return null;
+        }
+        return convertToObject(entity);
+    }
+
+    @Override
+    public Integer updateByUuid(String uuid, A a) {
+        return accessor.updateByUuid(uuid, convertToEntity(a));
+    }
+
+    @Override
+    public Integer deleteByUuid(String uuid) {
+        return accessor.deleteByUuid(uuid);
+    }
+
     abstract protected B convertToEntity(A a);
 
     abstract protected A convertToObject(B b);

@@ -17,4 +17,10 @@ public interface ITimesheetSystem<A> {
     
     public A create(A a);
     
+    public A getByUuid(String uuid);
+    
+    public Integer updateByUuid(String uuid, A a);
+    
+    public Integer deleteByUuid(String uuid);
+    
 }

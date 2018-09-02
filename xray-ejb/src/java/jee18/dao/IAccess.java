@@ -20,5 +20,11 @@ public interface IAccess<A extends AbstractEntity> {
     public A create(A a);
 
     public List<A> getList();
+    
+    public A getByUuid(String uuid);
+    
+    public Integer updateByUuid(String uuid, A a);
+    
+    public Integer deleteByUuid(String uuid);
 
 }

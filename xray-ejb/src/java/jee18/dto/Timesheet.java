@@ -17,6 +17,7 @@ public class Timesheet implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830831L;
 
+    private String uuid;
     private TimesheetStatus status = TimesheetStatus.IN_PROGRESS;
     private Date startDate;
     private Date endDate;
@@ -24,6 +25,14 @@ public class Timesheet implements Serializable {
     private Date signedByEmployee;
     private Date signedBySupervisor;
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+    
     public TimesheetStatus getStatus() {
         return status;
     }

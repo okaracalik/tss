@@ -27,25 +27,50 @@ public class PersonFormMBean implements Serializable {
     private ITimesheetSystem personSystem;
 
     private Person person;
+    private String uuid;
 
     public PersonFormMBean() {
-
     }
 
     @PostConstruct
     public void init() {
-        person = new Person();
+        if (uuid == null) {
+            person = new Person();
+        }
+        person = (Person) personSystem.getByUuid(uuid);
     }
 
     public Person getPerson() {
         return person;
     }
 
-    public void createPerson() {
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void save() {
         try {
-            personSystem.create(person);
-            System.out.println(person);
-        } catch (Exception e) {
+            if (uuid == null) {
+                personSystem.create(person);
+            }
+            else {
+                personSystem.updateByUuid(uuid, person);
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    public void delete() {
+        try {
+            personSystem.deleteByUuid(uuid);
+        }
+        catch (Exception e) {
             System.out.println(e.toString());
         }
     }

@@ -37,6 +37,7 @@ public class PersonSystem extends AbstractTimesheetSystem<Person, PersonEntity> 
     @Override
     protected Person convertToObject(PersonEntity pe) {
         Person to = new Person();
+        to.setUuid(pe.getUuid());
         to.setFirstName(pe.getFirstName());
         to.setLastName(pe.getLastName());
         to.setEmailAddress(pe.getEmailAddress());

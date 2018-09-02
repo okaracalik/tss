@@ -20,7 +20,22 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(
             name = "PersonEntity.getPersonList",
-            query = "SELECT p FROM PersonEntity p"
+            query = "SELECT e FROM PersonEntity e"
+    )
+    ,
+    @NamedQuery(
+            name = "PersonEntity.getPersonEntityByUUID",
+            query = "SELECT e FROM PersonEntity e WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "PersonEntity.updatePersonEntityByUUID",
+            query = "UPDATE PersonEntity e SET e.firstName = :firstName, e.lastName = :lastName, e.dateOfBirth = :dateOfBirth, e.emailAddress = :emailAddress WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "PersonEntity.deletePersonEntityByUUID",
+            query = "DELETE FROM PersonEntity e WHERE e.uuid = :uuid"
     )
 })
 public class PersonEntity extends AbstractEntity {

@@ -7,7 +7,7 @@ package jee18.dao;
 
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
+import javax.persistence.NoResultException;
 import jee18.entities.TimesheetEntity;
 
 /**
@@ -25,7 +25,7 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
         em.persist(timesheet);
         return timesheet;
     }
-    
+
     public List<TimesheetEntity> getTimesheetList() {
         return em.createNamedQuery("TimesheetEntity.getTimesheetList", TimesheetEntity.class).getResultList();
     }
@@ -39,6 +39,37 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
     @Override
     public List<TimesheetEntity> getList() {
         return em.createNamedQuery("TimesheetEntity.getTimesheetList", TimesheetEntity.class).getResultList();
+    }
+
+    @Override
+    public TimesheetEntity getByUuid(String uuid) {
+        try {
+            return em.createNamedQuery("TimesheetEntity.getTimesheetEntityByUUID", TimesheetEntity.class)
+                    .setParameter("uuid", uuid)
+                    .getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Integer updateByUuid(String uuid, TimesheetEntity timesheet) {
+        return em.createNamedQuery("PersonEntity.updatePersonEntityByUUID", TimesheetEntity.class)
+                .setParameter("uuid", uuid)
+                .setParameter("status", timesheet.getStatus())
+                .setParameter("startDate", timesheet.getStartDate())
+                .setParameter("endDate", timesheet.getEndDate())
+                .setParameter("hoursDue", timesheet.getHoursDue())
+                .setParameter("signedByEmployee", timesheet.getSignedByEmployee())
+                .setParameter("signedBySupervisor", timesheet.getSignedBySupervisor())
+                .executeUpdate();
+    }
+
+    @Override
+    public Integer deleteByUuid(String uuid) {
+        return em.createNamedQuery("TimesheetEntity.deleteTimesheetEntityByUUID", TimesheetEntity.class)
+                .setParameter("uuid", uuid).executeUpdate();
     }
 
 }

@@ -16,10 +16,19 @@ public class Person implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830833L;
 
+    private String uuid;
     private String firstName;
     private String lastName;
     private Date dateOfBirth;
     private String emailAddress;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getFirstName() {
         return firstName;

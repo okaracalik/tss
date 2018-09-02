@@ -23,7 +23,22 @@ import jee18.entities.enums.TimesheetStatus;
 @NamedQueries({
     @NamedQuery(
             name = "TimesheetEntity.getTimesheetList",
-            query = "SELECT p FROM TimesheetEntity p"
+            query = "SELECT e FROM TimesheetEntity e"
+    )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntity.getTimesheetEntityByUUID",
+            query = "SELECT e FROM TimesheetEntity e WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntity.updateTimesheetEntityByUUID",
+            query = "UPDATE TimesheetEntity e SET e.status = :status, e.startDate = :startDate, e.endDate = :endDate, e.hoursDue = :hoursDue, e.signedByEmployee = :signedByEmployee, e.signedBySupervisor = :signedBySupervisor WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntity.deleteTimesheetEntityByUUID",
+            query = "DELETE FROM TimesheetEntity e WHERE e.uuid = :uuid"
     )
 })
 public class TimesheetEntity extends AbstractEntity {

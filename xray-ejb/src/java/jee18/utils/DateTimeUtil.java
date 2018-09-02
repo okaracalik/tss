@@ -5,7 +5,6 @@
  */
 package jee18.utils;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
@@ -45,7 +44,7 @@ public class DateTimeUtil {
 
     public static Integer calculateDurationOfContract(LocalDate start, LocalDate end) {
         Period p = Period.between(start, end);
-        return p.getYears() * 12 + p.getMonths();
+        return p.getYears() * 12 + p.getMonths() + 1;
     }
 
 }

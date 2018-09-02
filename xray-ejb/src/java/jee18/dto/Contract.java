@@ -18,6 +18,7 @@ public class Contract implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830832L;
 
+    private String uuid;
     private ContractStatus status = ContractStatus.PREPARED;
     private String name;
     private Date startDate;
@@ -30,6 +31,14 @@ public class Contract implements Serializable {
     private Integer workingDaysPerWeek = 5; // default
     private Integer vacationDaysPerYear = 20; // default
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+    
     public String getName() {
         return name;
     }
@@ -117,8 +126,6 @@ public class Contract implements Serializable {
     public void setFrequency(TimesheetFrequency frequency) {
         this.frequency = frequency;
     }
-    
-    
 
     @Override
     public String toString() {

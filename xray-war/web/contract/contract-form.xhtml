@@ -8,6 +8,11 @@
     xmlns:b="http://bootsfaces.net/ui"
     >
 
+    <f:metadata>
+        <f:viewParam name="uuid" value="#{contractFormMBean.uuid}" />
+        <f:viewAction action="#{contractFormMBean.init()}" />
+    </f:metadata>
+
     <ui:define name="content">
         <h2>${msg.CONTRACT_FORM_TITLE}</h2>
         <b:form>
@@ -21,7 +26,8 @@
             <b:inputText type="number" label="${msg.CONTRACT_HOURS_PER_WEEK}" value="#{contractFormMBean.contract.hoursPerWeek}"/>
             <b:inputText type="number" label="${msg.CONTRACT_WORKING_DAYS_PER_WEEK}" value="#{contractFormMBean.contract.workingDaysPerWeek}"/>
             <b:inputText type="number" label="${msg.CONTRACT_VACATION_DAYS_PER_YEAR}" value="#{contractFormMBean.contract.vacationDaysPerYear}"/>
-            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{contractFormMBean.createContract()}"/>
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{contractFormMBean.save()}"/>
+            <b:commandButton look="danger" iconAwesome="trash" value="${msg.FORM_DELETE_TITLE}" action="#{contractFormMBean.delete()}" rendered="${contractFormMBean.uuid != null}" class="pull-right"/>
         </b:form>
     </ui:define>
 

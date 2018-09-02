@@ -17,6 +17,7 @@ public class TimesheetEntry implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830830L;
 
+    private String uuid;
     private ReportType type;
     private String description;
     private Double hours;
@@ -24,6 +25,14 @@ public class TimesheetEntry implements Serializable {
     private Date endTime;
     private Date entryDate;
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+    
     public ReportType getType() {
         return type;
     }
