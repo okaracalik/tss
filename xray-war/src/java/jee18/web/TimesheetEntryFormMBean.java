@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.TimesheetEntry;
-import jee18.logic.ITimesheetManagementSystem;
+import jee18.logic.ICRUD;
 
 /**
  *
@@ -24,7 +24,7 @@ public class TimesheetEntryFormMBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB(beanName = "TimesheetEntrySystem")
-    private ITimesheetManagementSystem timesheetEntrySystem;
+    private ICRUD timesheetEntrySystem;
     private String uuid;
 
     private TimesheetEntry timesheetEntry;

@@ -5,7 +5,9 @@
  */
 package jee18.logic.impl;
 
+import java.util.Date;
 import java.util.List;
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
 import jee18.dto.Contract;
@@ -39,6 +41,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         ce.setEndDate(DateTimeUtil.setToLastDayOfMonth(DateTimeUtil.convertDateToLocalDate(c.getEndDate())));
         ce.setFrequency(c.getFrequency());
         ce.setHoursPerWeek(c.getHoursPerWeek());
+        ce.setTerminationDate(DateTimeUtil.convertDateToLocalDate(c.getTerminationDate()));
         ce.setWorkingDaysPerWeek(c.getWorkingDaysPerWeek());
         ce.setVacationDaysPerYear(c.getVacationDaysPerYear());
         ce.setVacationHours(calculateVacationHours(ce.getVacationDaysPerYear(), DateTimeUtil.calculateDurationOfContract(ce.getStartDate(), ce.getEndDate()), ce.getHoursPerWeek(), ce.getWorkingDaysPerWeek()));
@@ -56,7 +59,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         to.setEndDate(DateTimeUtil.convertLocalDateToDate(ce.getEndDate()));
         to.setFrequency(ce.getFrequency());
         to.setHoursPerWeek(ce.getHoursPerWeek());
-        //to.setTerminationDate(convertLocalDateToDate(ce.getTerminationDate()));
+        to.setTerminationDate(DateTimeUtil.convertLocalDateToDate(ce.getTerminationDate()));
         to.setWorkingDaysPerWeek(ce.getWorkingDaysPerWeek());
         to.setVacationDaysPerYear(ce.getVacationDaysPerYear());
         to.setVacationHours(ce.getVacationHours());
@@ -96,7 +99,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
             return super.updateByUuid(uuid, c);
         }
         else {
-            return -1;
+            throw new EJBException("Contract must be in prepared status.");
         }
     }
 
@@ -107,37 +110,45 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
             return super.deleteByUuid(uuid);
         }
         else {
-            return -1;
+            throw new EJBException("Contract must be in prepared status.");
         }
-    }
-
-    @Override
-    public Integer setStatusToPrepared(String uuid) {
-        Contract contract = super.getByUuid(uuid);
-        contract.setStatus(ContractStatus.PREPARED);
-        return super.updateByUuid(uuid, contract);
     }
 
     @Override
     public Integer setStatusToStarted(String uuid) {
         Contract contract = super.getByUuid(uuid);
-        contract.setStatus(ContractStatus.STARTED);
-        return super.updateByUuid(uuid, contract);
+        if (contract.getStatus() == ContractStatus.PREPARED) {
+            contract.setStatus(ContractStatus.STARTED);
+            return super.updateByUuid(uuid, contract);
+        }
+        else {
+            throw new EJBException("Contract must be in prepared status.");
+        }
     }
 
     @Override
     public Integer setStatusToTerminated(String uuid) {
         Contract contract = super.getByUuid(uuid);
-        contract.setStatus(ContractStatus.TERMINATED);
-        return super.updateByUuid(uuid, contract);
+        if (contract.getStatus() == ContractStatus.STARTED) {
+            contract.setTerminationDate(new Date());
+            contract.setStatus(ContractStatus.TERMINATED);
+            return super.updateByUuid(uuid, contract);
+        }
+        else {
+            throw new EJBException("Contract must be in started status.");
+        }
     }
 
     @Override
     public Integer setStatusToArchived(String uuid) {
         Contract contract = super.getByUuid(uuid);
-        contract.setStatus(ContractStatus.ARCHIVED);
-        System.out.print("setStatusToArchived: " + contract);
-        return super.updateByUuid(uuid, contract);
+        if (contract.getStatus() == ContractStatus.STARTED || contract.getStatus() == ContractStatus.TERMINATED) {
+            contract.setStatus(ContractStatus.ARCHIVED);
+            return super.updateByUuid(uuid, contract);
+        }
+        else {
+            throw new EJBException("Contract must be either started or terminated.");
+        }
     }
 
     @Override

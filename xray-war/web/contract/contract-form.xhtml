@@ -18,7 +18,7 @@
         <b:buttonToolbar rendered="${contractFormMBean.uuid != null}">
             <b:form>
                 <b:buttonGroup class="btn-block">
-                    <b:commandButton styleClass="#{(contractFormMBean.contract.status=='PREPARED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="refresh" value="${msg.CONTRACT_STATUS_PREPARED}" action="#{contractFormMBean.prepare()}" />
+                    <b:button styleClass="#{(contractFormMBean.contract.status=='PREPARED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="refresh" value="${msg.CONTRACT_STATUS_PREPARED}" disabled="true" />
                     <b:commandButton styleClass="#{(contractFormMBean.contract.status=='STARTED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="play" value="${msg.CONTRACT_STATUS_STARTED}" action="#{contractFormMBean.start()}" />
                     <b:commandButton styleClass="#{(contractFormMBean.contract.status=='TERMINATED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="stop" value="${msg.CONTRACT_STATUS_TERMINATED}" action="#{contractFormMBean.terminate()}" />
                     <b:commandButton styleClass="#{(contractFormMBean.contract.status=='ARCHIVED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="archive" value="${msg.CONTRACT_STATUS_ARCHIVED}" action="#{contractFormMBean.archive()}" />

@@ -18,7 +18,7 @@ import jee18.entities.AbstractEntity;
  * @param <A>
  * @param <B>
  */
-abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> implements ITimesheetManagementSystem<A> {
+abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> implements ICRUD<A> {
 
     private IAccess<B> accessor;
 

@@ -19,14 +19,23 @@ import java.util.Date;
 public class DateTimeUtil {
 
     public static LocalDate convertDateToLocalDate(Date d) {
-        System.out.println("jee18.utils.DateTimeUtil.convertDateToLocalDate(): " + d.toString());
-        return d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (d != null) {
+            return d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+        else {
+            return null;
+        }
     }
 
     public static Date convertLocalDateToDate(LocalDate d) {
-        return java.util.Date.from(d.atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
+        if (d != null) {
+            return java.util.Date.from(d.atStartOfDay()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
+        }
+        else {
+            return null;
+        }
     }
 
     public static LocalTime convertDateToLocalTime(Date d) {

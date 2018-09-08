@@ -28,11 +28,10 @@ public interface IContractSystem {
     // TASK: delete timesheets in progress
     public Integer delete(String uuid);
 
-    public Integer setStatusToPrepared(String uuid);
-
     // TASK: create timesheets
     public Integer setStatusToStarted(String uuid);
 
+    // TASK: set termination date
     public Integer setStatusToTerminated(String uuid);
 
     public Integer setStatusToArchived(String uuid);

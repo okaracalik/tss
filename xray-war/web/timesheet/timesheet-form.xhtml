@@ -15,8 +15,21 @@
 
     <ui:define name="content">
         <h2>${msg.TIMESHEET_FORM_TITLE}</h2>
+        <b:buttonToolbar rendered="${timesheetFormMBean.uuid != null}">
+            <b:form>
+                <b:buttonGroup class="btn-block">
+                    <b:commandButton styleClass="col-md-6" iconAwesome="pencil" value="${msg.TIMESHEET_FORM_SIGN}" action="#{timesheetFormMBean.signAsEmployee()}"/>
+                    <b:commandButton styleClass="col-md-6" iconAwesome="undo" value="${msg.TIMESHEET_FORM_REVOKE}" action="#{timesheetFormMBean.revokeEmployeeSignature()}"/>
+                </b:buttonGroup>
+                <b:buttonGroup class="btn-block">
+                    <b:commandButton styleClass="col-md-4" iconAwesome="pencil-square" value="${msg.TIMESHEET_FORM_SIGN}" action="#{timesheetFormMBean.signAsSupervisor()}"/>
+                    <b:commandButton styleClass="col-md-4" iconAwesome="backward" value="${msg.TIMESHEET_FORM_REQUEST_CHANGES}" action="#{timesheetFormMBean.requestChanges()}"/>
+                    <b:commandButton styleClass="col-md-4" iconAwesome="archive" value="${msg.TIMESHEET_FORM_ARCHIVE}" action="#{timesheetFormMBean.archive()}"/>
+                </b:buttonGroup>
+            </b:form>
+        </b:buttonToolbar>
         <b:form>
-            <b:selectOneMenu label="${msg.TIMESHEET_STATUS}" value="#{timesheetFormMBean.timesheet.status}">
+            <b:selectOneMenu label="${msg.TIMESHEET_STATUS}" value="#{timesheetFormMBean.timesheet.status}" readonly="true">
                 <f:selectItem itemValue="IN_PROGRESS" itemLabel="${msg.TIMESHEET_STATUS_IN_PROGRESS}" />
                 <f:selectItem itemValue="SIGNED_BY_EMPLOYEE" itemLabel="${msg.TIMESHEET_STATUS_SIGNED_BY_EMPLOYEE}" />
                 <f:selectItem itemValue="SIGNED_BY_SUPERVISOR" itemLabel="${msg.TIMESHEET_STATUS_SIGNED_BY_SUPERVISOR}" />

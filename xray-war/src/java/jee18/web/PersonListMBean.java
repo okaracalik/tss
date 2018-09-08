@@ -10,7 +10,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import jee18.dto.Person;
-import jee18.logic.ITimesheetManagementSystem;
+import jee18.logic.ICRUD;
 
 /**
  *
@@ -21,7 +21,7 @@ import jee18.logic.ITimesheetManagementSystem;
 public class PersonListMBean {
 
     @EJB(beanName = "PersonSystem")
-    private ITimesheetManagementSystem personSystem;
+    private ICRUD personSystem;
 
     private List<Person> personList;
 

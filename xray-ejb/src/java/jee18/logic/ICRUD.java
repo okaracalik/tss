@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author okaracalik
  */
-public interface ITimesheetManagementSystem<A> {
+public interface ICRUD<A> {
     
     public List<A> getList();
     

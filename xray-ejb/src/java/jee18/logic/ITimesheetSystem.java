@@ -27,15 +27,13 @@ public interface ITimesheetSystem {
     // RULE: if not archived
     public Integer delete(String uuid);
     
-    public Integer setStatusToInProgress(String uuid);
-
-    public Integer setStatusToSignedByEmployee(String uuid);
+    public Integer signAsEmployee(String uuid);
 
     // TASK: setStatusToInProgress
     public Integer revokeEmployeeSignature(String uuid);
     
     // RULE: if signed by employee
-    public Integer setStatusToSignedBySupervisor(String uuid);
+    public Integer signAsSupervisor(String uuid);
 
     // TASK: setStatusToInProgress
     public Integer requestChanges(String uuid);

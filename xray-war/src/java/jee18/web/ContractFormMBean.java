@@ -40,6 +40,7 @@ public class ContractFormMBean implements Serializable {
         else {
             contract = (Contract) contractSystem.get(uuid);
         }
+        System.out.print(contract);
     }
 
     public Contract getContract() {
@@ -73,17 +74,6 @@ public class ContractFormMBean implements Serializable {
     public String delete() {
         try {
             contractSystem.delete(uuid);
-            return "/contract/contract-list.xhtml?faces-redirect=true";
-        }
-        catch (Exception e) {
-            System.out.println(e.toString());
-            return "error";
-        }
-    }
-
-    public String prepare() {
-        try {
-            contractSystem.setStatusToPrepared(uuid);
             return "/contract/contract-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {

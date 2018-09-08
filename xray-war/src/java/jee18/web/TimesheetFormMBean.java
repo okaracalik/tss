@@ -78,5 +78,60 @@ public class TimesheetFormMBean implements Serializable {
             return "error";
         }
     }
+    
+    public String signAsEmployee() {
+        try {
+            timesheetSystem.signAsEmployee(uuid);
+            return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return "error";
+        }
+    }
+    
+    public String revokeEmployeeSignature() {
+        try {
+            timesheetSystem.revokeEmployeeSignature(uuid);
+            return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return "error";
+        }
+    }
+    
+    public String signAsSupervisor() {
+        try {
+            timesheetSystem.signAsSupervisor(uuid);
+            return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return "error";
+        }
+    }
+    
+    public String requestChanges() {
+        try {
+            timesheetSystem.requestChanges(uuid);
+            return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return "error";
+        }
+    }
+    
+    public String archive() {
+        try {
+            timesheetSystem.setStatusToArchived(uuid);
+            return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return "error";
+        }
+    }
 
 }

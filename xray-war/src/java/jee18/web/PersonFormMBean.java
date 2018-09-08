@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import jee18.dto.Person;
-import jee18.logic.ITimesheetManagementSystem;
+import jee18.logic.ICRUD;
 
 /**
  *
@@ -24,7 +24,7 @@ public class PersonFormMBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB(beanName = "PersonSystem")
-    private ITimesheetManagementSystem personSystem;
+    private ICRUD personSystem;
 
     private Person person;
     private String uuid;
