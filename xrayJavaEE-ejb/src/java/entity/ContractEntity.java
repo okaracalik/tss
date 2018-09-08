@@ -6,66 +6,93 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author apple
  */
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Table(name = "NAMED_ENTITY", indexes = @Index(columnList = "DTYPE"))
-public class NamedEntity implements Serializable {
+public class ContractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Column(unique = true, length = 36)
+    
     private String uuid;
-
+    
+    private ContractStatus status;
     private String name;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private TimesheetFrequency frequency;
+    
+    
+    //@OneToMany(mappedBy = "contract")
+    private List<SecretaryEntity> secretaryEntitys;
+    //@OneToOne(mappedBy = "contract")
+    private EmployeeEntity employee;
+    
+    @OneToOne
+    private SupervisorEntity supervisor;
+    
+    @OneToMany
+    private List<AssistantEntity> assitants;
 
-    public NamedEntity() {
+    
+    
+    public List<SecretaryEntity> getSecretaryEntitys() {
+        return secretaryEntitys;
+    }
+
+    public EmployeeEntity getEmployee() {
+        return employee;
+    }
+
+    public SupervisorEntity getSupervisor() {
+        return supervisor;
+    }
+
+    public List<AssistantEntity> getAssitants() {
+        return assitants;
+    }
+
+
+    
+    public String getUuid() {
+        return uuid;
+    }
+    
+    public ContractEntity() {
         this(false);
     }
 
-    NamedEntity(boolean isNew) {
+    ContractEntity(boolean isNew) {
         if (isNew) {
             uuid = UUID.randomUUID().toString();
         }
     }
-
-    public String getUuid() {
-        return uuid;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public int hashCode() {
-        if (uuid == null) {
+           if (uuid == null) {
             throw new IllegalStateException("uuid not set");
         }
         int hash = 7;
@@ -74,20 +101,20 @@ public class NamedEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object object) {
         if (uuid == null) {
             throw new IllegalStateException("uuid not set");
         }
-        if (this == obj) {
+        if (this == object) {
             return true;
         }
-        if (obj == null) {
+        if (object == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (getClass() != object.getClass()) {
             return false;
         }
-        final NamedEntity other = (NamedEntity) obj;
+        final ContractEntity other = (ContractEntity) object;
         if (other.uuid == null) {
             throw new IllegalStateException("other.uuid not set");
         }

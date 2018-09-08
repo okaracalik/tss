@@ -3,75 +3,39 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
  *
  * @author apple
  */
-@NamedQuery(
-            name = "PersonEntity.getPersonList",
-            query = "SELECT p FROM PersonEntity p ORDER BY p.name"
-)
-@NamedQuery(
-            name = "PersonEntity.getRoleNames",
-            query = "SELECT role.rtype FROM PersonEntity p, IN(p.roles) role"
-            + " WHERE p.id = :personId ORDER BY role.rtype"
-)
-@Entity
-@Table(name = "PERSON")
 
-public class PersonEntity extends NamedEntity {
+public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String uuid;
     
-
-
     private String firstName;
 
     private String lastName;
     private LocalDate dateOfBirth;
     private String emailAddress;
     
-
-   
-
-    @OneToMany(mappedBy = "person")
-    private Set<RoleEntity> roles;
-
-    public Set<RoleEntity> getRoles() {
-        return roles;
+    public String getUuid() {
+        return uuid;
     }
-    
-    public PersonEntity() {
-        this(false);
-    }
-    PersonEntity(boolean isNew) {
-        super(isNew);
-        if (isNew) {
-            roles = new HashSet<>();
-      
-        }
-    }
-    
-    public static PersonEntity newInstance() {
-        return new PersonEntity(true);
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getFirstName() {
@@ -107,8 +71,31 @@ public class PersonEntity extends NamedEntity {
     }
 
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 41 * hash + Objects.hashCode(this.uuid);
+        return hash;
+    }
 
-
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null) {
+            return false;
+        }
+        if (getClass() != object.getClass()) {
+            return false;
+        }
+        final Person other = (Person) object;
+        if (!Objects.equals(this.uuid, other.uuid)) {
+            return false;
+        }
+        return true;
+    }
+    
 
     
 }

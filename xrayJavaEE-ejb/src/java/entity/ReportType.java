@@ -9,7 +9,8 @@ package entity;
  *
  * @author apple
  */
-class Term {
-    public static int SUMMER=1;
-    public static int WINTER=0;
+public enum ReportType {
+    WORK,
+    VACATION,
+    SICK_LEAVE;
 }
