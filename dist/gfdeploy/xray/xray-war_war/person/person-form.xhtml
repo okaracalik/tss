@@ -20,7 +20,7 @@
             <b:inputText type="text" label="${msg.PERSON_LAST_NAME}" value="#{personFormMBean.person.lastName}" />
             <b:inputText type="email" label="${msg.PERSON_EMAIL_ADDRESS}" value="#{personFormMBean.person.emailAddress}" />
             <b:datepicker label="${msg.PERSON_DATE_OF_BIRTH}" mode="icon-popup" value="#{personFormMBean.person.dateOfBirth}" />
-            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{personFormMBean.save()}"/>
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" action="#{personFormMBean.save()}"/>
             <b:commandButton look="danger" iconAwesome="trash" value="${msg.FORM_DELETE_TITLE}" action="#{personFormMBean.delete()}" rendered="${personFormMBean.uuid != null}" class="pull-right"/>
         </b:form>
     </ui:define>

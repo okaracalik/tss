@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import jee18.dto.Person;
-import jee18.logic.ITimesheetSystem;
+import jee18.logic.ITimesheetManagementSystem;
 
 /**
  *
@@ -24,7 +24,7 @@ public class PersonFormMBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB(beanName = "PersonSystem")
-    private ITimesheetSystem personSystem;
+    private ITimesheetManagementSystem personSystem;
 
     private Person person;
     private String uuid;
@@ -37,7 +37,9 @@ public class PersonFormMBean implements Serializable {
         if (uuid == null) {
             person = new Person();
         }
-        person = (Person) personSystem.getByUuid(uuid);
+        else {
+            person = (Person) personSystem.getByUuid(uuid);
+        }
     }
 
     public Person getPerson() {
@@ -52,7 +54,7 @@ public class PersonFormMBean implements Serializable {
         return uuid;
     }
 
-    public void save() {
+    public String save() {
         try {
             if (uuid == null) {
                 personSystem.create(person);
@@ -60,18 +62,22 @@ public class PersonFormMBean implements Serializable {
             else {
                 personSystem.updateByUuid(uuid, person);
             }
+            return "/person/person-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
+            return "error";
         }
     }
 
-    public void delete() {
+    public String delete() {
         try {
             personSystem.deleteByUuid(uuid);
+            return "/person/person-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
+            return "error";
         }
     }
 

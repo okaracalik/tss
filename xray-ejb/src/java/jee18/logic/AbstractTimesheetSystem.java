@@ -18,7 +18,7 @@ import jee18.entities.AbstractEntity;
  * @param <A>
  * @param <B>
  */
-abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> implements ITimesheetSystem<A> {
+abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> implements ITimesheetManagementSystem<A> {
 
     private IAccess<B> accessor;
 
@@ -49,6 +49,7 @@ abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> imple
 
     @Override
     public Integer updateByUuid(String uuid, A a) {
+        System.out.print(uuid + ": "+ a.toString());
         return accessor.updateByUuid(uuid, convertToEntity(a));
     }
 

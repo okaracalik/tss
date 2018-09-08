@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.TimesheetEntry;
-import jee18.logic.ITimesheetSystem;
+import jee18.logic.ITimesheetManagementSystem;
 
 /**
  *
@@ -24,7 +24,7 @@ public class TimesheetEntryFormMBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB(beanName = "TimesheetEntrySystem")
-    private ITimesheetSystem timesheetEntrySystem;
+    private ITimesheetManagementSystem timesheetEntrySystem;
     private String uuid;
 
     private TimesheetEntry timesheetEntry;
@@ -37,7 +37,9 @@ public class TimesheetEntryFormMBean implements Serializable {
         if (uuid == null) {
             timesheetEntry = new TimesheetEntry();
         }
-        timesheetEntry = (TimesheetEntry) timesheetEntrySystem.getByUuid(uuid);
+        else {
+            timesheetEntry = (TimesheetEntry) timesheetEntrySystem.getByUuid(uuid);
+        }
     }
 
     public TimesheetEntry getTimesheetEntry() {
@@ -52,7 +54,7 @@ public class TimesheetEntryFormMBean implements Serializable {
         return uuid;
     }
 
-    public void save() {
+    public String save() {
         try {
             if (uuid == null) {
                 timesheetEntrySystem.create(timesheetEntry);
@@ -60,18 +62,22 @@ public class TimesheetEntryFormMBean implements Serializable {
             else {
                 timesheetEntrySystem.updateByUuid(uuid, timesheetEntry);
             }
+            return "/timesheet-entries/timesheet-entries-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
+            return "error";
         }
     }
 
-    public void delete() {
+    public String delete() {
         try {
             timesheetEntrySystem.deleteByUuid(uuid);
+            return "/timesheet-entries/timesheet-entries-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
+            return "error";
         }
     }
 

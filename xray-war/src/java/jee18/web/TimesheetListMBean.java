@@ -20,7 +20,7 @@ import jee18.logic.ITimesheetSystem;
 @RequestScoped
 public class TimesheetListMBean {
 
-    @EJB(beanName = "TimesheetSystem")
+    @EJB
     private ITimesheetSystem timesheetSystem;
 
     private List<Timesheet> timesheetList;
@@ -30,7 +30,7 @@ public class TimesheetListMBean {
 
     public List<Timesheet> getTimesheetList() {
         if (timesheetList == null) {
-            timesheetList = timesheetSystem.getList();
+            timesheetList = timesheetSystem.list();
         }
         return timesheetList;
     }

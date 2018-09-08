@@ -10,7 +10,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import jee18.dto.TimesheetEntry;
-import jee18.logic.ITimesheetSystem;
+import jee18.logic.ITimesheetManagementSystem;
 
 /**
  *
@@ -21,7 +21,7 @@ import jee18.logic.ITimesheetSystem;
 public class TimesheetEntryListMBean {
 
     @EJB(beanName = "TimesheetEntrySystem")
-    private ITimesheetSystem timesheetEntrySystem;
+    private ITimesheetManagementSystem timesheetEntrySystem;
 
     private List<TimesheetEntry> timesheetEntryList;
 

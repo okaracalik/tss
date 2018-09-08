@@ -7,6 +7,8 @@ package jee18.entities;
 
 import java.time.LocalDate;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -16,6 +18,7 @@ import javax.persistence.Table;
  * @author okaracalik
  */
 @Entity
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "persons")
 @NamedQueries({
     @NamedQuery(
@@ -41,7 +44,7 @@ import javax.persistence.Table;
 public class PersonEntity extends AbstractEntity {
 
     private static final long serialVersionUID = 8164978510161170908L;
-    // TODO: role 
+
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;

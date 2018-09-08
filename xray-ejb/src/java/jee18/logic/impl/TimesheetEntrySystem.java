@@ -10,15 +10,15 @@ import javax.naming.NamingException;
 import jee18.dto.TimesheetEntry;
 import jee18.entities.TimesheetEntryEntity;
 import jee18.logic.AbstractTimesheetSystem;
-import jee18.logic.ITimesheetSystem;
 import jee18.utils.DateTimeUtil;
+import jee18.logic.ITimesheetManagementSystem;
 
 /**
  *
  * @author okaracalik
  */
 @Stateless(name="TimesheetEntrySystem")
-public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry, TimesheetEntryEntity> implements ITimesheetSystem<TimesheetEntry> {
+public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry, TimesheetEntryEntity> implements ITimesheetManagementSystem<TimesheetEntry> {
 
     public TimesheetEntrySystem() throws NamingException {
         super("TimesheetEntryAccess");

@@ -24,7 +24,7 @@
             </b:selectOneMenu>
             <b:datepicker label="${msg.TIMESHEET_START_DATE}" value="#{timesheetFormMBean.timesheet.startDate}" />
             <b:datepicker label="${msg.TIMESHEET_END_DATE}" value="#{timesheetFormMBean.timesheet.endDate}" />
-            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{timesheetFormMBean.save()}"/>
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" action="#{timesheetFormMBean.save()}"/>
             <b:commandButton look="danger" iconAwesome="trash" value="${msg.FORM_DELETE_TITLE}" action="#{timesheetFormMBean.delete()}" rendered="${timesheetFormMBean.uuid != null}" class="pull-right"/>
         </b:form>
     </ui:define>

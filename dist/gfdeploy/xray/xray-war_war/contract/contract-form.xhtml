@@ -15,6 +15,16 @@
 
     <ui:define name="content">
         <h2>${msg.CONTRACT_FORM_TITLE}</h2>
+        <b:buttonToolbar rendered="${contractFormMBean.uuid != null}">
+            <b:form>
+                <b:buttonGroup class="btn-block">
+                    <b:commandButton styleClass="#{(contractFormMBean.contract.status=='PREPARED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="refresh" value="${msg.CONTRACT_STATUS_PREPARED}" action="#{contractFormMBean.prepare()}" />
+                    <b:commandButton styleClass="#{(contractFormMBean.contract.status=='STARTED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="play" value="${msg.CONTRACT_STATUS_STARTED}" action="#{contractFormMBean.start()}" />
+                    <b:commandButton styleClass="#{(contractFormMBean.contract.status=='TERMINATED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="stop" value="${msg.CONTRACT_STATUS_TERMINATED}" action="#{contractFormMBean.terminate()}" />
+                    <b:commandButton styleClass="#{(contractFormMBean.contract.status=='ARCHIVED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="archive" value="${msg.CONTRACT_STATUS_ARCHIVED}" action="#{contractFormMBean.archive()}" />
+                 </b:buttonGroup>
+            </b:form>
+        </b:buttonToolbar>
         <b:form>
             <b:inputText label="${msg.CONTRACT_NAME}" value="#{contractFormMBean.contract.name}" />
             <b:dateTimePicker label="${msg.CONTRACT_START_DATE}" format="MM/YYYY" viewMode="months" value="#{contractFormMBean.contract.startDate}" />
@@ -26,7 +36,7 @@
             <b:inputText type="number" label="${msg.CONTRACT_HOURS_PER_WEEK}" value="#{contractFormMBean.contract.hoursPerWeek}"/>
             <b:inputText type="number" label="${msg.CONTRACT_WORKING_DAYS_PER_WEEK}" value="#{contractFormMBean.contract.workingDaysPerWeek}"/>
             <b:inputText type="number" label="${msg.CONTRACT_VACATION_DAYS_PER_YEAR}" value="#{contractFormMBean.contract.vacationDaysPerYear}"/>
-            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" actionListener="#{contractFormMBean.save()}"/>
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" action="#{contractFormMBean.save()}"/>
             <b:commandButton look="danger" iconAwesome="trash" value="${msg.FORM_DELETE_TITLE}" action="#{contractFormMBean.delete()}" rendered="${contractFormMBean.uuid != null}" class="pull-right"/>
         </b:form>
     </ui:define>

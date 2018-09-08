@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.Contract;
-import jee18.logic.ITimesheetSystem;
+import jee18.logic.IContractSystem;
 
 /**
  *
@@ -21,11 +21,10 @@ import jee18.logic.ITimesheetSystem;
 @ViewScoped
 public class ContractFormMBean implements Serializable {
 
-
     private static final long serialVersionUID = 1L;
 
-    @EJB(beanName = "ContractSystem")
-    private ITimesheetSystem contractSystem;
+    @EJB
+    private IContractSystem contractSystem;
 
     private Contract contract;
     private String uuid;
@@ -38,7 +37,9 @@ public class ContractFormMBean implements Serializable {
         if (uuid == null) {
             contract = new Contract();
         }
-        contract = (Contract) contractSystem.getByUuid(uuid);
+        else {
+            contract = (Contract) contractSystem.get(uuid);
+        }
     }
 
     public Contract getContract() {
@@ -53,26 +54,74 @@ public class ContractFormMBean implements Serializable {
         return uuid;
     }
 
-    public void save() {
+    public String save() {
         try {
             if (uuid == null) {
-                contractSystem.create(contract);
+                contractSystem.add(contract);
             }
             else {
-                contractSystem.updateByUuid(uuid, contract);
+                contractSystem.update(uuid, contract);
             }
+            return "/contract/contract-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
+            return "error";
         }
     }
 
-    public void delete() {
+    public String delete() {
         try {
-            contractSystem.deleteByUuid(uuid);
+            contractSystem.delete(uuid);
+            return "/contract/contract-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
+            return "error";
+        }
+    }
+
+    public String prepare() {
+        try {
+            contractSystem.setStatusToPrepared(uuid);
+            return "/contract/contract-list.xhtml?faces-redirect=true";
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return "error";
+        }
+    }
+
+    public String start() {
+        try {
+            contractSystem.setStatusToStarted(uuid);
+            return "/contract/contract-list.xhtml?faces-redirect=true";
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return "error";
+        }
+    }
+
+    public String terminate() {
+        try {
+            contractSystem.setStatusToTerminated(uuid);
+            return "/contract/contract-list.xhtml?faces-redirect=true";
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return "error";
+        }
+    }
+
+    public String archive() {
+        try {
+            contractSystem.setStatusToArchived(uuid);
+            return "/contract/contract-list.xhtml?faces-redirect=true";
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+            return "error";
         }
     }
 

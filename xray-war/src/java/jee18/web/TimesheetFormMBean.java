@@ -23,7 +23,7 @@ public class TimesheetFormMBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @EJB(beanName = "TimesheetSystem")
+    @EJB
     private ITimesheetSystem timesheetSystem;
 
     private Timesheet timesheet;
@@ -37,7 +37,7 @@ public class TimesheetFormMBean implements Serializable {
         if (uuid == null) {
             timesheet = new Timesheet();
         }
-        timesheet = (Timesheet) timesheetSystem.getByUuid(uuid);
+        timesheet = (Timesheet) timesheetSystem.get(uuid);
     }
 
     public Timesheet getTimesheet() {
@@ -52,26 +52,30 @@ public class TimesheetFormMBean implements Serializable {
         return uuid;
     }
 
-    public void save() {
+    public String save() {
         try {
             if (uuid == null) {
-                timesheetSystem.create(timesheet);
+                timesheetSystem.add(timesheet);
             }
             else {
-                timesheetSystem.updateByUuid(uuid, timesheet);
+                timesheetSystem.update(uuid, timesheet);
             }
+            return "/person/person-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
+            return "error";
         }
     }
 
-    public void delete() {
+    public String delete() {
         try {
-            timesheetSystem.deleteByUuid(uuid);
+            timesheetSystem.delete(uuid);
+            return "/person/person-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
+            return "error";
         }
     }
 

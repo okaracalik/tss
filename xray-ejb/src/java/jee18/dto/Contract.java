@@ -23,7 +23,7 @@ public class Contract implements Serializable {
     private String name;
     private Date startDate;
     private Date endDate;
-    private TimesheetFrequency frequency;
+    private TimesheetFrequency frequency = TimesheetFrequency.WEEKLY;
     private Date terminationDate; // onUpdate
     private Double hoursPerWeek;
     private Double vacationHours; // auto
@@ -129,7 +129,7 @@ public class Contract implements Serializable {
 
     @Override
     public String toString() {
-        return "Contract{" + "name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + '}';
+        return "Contract{" + "uuid=" + uuid + ", status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + '}';
     }
 
 }

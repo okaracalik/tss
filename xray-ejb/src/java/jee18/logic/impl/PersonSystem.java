@@ -10,15 +10,15 @@ import javax.naming.NamingException;
 import jee18.dto.Person;
 import jee18.entities.PersonEntity;
 import jee18.logic.AbstractTimesheetSystem;
-import jee18.logic.ITimesheetSystem;
 import jee18.utils.DateTimeUtil;
+import jee18.logic.ITimesheetManagementSystem;
 
 /**
  *
  * @author okaracalik
  */
 @Stateless(name = "PersonSystem")
-public class PersonSystem extends AbstractTimesheetSystem<Person, PersonEntity> implements ITimesheetSystem<Person> {
+public class PersonSystem extends AbstractTimesheetSystem<Person, PersonEntity> implements ITimesheetManagementSystem<Person> {
 
     public PersonSystem() throws NamingException {
         super("PersonAccess");
