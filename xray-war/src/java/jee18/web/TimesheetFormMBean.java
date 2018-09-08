@@ -60,7 +60,7 @@ public class TimesheetFormMBean implements Serializable {
             else {
                 timesheetSystem.update(uuid, timesheet);
             }
-            return "/person/person-list.xhtml?faces-redirect=true";
+            return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
@@ -71,7 +71,7 @@ public class TimesheetFormMBean implements Serializable {
     public String delete() {
         try {
             timesheetSystem.delete(uuid);
-            return "/person/person-list.xhtml?faces-redirect=true";
+            return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());

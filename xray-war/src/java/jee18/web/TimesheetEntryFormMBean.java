@@ -62,7 +62,7 @@ public class TimesheetEntryFormMBean implements Serializable {
             else {
                 timesheetEntrySystem.updateByUuid(uuid, timesheetEntry);
             }
-            return "/timesheet-entries/timesheet-entries-list.xhtml?faces-redirect=true";
+            return "/timesheet-entry/timesheet-entry-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());
@@ -73,7 +73,7 @@ public class TimesheetEntryFormMBean implements Serializable {
     public String delete() {
         try {
             timesheetEntrySystem.deleteByUuid(uuid);
-            return "/timesheet-entries/timesheet-entries-list.xhtml?faces-redirect=true";
+            return "/timesheet-entry/timesheet-entry-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
             System.out.println(e.toString());

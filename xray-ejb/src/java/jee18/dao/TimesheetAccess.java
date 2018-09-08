@@ -55,7 +55,7 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
 
     @Override
     public Integer updateByUuid(String uuid, TimesheetEntity timesheet) {
-        return em.createNamedQuery("PersonEntity.updatePersonEntityByUUID", TimesheetEntity.class)
+        return em.createNamedQuery("TimesheetEntity.updateTimesheetEntityByUUID", TimesheetEntity.class)
                 .setParameter("uuid", uuid)
                 .setParameter("status", timesheet.getStatus())
                 .setParameter("startDate", timesheet.getStartDate())
