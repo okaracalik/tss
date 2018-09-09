@@ -5,12 +5,16 @@
  */
 package jee18.utils;
 
+import static java.time.DayOfWeek.SUNDAY;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
+import static java.time.temporal.TemporalAdjusters.next;
 import java.util.Date;
+import java.util.HashMap;
+import jee18.entities.enums.TimesheetFrequency;
 
 /**
  *
@@ -57,6 +61,46 @@ public class DateTimeUtil {
     public static Integer calculateDurationOfContract(LocalDate start, LocalDate end) {
         Period p = Period.between(start, end);
         return p.getYears() * 12 + p.getMonths() + 1;
+    }
+
+    public static HashMap<LocalDate, LocalDate> findTimesheetDates(LocalDate start, LocalDate end, TimesheetFrequency frequency) {
+        System.out.print(start.toString() + " " + end.toString() + " " + frequency);
+        HashMap<LocalDate, LocalDate> dates = new HashMap<>();
+        LocalDate tempStart = start;
+        if (frequency == TimesheetFrequency.MONTHLY) {
+            do {
+                LocalDate tempEnd = setToLastDayOfMonth(tempStart);
+                dates.put(tempStart, tempEnd);
+                tempStart = tempEnd.plusDays(1);
+                System.out.println("jee18.utils.DateTimeUtil.findTimesheetDates(): " + tempStart + " " + tempEnd);
+            }
+            while (!tempStart.isAfter(end));
+        }
+        else {
+            // if start is sunday
+            // if end is after end
+            LocalDate tempEnd;
+
+            if (tempStart.getDayOfWeek() == SUNDAY) {
+                tempEnd = tempStart;
+                dates.put(tempStart, tempEnd);
+                System.out.println("jee18.utils.DateTimeUtil.findTimesheetDates(): " + tempStart + " " + tempEnd);
+                tempStart = tempEnd.plusDays(1);
+            }
+
+            do {
+                tempEnd = tempStart.with(next(SUNDAY));
+                if (tempEnd.isAfter(end)) {
+                    tempEnd = setToLastDayOfMonth(tempStart);
+                }
+                dates.put(tempStart, tempEnd);
+                System.out.println("jee18.utils.DateTimeUtil.findTimesheetDates(): " + tempStart + " " + tempEnd);
+                tempStart = tempEnd.plusDays(1);
+            }
+            while (!tempStart.isAfter(end));
+
+        }
+        return dates;
     }
 
 }

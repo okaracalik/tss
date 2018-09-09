@@ -35,6 +35,8 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         te.setStartDate(DateTimeUtil.convertDateToLocalDate(t.getStartDate()));
         te.setEndDate(DateTimeUtil.convertDateToLocalDate(t.getEndDate()));
         te.setHoursDue(calculateTimesheetHoursDue());
+        te.setSignedByEmployee(DateTimeUtil.convertDateToLocalDate(t.getSignedByEmployee()));
+        te.setSignedBySupervisor(DateTimeUtil.convertDateToLocalDate(t.getSignedBySupervisor()));
         return te;
     }
 
@@ -46,9 +48,8 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         to.setStartDate(DateTimeUtil.convertLocalDateToDate(te.getStartDate()));
         to.setEndDate(DateTimeUtil.convertLocalDateToDate(te.getEndDate()));
         to.setHoursDue(te.getHoursDue());
-        // FIXME: null dates
-        // to.setSignedByEmployee(te.getSignedByEmployee());
-        // to.setSignedBySupervisor(te.getSignedBySupervisor());
+        to.setSignedByEmployee(DateTimeUtil.convertLocalDateToDate(te.getSignedByEmployee()));
+        to.setSignedBySupervisor(DateTimeUtil.convertLocalDateToDate(te.getSignedBySupervisor()));
         return to;
     }
 

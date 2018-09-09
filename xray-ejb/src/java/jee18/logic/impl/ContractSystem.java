@@ -5,16 +5,27 @@
  */
 package jee18.logic.impl;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
+import jee18.dao.IAccess;
 import jee18.dto.Contract;
+import jee18.dto.Timesheet;
 import jee18.entities.ContractEntity;
+import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.ContractStatus;
+import jee18.entities.enums.TimesheetFrequency;
 import jee18.logic.AbstractTimesheetSystem;
 import jee18.logic.IContractSystem;
+import jee18.logic.ITimesheetSystem;
 import jee18.utils.DateTimeUtil;
 
 /**
@@ -24,10 +35,9 @@ import jee18.utils.DateTimeUtil;
 @Stateless(name = "ContractSystem")
 public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEntity> implements IContractSystem {
 
-    // TODO: Update/Delete only PREPARED
-    // TODO: Start contract
-    // TODO: Terminate contract
-    // TODO: Archive contract
+    @EJB
+    private ITimesheetSystem timesheetSystem;
+
     public ContractSystem() throws NamingException {
         super("ContractAccess");
     }
@@ -84,7 +94,9 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @Override
     public Contract add(Contract c) {
-        return super.create(c);
+        Contract contract = super.create(c);
+
+        return contract;
     }
 
     @Override
@@ -119,6 +131,13 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.PREPARED) {
             contract.setStatus(ContractStatus.STARTED);
+            HashMap<LocalDate, LocalDate> dates = DateTimeUtil.findTimesheetDates(DateTimeUtil.convertDateToLocalDate(contract.getStartDate()), DateTimeUtil.convertDateToLocalDate(contract.getEndDate()), contract.getFrequency());
+            List<Timesheet> ts = dates.entrySet().stream().map(x -> {
+                Timesheet t = new Timesheet();
+                t.setStartDate(DateTimeUtil.convertLocalDateToDate(x.getKey()));
+                t.setEndDate(DateTimeUtil.convertLocalDateToDate(x.getValue()));
+                return timesheetSystem.add(t);
+            }).collect(Collectors.toList());
             return super.updateByUuid(uuid, contract);
         }
         else {

@@ -20,6 +20,11 @@
             <b:dataTableColumn label="${msg.TIMESHEET_STATUS}" value="#{timesheet.status}"/>
             <b:dataTableColumn label="${msg.TIMESHEET_START_DATE}" value="#{timesheet.startDate}"/>
             <b:dataTableColumn label="${msg.TIMESHEET_END_DATE}" value="#{timesheet.endDate}"/>
+            <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_LINK}" style="width: 50px; text-align: center;">
+                <b:button look="warning" iconAwesome="plus-circle" outcome="timesheet-entry-form">
+                    <f:param name="timesheetUuid" value="#{timesheet.uuid}" />
+                </b:button>
+            </b:dataTableColumn>
 
         </b:dataTable>
     </ui:define>
