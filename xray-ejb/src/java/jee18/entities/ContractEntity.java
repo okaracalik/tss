@@ -6,11 +6,15 @@
 package jee18.entities;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import jee18.entities.enums.ContractStatus;
 import jee18.entities.enums.TimesheetFrequency;
@@ -59,6 +63,8 @@ public class ContractEntity extends AbstractEntity {
     private Double hoursDue;
     private Integer workingDaysPerWeek;
     private Integer vacationDaysPerYear;
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
+    private Set<TimesheetEntity> timesheets;
 
     public ContractEntity() {
         this(false);
@@ -66,6 +72,9 @@ public class ContractEntity extends AbstractEntity {
 
     ContractEntity(boolean isNew) {
         super(isNew);
+        if (isNew) {
+            timesheets = new HashSet<>();
+        }
     }
 
     public static ContractEntity newInstance() {
@@ -160,9 +169,21 @@ public class ContractEntity extends AbstractEntity {
         this.frequency = frequency;
     }
 
-    @Override
-    public String toString() {
-        return "ContractEntity{" + "status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + '}';
+    public Set<TimesheetEntity> getTimesheets() {
+        return timesheets;
+    }
+
+//    @Override
+//    public String toString() {
+//        return "ContractEntity{" + "status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + ", timesheets=" + timesheets + '}';
+//    }
+    public void addTimesheets(TimesheetEntity te) {
+        System.out.print(this.getClass().toString()+" addTimesheets: " + te);
+        if (te.getContract() != null && !this.equals(te.getContract())) {
+            te.getContract().getTimesheets().remove(te);
+        }
+        te.setContract(this);
+        timesheets.add(te);
     }
 
 }

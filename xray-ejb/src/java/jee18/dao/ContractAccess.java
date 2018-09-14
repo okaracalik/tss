@@ -9,6 +9,9 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import jee18.entities.ContractEntity;
+import jee18.entities.TimesheetEntity;
+import jee18.entities.enums.ContractStatus;
+import jee18.entities.enums.TimesheetStatus;
 
 /**
  *
@@ -46,7 +49,8 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
 
     @Override
     public Integer updateByUuid(String uuid, ContractEntity contract) {
-        return em.createNamedQuery("ContractEntity.updateContractEntityByUUID", ContractEntity.class)
+        ContractEntity e = getByUuid(uuid);
+        Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityByUUID", ContractEntity.class)
                 .setParameter("uuid", uuid)
                 .setParameter("status", contract.getStatus())
                 .setParameter("name", contract.getName())
@@ -60,6 +64,18 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
                 .setParameter("workingDaysPerWeek", contract.getWorkingDaysPerWeek())
                 .setParameter("vacationDaysPerYear", contract.getVacationDaysPerYear())
                 .executeUpdate();
+        if (contract.getStatus() == ContractStatus.STARTED) {
+            contract.getTimesheets().forEach(c -> {
+                e.addTimesheets(c);
+            });
+        }
+        else if (contract.getStatus() == ContractStatus.TERMINATED) {
+            em.createNamedQuery("TimesheetEntity.deleteTimesheetEntityInProgressByContractId", TimesheetEntity.class)
+                    .setParameter("contract", e)
+                    .setParameter("status", TimesheetStatus.IN_PROGRESS)
+                    .executeUpdate();
+        }
+        return rows;
     }
 
     @Override

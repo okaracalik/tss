@@ -7,7 +7,9 @@ package jee18.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import jee18.entities.TimesheetEntryEntity;
 import jee18.entities.enums.ReportType;
+import jee18.utils.DateTimeUtil;
 
 /**
  *
@@ -86,4 +88,26 @@ public class TimesheetEntry implements Serializable {
         return "TimesheetEntry{" + "type=" + type + ", description=" + description + ", hours=" + hours + ", startTime=" + startTime + ", endTime=" + endTime + ", entryDate=" + entryDate + '}';
     }
 
+    public static TimesheetEntryEntity toEntity(TimesheetEntry dto) {
+        TimesheetEntryEntity e = TimesheetEntryEntity.newInstance();
+        e.setType(dto.getType());
+        e.setDescription(dto.getDescription());
+        e.setHours(dto.getHours());
+        e.setStartTime(DateTimeUtil.convertDateToLocalTime(dto.getStartTime()));
+        e.setEndTime(DateTimeUtil.convertDateToLocalTime(dto.getEndTime()));
+        e.setEntryDate(DateTimeUtil.convertDateToLocalDate(dto.getEntryDate()));
+        return e;
+    }
+    
+    public static TimesheetEntry toDTO(TimesheetEntryEntity e) {
+        TimesheetEntry dto = new TimesheetEntry();
+        dto.setUuid(e.getUuid());
+        dto.setType(e.getType());
+        dto.setDescription(e.getDescription());
+        dto.setHours(e.getHours());
+        dto.setStartTime(DateTimeUtil.convertLocalTimeToDate(e.getStartTime(), e.getEntryDate()));
+        dto.setEndTime(DateTimeUtil.convertLocalTimeToDate(e.getEndTime(), e.getEntryDate()));
+        dto.setEntryDate(DateTimeUtil.convertLocalDateToDate(e.getEntryDate()));
+        return dto;
+    }
 }

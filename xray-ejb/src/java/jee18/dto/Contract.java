@@ -7,8 +7,13 @@ package jee18.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import jee18.entities.ContractEntity;
 import jee18.entities.enums.ContractStatus;
 import jee18.entities.enums.TimesheetFrequency;
+import jee18.utils.DateTimeUtil;
 
 /**
  *
@@ -30,6 +35,7 @@ public class Contract implements Serializable {
     private Double hoursDue; // auto
     private Integer workingDaysPerWeek = 5; // default
     private Integer vacationDaysPerYear = 20; // default
+    private Set<Timesheet> timesheets = new HashSet<>(); // default
 
     public String getUuid() {
         return uuid;
@@ -38,7 +44,7 @@ public class Contract implements Serializable {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -127,9 +133,64 @@ public class Contract implements Serializable {
         this.frequency = frequency;
     }
 
+    public Set<Timesheet> getTimesheets() {
+        return timesheets;
+    }
+
+    public void setTimesheets(Set<Timesheet> timesheets) {
+        this.timesheets = timesheets;
+    }
+
     @Override
     public String toString() {
-        return "Contract{" + "uuid=" + uuid + ", status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + '}';
+        return "Contract{" + "uuid=" + uuid + ", status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + ", timesheets=" + timesheets + '}';
+    }
+
+    public static ContractEntity toEntity(Contract dto) {
+        ContractEntity e = ContractEntity.newInstance();
+        e.setStatus(dto.getStatus());
+        e.setName(dto.getName());
+        e.setStartDate(DateTimeUtil.setToFirstDayOfMonth(DateTimeUtil.convertDateToLocalDate(dto.getStartDate())));
+        e.setEndDate(DateTimeUtil.setToLastDayOfMonth(DateTimeUtil.convertDateToLocalDate(dto.getEndDate())));
+        e.setFrequency(dto.getFrequency());
+        e.setHoursPerWeek(dto.getHoursPerWeek());
+        e.setTerminationDate(DateTimeUtil.convertDateToLocalDate(dto.getTerminationDate()));
+        e.setWorkingDaysPerWeek(dto.getWorkingDaysPerWeek());
+        e.setVacationDaysPerYear(dto.getVacationDaysPerYear());
+        e.setVacationHours(calculateVacationHours(e.getVacationDaysPerYear(), DateTimeUtil.calculateDurationOfContract(e.getStartDate(), e.getEndDate()), e.getHoursPerWeek(), e.getWorkingDaysPerWeek()));
+        e.setHoursDue(calculateHoursDue());
+        dto.getTimesheets().stream().map(x -> Timesheet.toEntity(x)).collect(Collectors.toList()).forEach(t -> {
+            e.addTimesheets(t);
+        });
+        return e;
+    }
+
+    public static Contract toDTO(ContractEntity e) {
+        Contract dto = new Contract();
+        dto.setUuid(e.getUuid());
+        dto.setStatus(e.getStatus());
+        dto.setName(e.getName());
+        dto.setStartDate(DateTimeUtil.convertLocalDateToDate(e.getStartDate()));
+        dto.setEndDate(DateTimeUtil.convertLocalDateToDate(e.getEndDate()));
+        dto.setFrequency(e.getFrequency());
+        dto.setHoursPerWeek(e.getHoursPerWeek());
+        dto.setTerminationDate(DateTimeUtil.convertLocalDateToDate(e.getTerminationDate()));
+        dto.setWorkingDaysPerWeek(e.getWorkingDaysPerWeek());
+        dto.setVacationDaysPerYear(e.getVacationDaysPerYear());
+        dto.setVacationHours(e.getVacationHours());
+        dto.setHoursDue(e.getVacationHours());
+//        dto.setTimesheets(e.getTimesheets().stream().map(x -> convertToTimesheetObject(x)).collect(Collectors.toSet()));
+        return dto;
+    }
+
+    // vacationHours = vacationDaysPerYear * durationOfContract / 12 * hoursPerWeek / workingDaysPerWeek  (The duration of the contract is counted in months.)
+    private static Double calculateVacationHours(Integer vacationDaysPerYear, Integer durationOfContract, Double hoursPerWeek, Integer workingDaysPerWeek) {
+        return (vacationDaysPerYear.doubleValue() * (durationOfContract.doubleValue() / 12)) * (hoursPerWeek / workingDaysPerWeek.doubleValue());
+    }
+
+    // FIXME: calculateHoursDue
+    private static Double calculateHoursDue() {
+        return 0.00;
     }
 
 }

@@ -6,23 +6,20 @@
 package jee18.logic.impl;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
-import jee18.dao.IAccess;
 import jee18.dto.Contract;
 import jee18.dto.Timesheet;
 import jee18.entities.ContractEntity;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.ContractStatus;
-import jee18.entities.enums.TimesheetFrequency;
 import jee18.logic.AbstractTimesheetSystem;
 import jee18.logic.IContractSystem;
 import jee18.logic.ITimesheetSystem;
@@ -44,37 +41,12 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @Override
     protected ContractEntity convertToEntity(Contract c) {
-        ContractEntity ce = ContractEntity.newInstance();
-        ce.setStatus(c.getStatus());
-        ce.setName(c.getName());
-        ce.setStartDate(DateTimeUtil.setToFirstDayOfMonth(DateTimeUtil.convertDateToLocalDate(c.getStartDate())));
-        ce.setEndDate(DateTimeUtil.setToLastDayOfMonth(DateTimeUtil.convertDateToLocalDate(c.getEndDate())));
-        ce.setFrequency(c.getFrequency());
-        ce.setHoursPerWeek(c.getHoursPerWeek());
-        ce.setTerminationDate(DateTimeUtil.convertDateToLocalDate(c.getTerminationDate()));
-        ce.setWorkingDaysPerWeek(c.getWorkingDaysPerWeek());
-        ce.setVacationDaysPerYear(c.getVacationDaysPerYear());
-        ce.setVacationHours(calculateVacationHours(ce.getVacationDaysPerYear(), DateTimeUtil.calculateDurationOfContract(ce.getStartDate(), ce.getEndDate()), ce.getHoursPerWeek(), ce.getWorkingDaysPerWeek()));
-        ce.setHoursDue(calculateHoursDue());
-        return ce;
+        return Contract.toEntity(c);
     }
 
     @Override
     protected Contract convertToObject(ContractEntity ce) {
-        Contract to = new Contract();
-        to.setUuid(ce.getUuid());
-        to.setStatus(ce.getStatus());
-        to.setName(ce.getName());
-        to.setStartDate(DateTimeUtil.convertLocalDateToDate(ce.getStartDate()));
-        to.setEndDate(DateTimeUtil.convertLocalDateToDate(ce.getEndDate()));
-        to.setFrequency(ce.getFrequency());
-        to.setHoursPerWeek(ce.getHoursPerWeek());
-        to.setTerminationDate(DateTimeUtil.convertLocalDateToDate(ce.getTerminationDate()));
-        to.setWorkingDaysPerWeek(ce.getWorkingDaysPerWeek());
-        to.setVacationDaysPerYear(ce.getVacationDaysPerYear());
-        to.setVacationHours(ce.getVacationHours());
-        to.setHoursDue(ce.getVacationHours());
-        return to;
+        return Contract.toDTO(ce);
     }
 
     // vacationHours = vacationDaysPerYear * durationOfContract / 12 * hoursPerWeek / workingDaysPerWeek  (The duration of the contract is counted in months.)
@@ -130,19 +102,23 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     public Integer setStatusToStarted(String uuid) {
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.PREPARED) {
+
             contract.setStatus(ContractStatus.STARTED);
+
             HashMap<LocalDate, LocalDate> dates = DateTimeUtil.findTimesheetDates(DateTimeUtil.convertDateToLocalDate(contract.getStartDate()), DateTimeUtil.convertDateToLocalDate(contract.getEndDate()), contract.getFrequency());
-            List<Timesheet> ts = dates.entrySet().stream().map(x -> {
+            Set<Timesheet> ts = dates.entrySet().stream().map(x -> {
                 Timesheet t = new Timesheet();
                 t.setStartDate(DateTimeUtil.convertLocalDateToDate(x.getKey()));
                 t.setEndDate(DateTimeUtil.convertLocalDateToDate(x.getValue()));
-                return timesheetSystem.add(t);
-            }).collect(Collectors.toList());
+                return t;
+            }).collect(Collectors.toSet());
+            contract.setTimesheets(ts);
             return super.updateByUuid(uuid, contract);
         }
         else {
             throw new EJBException("Contract must be in prepared status.");
         }
+
     }
 
     @Override

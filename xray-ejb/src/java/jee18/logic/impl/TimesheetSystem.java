@@ -10,6 +10,7 @@ import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
+import jee18.dto.Contract;
 import jee18.dto.Timesheet;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.TimesheetStatus;
@@ -27,35 +28,15 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
     public TimesheetSystem() throws NamingException {
         super("TimesheetAccess");
     }
-
+    
     @Override
     protected TimesheetEntity convertToEntity(Timesheet t) {
-        TimesheetEntity te = TimesheetEntity.newInstance();
-        te.setStatus(t.getStatus());
-        te.setStartDate(DateTimeUtil.convertDateToLocalDate(t.getStartDate()));
-        te.setEndDate(DateTimeUtil.convertDateToLocalDate(t.getEndDate()));
-        te.setHoursDue(calculateTimesheetHoursDue());
-        te.setSignedByEmployee(DateTimeUtil.convertDateToLocalDate(t.getSignedByEmployee()));
-        te.setSignedBySupervisor(DateTimeUtil.convertDateToLocalDate(t.getSignedBySupervisor()));
-        return te;
+        return Timesheet.toEntity(t);
     }
 
     @Override
     protected Timesheet convertToObject(TimesheetEntity te) {
-        Timesheet to = new Timesheet();
-        to.setUuid(te.getUuid());
-        to.setStatus(te.getStatus());
-        to.setStartDate(DateTimeUtil.convertLocalDateToDate(te.getStartDate()));
-        to.setEndDate(DateTimeUtil.convertLocalDateToDate(te.getEndDate()));
-        to.setHoursDue(te.getHoursDue());
-        to.setSignedByEmployee(DateTimeUtil.convertLocalDateToDate(te.getSignedByEmployee()));
-        to.setSignedBySupervisor(DateTimeUtil.convertLocalDateToDate(te.getSignedBySupervisor()));
-        return to;
-    }
-
-    // FIXME: calculateTimesheetHoursDue
-    private Double calculateTimesheetHoursDue() {
-        return 0.00;
+        return Timesheet.toDTO(te);
     }
 
     @Override

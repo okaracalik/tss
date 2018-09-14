@@ -64,7 +64,7 @@ public class DateTimeUtil {
     }
 
     public static HashMap<LocalDate, LocalDate> findTimesheetDates(LocalDate start, LocalDate end, TimesheetFrequency frequency) {
-        System.out.print(start.toString() + " " + end.toString() + " " + frequency);
+//        System.out.print(start.toString() + " " + end.toString() + " " + frequency);
         HashMap<LocalDate, LocalDate> dates = new HashMap<>();
         LocalDate tempStart = start;
         if (frequency == TimesheetFrequency.MONTHLY) {
@@ -72,7 +72,7 @@ public class DateTimeUtil {
                 LocalDate tempEnd = setToLastDayOfMonth(tempStart);
                 dates.put(tempStart, tempEnd);
                 tempStart = tempEnd.plusDays(1);
-                System.out.println("jee18.utils.DateTimeUtil.findTimesheetDates(): " + tempStart + " " + tempEnd);
+//                System.out.println("jee18.utils.DateTimeUtil.findTimesheetDates(): " + tempStart + " " + tempEnd);
             }
             while (!tempStart.isAfter(end));
         }
@@ -84,7 +84,7 @@ public class DateTimeUtil {
             if (tempStart.getDayOfWeek() == SUNDAY) {
                 tempEnd = tempStart;
                 dates.put(tempStart, tempEnd);
-                System.out.println("jee18.utils.DateTimeUtil.findTimesheetDates(): " + tempStart + " " + tempEnd);
+//                System.out.println("jee18.utils.DateTimeUtil.findTimesheetDates(): " + tempStart + " " + tempEnd);
                 tempStart = tempEnd.plusDays(1);
             }
 
@@ -94,7 +94,7 @@ public class DateTimeUtil {
                     tempEnd = setToLastDayOfMonth(tempStart);
                 }
                 dates.put(tempStart, tempEnd);
-                System.out.println("jee18.utils.DateTimeUtil.findTimesheetDates(): " + tempStart + " " + tempEnd);
+//                System.out.println("jee18.utils.DateTimeUtil.findTimesheetDates(): " + tempStart + " " + tempEnd);
                 tempStart = tempEnd.plusDays(1);
             }
             while (!tempStart.isAfter(end));

@@ -10,7 +10,6 @@ import javax.naming.NamingException;
 import jee18.dto.Person;
 import jee18.entities.PersonEntity;
 import jee18.logic.AbstractTimesheetSystem;
-import jee18.utils.DateTimeUtil;
 import jee18.logic.ICRUD;
 
 /**
@@ -26,23 +25,12 @@ public class PersonSystem extends AbstractTimesheetSystem<Person, PersonEntity> 
 
     @Override
     protected PersonEntity convertToEntity(Person p) {
-        PersonEntity pe = PersonEntity.newInstance();
-        pe.setFirstName(p.getFirstName());
-        pe.setLastName(p.getLastName());
-        pe.setEmailAddress(p.getEmailAddress());
-        pe.setDateOfBirth(DateTimeUtil.convertDateToLocalDate(p.getDateOfBirth()));
-        return pe;
+        return Person.toEntity(p);
     }
 
     @Override
     protected Person convertToObject(PersonEntity pe) {
-        Person to = new Person();
-        to.setUuid(pe.getUuid());
-        to.setFirstName(pe.getFirstName());
-        to.setLastName(pe.getLastName());
-        to.setEmailAddress(pe.getEmailAddress());
-        to.setDateOfBirth(DateTimeUtil.convertLocalDateToDate(pe.getDateOfBirth()));
-        return to;
+        return Person.toDTO(pe);
     }
 
 }

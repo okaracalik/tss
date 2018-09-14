@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -40,6 +41,11 @@ import jee18.entities.enums.TimesheetStatus;
             name = "TimesheetEntity.deleteTimesheetEntityByUUID",
             query = "DELETE FROM TimesheetEntity e WHERE e.uuid = :uuid"
     )
+        ,
+    @NamedQuery(
+            name = "TimesheetEntity.deleteTimesheetEntityInProgressByContractId",
+            query = "DELETE FROM TimesheetEntity e WHERE e.contract = :contract AND e.status = :status"
+    )
 })
 public class TimesheetEntity extends AbstractEntity {
 
@@ -52,6 +58,8 @@ public class TimesheetEntity extends AbstractEntity {
     private Double hoursDue;
     private LocalDate signedByEmployee;
     private LocalDate signedBySupervisor;
+    @JoinColumn(name = "contract_id")
+    private ContractEntity contract;
 
     public TimesheetEntity() {
         this(false);
@@ -111,6 +119,19 @@ public class TimesheetEntity extends AbstractEntity {
 
     public void setSignedBySupervisor(LocalDate signedBySupervisor) {
         this.signedBySupervisor = signedBySupervisor;
+    }
+
+    public ContractEntity getContract() {
+        return contract;
+    }
+
+    public void setContract(ContractEntity contract) {
+        this.contract = contract;
+    }
+
+    @Override
+    public String toString() {
+        return "TimesheetEntity{" + "status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", hoursDue=" + hoursDue + ", signedByEmployee=" + signedByEmployee + ", signedBySupervisor=" + signedBySupervisor + ", contract=" + contract + '}';
     }
 
 }

@@ -7,7 +7,9 @@ package jee18.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.TimesheetStatus;
+import jee18.utils.DateTimeUtil;
 
 /**
  *
@@ -32,7 +34,7 @@ public class Timesheet implements Serializable {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-    
+
     public TimesheetStatus getStatus() {
         return status;
     }
@@ -83,7 +85,35 @@ public class Timesheet implements Serializable {
 
     @Override
     public String toString() {
-        return "Timesheet{" + "status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", hoursDue=" + hoursDue + ", signedByEmployee=" + signedByEmployee + ", signedBySupervisor=" + signedBySupervisor + '}';
+        return "Timesheet{" + "uuid=" + uuid + ", status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", hoursDue=" + hoursDue + ", signedByEmployee=" + signedByEmployee + ", signedBySupervisor=" + signedBySupervisor + '}';
+    }
+
+    public static TimesheetEntity toEntity(Timesheet dto) {
+        TimesheetEntity te = TimesheetEntity.newInstance();
+        te.setStatus(dto.getStatus());
+        te.setStartDate(DateTimeUtil.convertDateToLocalDate(dto.getStartDate()));
+        te.setEndDate(DateTimeUtil.convertDateToLocalDate(dto.getEndDate()));
+        te.setHoursDue(calculateTimesheetHoursDue());
+        te.setSignedByEmployee(DateTimeUtil.convertDateToLocalDate(dto.getSignedByEmployee()));
+        te.setSignedBySupervisor(DateTimeUtil.convertDateToLocalDate(dto.getSignedBySupervisor()));
+        return te;
+    }
+    
+    public static Timesheet toDTO(TimesheetEntity te) {
+        Timesheet to = new Timesheet();
+        to.setUuid(te.getUuid());
+        to.setStatus(te.getStatus());
+        to.setStartDate(DateTimeUtil.convertLocalDateToDate(te.getStartDate()));
+        to.setEndDate(DateTimeUtil.convertLocalDateToDate(te.getEndDate()));
+        to.setHoursDue(te.getHoursDue());
+        to.setSignedByEmployee(DateTimeUtil.convertLocalDateToDate(te.getSignedByEmployee()));
+        to.setSignedBySupervisor(DateTimeUtil.convertLocalDateToDate(te.getSignedBySupervisor()));
+        return to;
+    }
+    
+    // FIXME: calculateTimesheetHoursDue
+    private static Double calculateTimesheetHoursDue() {
+        return 0.00;
     }
 
 }
