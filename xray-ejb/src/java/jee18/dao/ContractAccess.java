@@ -65,8 +65,8 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
                 .setParameter("vacationDaysPerYear", contract.getVacationDaysPerYear())
                 .executeUpdate();
         if (contract.getStatus() == ContractStatus.STARTED) {
-            contract.getTimesheets().forEach(c -> {
-                e.addTimesheets(c);
+            contract.getTimesheets().forEach((te) -> {
+                e.addTimesheets(te);
             });
         }
         else if (contract.getStatus() == ContractStatus.TERMINATED) {

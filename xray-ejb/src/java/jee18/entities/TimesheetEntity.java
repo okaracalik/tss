@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -58,6 +59,7 @@ public class TimesheetEntity extends AbstractEntity {
     private Double hoursDue;
     private LocalDate signedByEmployee;
     private LocalDate signedBySupervisor;
+    @ManyToOne
     @JoinColumn(name = "contract_id")
     private ContractEntity contract;
 
