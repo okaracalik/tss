@@ -6,6 +6,9 @@
 package jee18.entities;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import jee18.entities.enums.TimesheetStatus;
 
@@ -42,7 +46,7 @@ import jee18.entities.enums.TimesheetStatus;
             name = "TimesheetEntity.deleteTimesheetEntityByUUID",
             query = "DELETE FROM TimesheetEntity e WHERE e.uuid = :uuid"
     )
-        ,
+    ,
     @NamedQuery(
             name = "TimesheetEntity.deleteTimesheetEntityInProgressByContractId",
             query = "DELETE FROM TimesheetEntity e WHERE e.contract = :contract AND e.status = :status"
@@ -62,6 +66,8 @@ public class TimesheetEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "contract_id")
     private ContractEntity contract;
+    @OneToMany(mappedBy = "timesheet", cascade = CascadeType.PERSIST)
+    private Set<TimesheetEntryEntity> entries = new HashSet<>();
 
     public TimesheetEntity() {
         this(false);
@@ -69,6 +75,9 @@ public class TimesheetEntity extends AbstractEntity {
 
     TimesheetEntity(boolean isNew) {
         super(isNew);
+        if (isNew) {
+            entries = new HashSet<>();
+        }
     }
 
     public static TimesheetEntity newInstance() {
@@ -131,9 +140,19 @@ public class TimesheetEntity extends AbstractEntity {
         this.contract = contract;
     }
 
+    public Set<TimesheetEntryEntity> getEntries() {
+        return entries;
+    }
+
     @Override
     public String toString() {
         return "TimesheetEntity{" + "status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", hoursDue=" + hoursDue + ", signedByEmployee=" + signedByEmployee + ", signedBySupervisor=" + signedBySupervisor + ", contract=" + contract + '}';
+    }
+    
+    public void addEntry(TimesheetEntryEntity e) {
+        System.out.print(this.getClass().toString() + " addEntry: " + e);
+        e.setTimesheet(this);
+        entries.add(e);
     }
 
 }

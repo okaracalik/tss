@@ -10,6 +10,8 @@ import java.time.LocalTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -53,6 +55,9 @@ public class TimesheetEntryEntity extends AbstractEntity {
     private LocalTime startTime;
     private LocalTime endTime;
     private LocalDate entryDate;
+    @ManyToOne
+    @JoinColumn(name = "timesheet_id")
+    private TimesheetEntity timesheet;
 
     public TimesheetEntryEntity() {
         this(false);
@@ -112,6 +117,19 @@ public class TimesheetEntryEntity extends AbstractEntity {
 
     public void setEntryDate(LocalDate entryDate) {
         this.entryDate = entryDate;
+    }
+
+    public TimesheetEntity getTimesheet() {
+        return timesheet;
+    }
+
+    public void setTimesheet(TimesheetEntity timesheet) {
+        this.timesheet = timesheet;
+    }
+
+    @Override
+    public String toString() {
+        return "TimesheetEntryEntity{" + "type=" + type + ", description=" + description + ", hours=" + hours + ", startTime=" + startTime + ", endTime=" + endTime + ", entryDate=" + entryDate + ", timesheet=" + timesheet + '}';
     }
 
 }

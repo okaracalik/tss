@@ -10,7 +10,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import jee18.dto.TimesheetEntry;
-import jee18.logic.ICRUD;
+import jee18.logic.ITimesheetEntrySystem;
 
 /**
  *
@@ -21,7 +21,7 @@ import jee18.logic.ICRUD;
 public class TimesheetEntryListMBean {
 
     @EJB(beanName = "TimesheetEntrySystem")
-    private ICRUD timesheetEntrySystem;
+    private ITimesheetEntrySystem timesheetEntrySystem;
 
     private List<TimesheetEntry> timesheetEntryList;
 
@@ -30,7 +30,7 @@ public class TimesheetEntryListMBean {
 
     public List<TimesheetEntry> getTimesheetEntryList() {
         if (timesheetEntryList == null) {
-            timesheetEntryList = timesheetEntrySystem.getList();
+            timesheetEntryList = timesheetEntrySystem.list();
         }
         return timesheetEntryList;
     }

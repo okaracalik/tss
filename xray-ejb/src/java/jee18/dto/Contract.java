@@ -165,6 +165,7 @@ public class Contract implements Serializable {
         return e;
     }
 
+    // TODO: doesnot convert timesheets
     public static Contract toDTO(ContractEntity e) {
         Contract dto = new Contract();
         dto.setUuid(e.getUuid());

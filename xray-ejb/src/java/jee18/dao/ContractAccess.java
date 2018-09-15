@@ -6,6 +6,7 @@
 package jee18.dao;
 
 import java.util.List;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import jee18.entities.ContractEntity;
@@ -18,6 +19,7 @@ import jee18.entities.enums.TimesheetStatus;
  * @author okaracalik
  */
 @Stateless(name = "ContractAccess")
+@LocalBean
 public class ContractAccess extends AbstractAccess implements IAccess<ContractEntity> {
 
     public ContractAccess() {

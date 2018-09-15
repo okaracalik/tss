@@ -6,6 +6,7 @@
 package jee18.dao;
 
 import java.util.List;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import jee18.entities.TimesheetEntity;
@@ -15,6 +16,7 @@ import jee18.entities.TimesheetEntity;
  * @author okaracalik
  */
 @Stateless
+@LocalBean
 public class TimesheetAccess extends AbstractAccess implements IAccess<TimesheetEntity> {
 
     public TimesheetAccess() {

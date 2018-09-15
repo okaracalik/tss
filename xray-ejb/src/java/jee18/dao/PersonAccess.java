@@ -6,6 +6,7 @@
 package jee18.dao;
 
 import java.util.List;
+import javax.ejb.LocalBean;
 import jee18.entities.PersonEntity;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
@@ -15,6 +16,7 @@ import javax.persistence.NoResultException;
  * @author okaracalik
  */
 @Stateless(name = "PersonAccess")
+@LocalBean
 public class PersonAccess extends AbstractAccess implements IAccess<PersonEntity> {
 
     public PersonAccess() {

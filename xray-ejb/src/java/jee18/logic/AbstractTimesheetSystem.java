@@ -24,7 +24,7 @@ abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> imple
 
     public AbstractTimesheetSystem(String name) throws NamingException {
         InitialContext ctx = new InitialContext();
-        Object fObj = ctx.lookup("java:global/xray/xray-ejb/" + name + "!jee18.dao.IAccess");
+        Object fObj = ctx.lookup("java:global/xray/xray-ejb/" + name + "!jee18.dao."+name);
         accessor = (IAccess<B>) fObj;
     }
 

@@ -6,7 +6,6 @@
 package jee18.dao;
 
 import java.util.List;
-import javax.ejb.Local;
 import jee18.entities.AbstractEntity;
 
 /**
@@ -14,12 +13,11 @@ import jee18.entities.AbstractEntity;
  * @author okaracalik
  * @param <A>
  */
-@Local
 public interface IAccess<A extends AbstractEntity> {
 
-    public A create(A a);
-
     public List<A> getList();
+
+    public A create(A a);
     
     public A getByUuid(String uuid);
     

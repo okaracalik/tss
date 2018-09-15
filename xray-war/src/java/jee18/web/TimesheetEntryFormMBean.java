@@ -11,7 +11,7 @@ import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.TimesheetEntry;
-import jee18.logic.ICRUD;
+import jee18.logic.ITimesheetEntrySystem;
 
 /**
  *
@@ -24,8 +24,9 @@ public class TimesheetEntryFormMBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB(beanName = "TimesheetEntrySystem")
-    private ICRUD timesheetEntrySystem;
+    private ITimesheetEntrySystem timesheetEntrySystem;
     private String uuid;
+    private String timesheetUuid;
 
     private TimesheetEntry timesheetEntry;
 
@@ -38,7 +39,7 @@ public class TimesheetEntryFormMBean implements Serializable {
             timesheetEntry = new TimesheetEntry();
         }
         else {
-            timesheetEntry = (TimesheetEntry) timesheetEntrySystem.getByUuid(uuid);
+            timesheetEntry = (TimesheetEntry) timesheetEntrySystem.get(uuid);
         }
     }
 
@@ -54,13 +55,21 @@ public class TimesheetEntryFormMBean implements Serializable {
         return uuid;
     }
 
+    public String getTimesheetUuid() {
+        return timesheetUuid;
+    }
+
+    public void setTimesheetUuid(String timesheetUuid) {
+        this.timesheetUuid = timesheetUuid;
+    }
+
     public String save() {
         try {
             if (uuid == null) {
-                timesheetEntrySystem.create(timesheetEntry);
+                 timesheetEntrySystem.add(timesheetEntry, timesheetUuid);
             }
             else {
-                timesheetEntrySystem.updateByUuid(uuid, timesheetEntry);
+                 timesheetEntrySystem.update(uuid, timesheetEntry);
             }
             return "/timesheet-entry/timesheet-entry-list.xhtml?faces-redirect=true";
         }
@@ -72,7 +81,7 @@ public class TimesheetEntryFormMBean implements Serializable {
 
     public String delete() {
         try {
-            timesheetEntrySystem.deleteByUuid(uuid);
+            timesheetEntrySystem.delete(uuid);
             return "/timesheet-entry/timesheet-entry-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {

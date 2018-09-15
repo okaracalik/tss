@@ -6,28 +6,35 @@
 package jee18.dao;
 
 import java.util.List;
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+
+import jee18.entities.TimesheetEntity;
 import jee18.entities.TimesheetEntryEntity;
 
 /**
  *
  * @author okaracalik
  */
+@LocalBean
 @Stateless(name = "TimesheetEntryAccess")
 public class TimesheetEntryAccess extends AbstractAccess implements IAccess<TimesheetEntryEntity> {
+
+    @EJB
+    private TimesheetAccess timesheetAccess;
 
     public TimesheetEntryAccess() {
         super(TimesheetEntryAccess.class);
     }
 
-    public TimesheetEntryEntity addTimesheetEntry(TimesheetEntryEntity timesheetEntry) {
-        em.persist(timesheetEntry);
-        return timesheetEntry;
-    }
-
-    public List<TimesheetEntryEntity> getTimesheetEntryList() {
-        return em.createNamedQuery("TimesheetEntryEntity.getTimesheetEntryList", TimesheetEntryEntity.class).getResultList();
+    public TimesheetEntryEntity createWithTimesheet(TimesheetEntryEntity te, String t) {
+        TimesheetEntity a = timesheetAccess.getByUuid(t);
+        em.persist(te);
+        te.setTimesheet(a);
+        a.addEntry(te);
+        return te;
     }
 
     @Override

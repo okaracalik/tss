@@ -26,6 +26,7 @@ public class TimesheetEntry implements Serializable {
     private Date startTime;
     private Date endTime;
     private Date entryDate;
+    private Timesheet timesheet;
 
     public String getUuid() {
         return uuid;
@@ -34,7 +35,7 @@ public class TimesheetEntry implements Serializable {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-    
+
     public ReportType getType() {
         return type;
     }
@@ -83,6 +84,14 @@ public class TimesheetEntry implements Serializable {
         this.entryDate = entryDate;
     }
 
+    public Timesheet getTimesheet() {
+        return timesheet;
+    }
+
+    public void setTimesheet(Timesheet timesheet) {
+        this.timesheet = timesheet;
+    }
+
     @Override
     public String toString() {
         return "TimesheetEntry{" + "type=" + type + ", description=" + description + ", hours=" + hours + ", startTime=" + startTime + ", endTime=" + endTime + ", entryDate=" + entryDate + '}';
@@ -96,9 +105,10 @@ public class TimesheetEntry implements Serializable {
         e.setStartTime(DateTimeUtil.convertDateToLocalTime(dto.getStartTime()));
         e.setEndTime(DateTimeUtil.convertDateToLocalTime(dto.getEndTime()));
         e.setEntryDate(DateTimeUtil.convertDateToLocalDate(dto.getEntryDate()));
+//        e.setTimesheet(Timesheet.toEntity(dto.getTimesheet()));
         return e;
     }
-    
+
     public static TimesheetEntry toDTO(TimesheetEntryEntity e) {
         TimesheetEntry dto = new TimesheetEntry();
         dto.setUuid(e.getUuid());
@@ -110,4 +120,5 @@ public class TimesheetEntry implements Serializable {
         dto.setEntryDate(DateTimeUtil.convertLocalDateToDate(e.getEntryDate()));
         return dto;
     }
+
 }

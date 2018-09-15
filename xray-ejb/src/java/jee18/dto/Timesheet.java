@@ -7,6 +7,8 @@ package jee18.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.TimesheetStatus;
 import jee18.utils.DateTimeUtil;
@@ -26,6 +28,7 @@ public class Timesheet implements Serializable {
     private Double hoursDue;
     private Date signedByEmployee;
     private Date signedBySupervisor;
+    private Set<TimesheetEntry> entries = new HashSet<>();
 
     public String getUuid() {
         return uuid;
@@ -83,34 +86,46 @@ public class Timesheet implements Serializable {
         this.signedBySupervisor = signedBySupervisor;
     }
 
+    public Set<TimesheetEntry> getEntries() {
+        return entries;
+    }
+
+    public void setEntries(Set<TimesheetEntry> entries) {
+        this.entries = entries;
+    }
+
     @Override
     public String toString() {
         return "Timesheet{" + "uuid=" + uuid + ", status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", hoursDue=" + hoursDue + ", signedByEmployee=" + signedByEmployee + ", signedBySupervisor=" + signedBySupervisor + '}';
     }
 
     public static TimesheetEntity toEntity(Timesheet dto) {
-        TimesheetEntity te = TimesheetEntity.newInstance();
-        te.setStatus(dto.getStatus());
-        te.setStartDate(DateTimeUtil.convertDateToLocalDate(dto.getStartDate()));
-        te.setEndDate(DateTimeUtil.convertDateToLocalDate(dto.getEndDate()));
-        te.setHoursDue(calculateTimesheetHoursDue());
-        te.setSignedByEmployee(DateTimeUtil.convertDateToLocalDate(dto.getSignedByEmployee()));
-        te.setSignedBySupervisor(DateTimeUtil.convertDateToLocalDate(dto.getSignedBySupervisor()));
-        return te;
+        TimesheetEntity e = TimesheetEntity.newInstance();
+        e.setStatus(dto.getStatus());
+        e.setStartDate(DateTimeUtil.convertDateToLocalDate(dto.getStartDate()));
+        e.setEndDate(DateTimeUtil.convertDateToLocalDate(dto.getEndDate()));
+        e.setHoursDue(calculateTimesheetHoursDue());
+        e.setSignedByEmployee(DateTimeUtil.convertDateToLocalDate(dto.getSignedByEmployee()));
+        e.setSignedBySupervisor(DateTimeUtil.convertDateToLocalDate(dto.getSignedBySupervisor()));
+        // dto.getEntries().stream().map(x -> TimesheetEntry.toEntity(x)).collect(Collectors.toList()).forEach(t -> {
+        //     e.addEntry(t);
+        // });
+        return e;
     }
-    
-    public static Timesheet toDTO(TimesheetEntity te) {
-        Timesheet to = new Timesheet();
-        to.setUuid(te.getUuid());
-        to.setStatus(te.getStatus());
-        to.setStartDate(DateTimeUtil.convertLocalDateToDate(te.getStartDate()));
-        to.setEndDate(DateTimeUtil.convertLocalDateToDate(te.getEndDate()));
-        to.setHoursDue(te.getHoursDue());
-        to.setSignedByEmployee(DateTimeUtil.convertLocalDateToDate(te.getSignedByEmployee()));
-        to.setSignedBySupervisor(DateTimeUtil.convertLocalDateToDate(te.getSignedBySupervisor()));
-        return to;
+
+    // TODO: does not convert entries
+    public static Timesheet toDTO(TimesheetEntity e) {
+        Timesheet dto = new Timesheet();
+        dto.setUuid(e.getUuid());
+        dto.setStatus(e.getStatus());
+        dto.setStartDate(DateTimeUtil.convertLocalDateToDate(e.getStartDate()));
+        dto.setEndDate(DateTimeUtil.convertLocalDateToDate(e.getEndDate()));
+        dto.setHoursDue(e.getHoursDue());
+        dto.setSignedByEmployee(DateTimeUtil.convertLocalDateToDate(e.getSignedByEmployee()));
+        dto.setSignedBySupervisor(DateTimeUtil.convertLocalDateToDate(e.getSignedBySupervisor()));
+        return dto;
     }
-    
+
     // FIXME: calculateTimesheetHoursDue
     private static Double calculateTimesheetHoursDue() {
         return 0.00;
