@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import jee18.entities.enums.ContractStatus;
 import jee18.entities.enums.TimesheetFrequency;
@@ -65,6 +66,14 @@ public class ContractEntity extends AbstractEntity {
     private Integer vacationDaysPerYear;
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
     private Set<TimesheetEntity> timesheets;
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
+    private Set<Secretary> secretaries;
+    @OneToOne(mappedBy = "contract", cascade = CascadeType.ALL)
+    private Employee employee;
+    @OneToOne(mappedBy = "contract", cascade = CascadeType.ALL)
+    private Supervisor supervisor;
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
+    private Set<Assistant> assistants;
 
     public ContractEntity() {
         this(false);
@@ -74,6 +83,8 @@ public class ContractEntity extends AbstractEntity {
         super(isNew);
         if (isNew) {
             timesheets = new HashSet<>();
+            secretaries = new HashSet<>();
+            assistants = new HashSet<>();
         }
     }
 
@@ -173,6 +184,30 @@ public class ContractEntity extends AbstractEntity {
         return timesheets;
     }
 
+    public Set<Secretary> getSecretaries() {
+        return secretaries;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Supervisor getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Supervisor supervisor) {
+        this.supervisor = supervisor;
+    }
+
+    public void setAssistants(Set<Assistant> assistants) {
+        this.assistants = assistants;
+    }
+
     @Override
     public String toString() {
         return "ContractEntity{" + "status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + ", timesheets=" + timesheets + '}';
@@ -183,5 +218,5 @@ public class ContractEntity extends AbstractEntity {
         te.setContract(this);
         timesheets.add(te);
     }
-
+    
 }

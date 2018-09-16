@@ -7,6 +7,8 @@ package jee18.entities;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -16,6 +18,10 @@ import javax.persistence.Entity;
 @DiscriminatorValue("Employee")
 public class Employee extends RoleEntity {
 
+    @OneToOne
+    @JoinColumn(name = "contract_id")
+    private ContractEntity contract;
+    
     public Employee() {
         this(false);
     }
@@ -27,5 +33,15 @@ public class Employee extends RoleEntity {
     public static Employee newInstance() {
         return new Employee(true);
     }
+
+    public ContractEntity getContract() {
+        return contract;
+    }
+
+    public void setContract(ContractEntity contract) {
+        this.contract = contract;
+    }
+    
+    
 
 }

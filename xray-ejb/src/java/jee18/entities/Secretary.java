@@ -7,6 +7,8 @@ package jee18.entities;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -15,6 +17,10 @@ import javax.persistence.Entity;
 @Entity(name = "Secretary")
 @DiscriminatorValue("Secretary")
 public class Secretary extends RoleEntity {
+
+    @ManyToOne
+    @JoinColumn(name = "contract_id")
+    private ContractEntity contract;
 
     public Secretary() {
         this(false);
@@ -26,6 +32,14 @@ public class Secretary extends RoleEntity {
 
     public static Secretary newInstance() {
         return new Secretary(true);
+    }
+
+    public ContractEntity getContract() {
+        return contract;
+    }
+
+    public void setContract(ContractEntity contract) {
+        this.contract = contract;
     }
 
 }
