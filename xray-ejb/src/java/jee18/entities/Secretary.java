@@ -9,6 +9,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
@@ -16,6 +18,17 @@ import javax.persistence.ManyToOne;
  */
 @Entity(name = "Secretary")
 @DiscriminatorValue("Secretary")
+@NamedQueries({
+    @NamedQuery(
+            name = "RoleEntity.getSecretaryList",
+            query = "SELECT e FROM Secretary e"
+    )
+    ,
+    @NamedQuery(
+            name = "RoleEntity.getSecretaryByUUID",
+            query = "SELECT e FROM Secretary e WHERE e.uuid = :uuid"
+    )
+})
 public class Secretary extends RoleEntity {
 
     @ManyToOne
@@ -32,14 +45,6 @@ public class Secretary extends RoleEntity {
 
     public static Secretary newInstance() {
         return new Secretary(true);
-    }
-
-    public ContractEntity getContract() {
-        return contract;
-    }
-
-    public void setContract(ContractEntity contract) {
-        this.contract = contract;
     }
 
 }

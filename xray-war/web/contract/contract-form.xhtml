@@ -22,10 +22,22 @@
                     <b:commandButton styleClass="#{(contractFormMBean.contract.status=='STARTED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="play" value="${msg.CONTRACT_STATUS_STARTED}" action="#{contractFormMBean.start()}" />
                     <b:commandButton styleClass="#{(contractFormMBean.contract.status=='TERMINATED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="stop" value="${msg.CONTRACT_STATUS_TERMINATED}" action="#{contractFormMBean.terminate()}" />
                     <b:commandButton styleClass="#{(contractFormMBean.contract.status=='ARCHIVED') ? 'col-md-3 active' : 'col-md-3'}" iconAwesome="archive" value="${msg.CONTRACT_STATUS_ARCHIVED}" action="#{contractFormMBean.archive()}" />
-                 </b:buttonGroup>
+                </b:buttonGroup>
             </b:form>
         </b:buttonToolbar>
         <b:form>
+            <b:selectMultiMenu label="${msg.PERSON_FORM_ROLE_SECRETARY}" value="#{contractFormMBean.secretaryUuids}" >
+                <f:selectItems value="#{contractFormMBean.secretaries}" var="r" itemValue="#{r.uuid}" itemLabel="#{r.person.firstName}" />
+            </b:selectMultiMenu><br/>
+            <b:selectOneMenu label="${msg.PERSON_FORM_ROLE_EMPLOYEE}" value="#{contractFormMBean.employeeUuid}" >
+                <f:selectItems value="#{contractFormMBean.employees}" var="r" itemValue="#{r.uuid}" itemLabel="#{r.person.firstName}" />
+            </b:selectOneMenu>
+            <b:selectOneMenu label="${msg.PERSON_FORM_ROLE_SUPERVISOR}" value="#{contractFormMBean.supervisorUuid}" >
+                <f:selectItems value="#{contractFormMBean.supervisors}" var="r" itemValue="#{r.uuid}" itemLabel="#{r.person.firstName}" />
+            </b:selectOneMenu>
+            <b:selectMultiMenu label="${msg.PERSON_FORM_ROLE_ASSISTANT}" value="#{contractFormMBean.assistantUuids}" >
+                <f:selectItems value="#{contractFormMBean.assistants}" var="r" itemValue="#{r.uuid}" itemLabel="#{r.person.firstName}" />
+            </b:selectMultiMenu><br/>
             <b:inputText label="${msg.CONTRACT_NAME}" value="#{contractFormMBean.contract.name}" />
             <b:dateTimePicker label="${msg.CONTRACT_START_DATE}" format="MM/YYYY" viewMode="months" value="#{contractFormMBean.contract.startDate}" />
             <b:dateTimePicker label="${msg.CONTRACT_START_DATE}" format="MM/YYYY" viewMode="months" value="#{contractFormMBean.contract.endDate}" />

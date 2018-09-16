@@ -6,12 +6,16 @@
 package jee18.web;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.Contract;
+import jee18.dto.Role;
 import jee18.logic.IContractSystem;
+import jee18.logic.IRoleSystem;
 
 /**
  *
@@ -25,9 +29,19 @@ public class ContractFormMBean implements Serializable {
 
     @EJB
     private IContractSystem contractSystem;
+    @EJB
+    private IRoleSystem roleSystem;
 
     private Contract contract;
     private String uuid;
+    private List<Role> secretaries;
+    private List<Role> employees;
+    private List<Role> supervisors;
+    private List<Role> assistants;
+    private String secretaryUuids;
+    private String employeeUuid;
+    private String supervisorUuid;
+    private String assistantUuids;
 
     public ContractFormMBean() {
     }
@@ -40,7 +54,15 @@ public class ContractFormMBean implements Serializable {
         else {
             contract = (Contract) contractSystem.get(uuid);
         }
-        System.out.print(contract);
+        System.out.println("jee18.web.ContractFormMBean.init()");
+        secretaries = roleSystem.listSecretary();
+        employees = roleSystem.listEmployee();
+        supervisors = roleSystem.listSupervisor();
+        assistants = roleSystem.listAssistant();
+        System.out.println(secretaries);
+        System.out.println(employees);
+        System.out.println(supervisors);
+        System.out.println(assistants);
     }
 
     public Contract getContract() {
@@ -55,10 +77,62 @@ public class ContractFormMBean implements Serializable {
         return uuid;
     }
 
+    public IRoleSystem getRoleSystem() {
+        return roleSystem;
+    }
+
+    public List<Role> getSecretaries() {
+        return secretaries;
+    }
+
+    public List<Role> getEmployees() {
+        return employees;
+    }
+
+    public List<Role> getSupervisors() {
+        return supervisors;
+    }
+
+    public List<Role> getAssistants() {
+        return assistants;
+    }
+
+    public String getSecretaryUuids() {
+        return secretaryUuids;
+    }
+
+    public void setSecretaryUuids(String secretaryUuids) {
+        this.secretaryUuids = secretaryUuids;
+    }
+
+    public String getEmployeeUuid() {
+        return employeeUuid;
+    }
+
+    public void setEmployeeUuid(String employeeUuid) {
+        this.employeeUuid = employeeUuid;
+    }
+
+    public String getSupervisorUuid() {
+        return supervisorUuid;
+    }
+
+    public void setSupervisorUuid(String supervisorUuid) {
+        this.supervisorUuid = supervisorUuid;
+    }
+
+    public String getAssistantUuids() {
+        return assistantUuids;
+    }
+
+    public void setAssistantUuids(String assistantUuids) {
+        this.assistantUuids = assistantUuids;
+    }
+
     public String save() {
         try {
             if (uuid == null) {
-                contractSystem.add(contract);
+                contractSystem.add(contract, Arrays.asList(secretaryUuids.split("\\s*,\\s*")), employeeUuid, supervisorUuid, Arrays.asList(assistantUuids.split("\\s*,\\s*")));
             }
             else {
                 contractSystem.update(uuid, contract);

@@ -6,9 +6,7 @@
 package jee18.logic.impl;
 
 import java.util.List;
-import java.util.Set;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
 import jee18.dao.PersonAccess;

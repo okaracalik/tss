@@ -15,6 +15,7 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
+import jee18.dao.ContractAccess;
 import jee18.dto.Contract;
 import jee18.dto.Timesheet;
 import jee18.entities.ContractEntity;
@@ -30,6 +31,9 @@ import jee18.utils.DateTimeUtil;
  */
 @Stateless(name = "ContractSystem")
 public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEntity> implements IContractSystem {
+
+    @EJB
+    private ContractAccess contractAccess;
 
     @EJB
     private ITimesheetSystem timesheetSystem;
@@ -48,24 +52,19 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         return Contract.toDTO(ce);
     }
 
-    // vacationHours = vacationDaysPerYear * durationOfContract / 12 * hoursPerWeek / workingDaysPerWeek  (The duration of the contract is counted in months.)
-    private Double calculateVacationHours(Integer vacationDaysPerYear, Integer durationOfContract, Double hoursPerWeek, Integer workingDaysPerWeek) {
-        return (vacationDaysPerYear.doubleValue() * (durationOfContract.doubleValue() / 12)) * (hoursPerWeek / workingDaysPerWeek.doubleValue());
-    }
-
-    // FIXME: calculateHoursDue
-    private Double calculateHoursDue() {
-        return 0.00;
-    }
-
     @Override
     public List<Contract> list() {
         return super.getList();
     }
 
     @Override
-    public Contract add(Contract c) {
-        Contract contract = super.create(c);
+    public Contract add(Contract c, List<String> secretaryUuids, String employeeUuid, String supervisorUuid, List<String> assistantUuids) {
+        System.out.println("jee18.logic.impl.ContractSystem.add()");
+        System.out.print(secretaryUuids);
+        System.out.print(employeeUuid);
+        System.out.print(supervisorUuid);
+        System.out.print(assistantUuids);
+        Contract contract = Contract.toDTO(contractAccess.createWithPersons(Contract.toEntity(c), secretaryUuids, employeeUuid, supervisorUuid, assistantUuids));
 
         return contract;
     }

@@ -204,8 +204,8 @@ public class ContractEntity extends AbstractEntity {
         this.supervisor = supervisor;
     }
 
-    public void setAssistants(Set<Assistant> assistants) {
-        this.assistants = assistants;
+    public Set<Assistant> getAssistants() {
+        return assistants;
     }
 
     @Override
@@ -218,5 +218,5 @@ public class ContractEntity extends AbstractEntity {
         te.setContract(this);
         timesheets.add(te);
     }
-    
+
 }

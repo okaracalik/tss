@@ -8,6 +8,8 @@ package jee18.entities;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 /**
@@ -16,12 +18,23 @@ import javax.persistence.OneToOne;
  */
 @Entity(name = "Employee")
 @DiscriminatorValue("Employee")
+@NamedQueries({
+    @NamedQuery(
+            name = "RoleEntity.getEmployeeList",
+            query = "SELECT e FROM Employee e"
+    )
+    ,
+    @NamedQuery(
+            name = "RoleEntity.getEmployeeByUUID",
+            query = "SELECT e FROM Employee e WHERE e.uuid = :uuid"
+    )
+})
 public class Employee extends RoleEntity {
 
     @OneToOne
     @JoinColumn(name = "contract_id")
     private ContractEntity contract;
-    
+
     public Employee() {
         this(false);
     }
@@ -33,15 +46,5 @@ public class Employee extends RoleEntity {
     public static Employee newInstance() {
         return new Employee(true);
     }
-
-    public ContractEntity getContract() {
-        return contract;
-    }
-
-    public void setContract(ContractEntity contract) {
-        this.contract = contract;
-    }
-    
-    
 
 }

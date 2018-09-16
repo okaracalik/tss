@@ -16,7 +16,7 @@ public interface IContractSystem {
 
     public List<Contract> list();
 
-    public Contract add(Contract c);
+    public Contract add(Contract c, List<String> secretartUuids, String employeeUuid, String supervisorUuid, List<String> assistantUuids);
 
     // TASK: stats
     public Contract get(String uuid);

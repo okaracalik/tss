@@ -6,22 +6,20 @@
 package jee18.logic;
 
 import java.util.List;
-import jee18.dto.Person;
+import jee18.dto.Role;
 
 /**
  *
  * @author okaracalik
  */
-public interface IPersonSystem {
+public interface IRoleSystem {
 
-    public List<Person> list();
+    public List<Role> listSecretary();
 
-    public Person add(Person p, List<String> roles);
+    public List<Role> listEmployee();
 
-    public Person get(String uuid);
+    public List<Role> listSupervisor();
 
-    public Integer update(String uuid, Person p);
-
-    public Integer delete(String uuid);
+    public List<Role> listAssistant();
 
 }

@@ -7,6 +7,7 @@ package jee18.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import jee18.entities.PersonEntity;
 import jee18.utils.DateTimeUtil;
 
 /**
@@ -77,7 +78,7 @@ public class Person implements Serializable {
         return e;
     }
     
-    public static Person toDTO(jee18.entities.PersonEntity e) {
+    public static Person toDTO(PersonEntity e) {
         Person dto = new Person();
         dto.setUuid(e.getUuid());
         dto.setFirstName(e.getFirstName());

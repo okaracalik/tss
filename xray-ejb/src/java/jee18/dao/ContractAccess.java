@@ -9,7 +9,11 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+import jee18.entities.Assistant;
 import jee18.entities.ContractEntity;
+import jee18.entities.Employee;
+import jee18.entities.Secretary;
+import jee18.entities.Supervisor;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.ContractStatus;
 import jee18.entities.enums.TimesheetStatus;
@@ -24,6 +28,27 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
 
     public ContractAccess() {
         super(ContractEntity.class);
+    }
+
+    public ContractEntity createWithPersons(ContractEntity contract, List<String> secretaryUuids, String employeeUuid, String supervisorUuid, List<String> assistantUuids) {
+        em.persist(contract);
+        secretaryUuids.forEach(uuid -> {
+            Secretary secretary = em.createNamedQuery("RoleEntity.getSecretaryByUUID", Secretary.class).setParameter("uuid", uuid).getSingleResult();
+            secretary.setContract(contract);
+            contract.getSecretaries().add(secretary);
+        });
+        Employee employee = em.createNamedQuery("RoleEntity.getEmployeeByUUID", Employee.class).setParameter("uuid", employeeUuid).getSingleResult();
+        employee.setContract(contract);
+        contract.setEmployee(employee);
+        Supervisor supervisor = em.createNamedQuery("RoleEntity.getSupervisorByUUID", Supervisor.class).setParameter("uuid", supervisorUuid).getSingleResult();
+        supervisor.setContract(contract);
+        contract.setSupervisor(supervisor);
+        assistantUuids.forEach(uuid -> {
+            Assistant assistant = em.createNamedQuery("RoleEntity.getAssistantByUUID", Assistant.class).setParameter("uuid", uuid).getSingleResult();
+            assistant.setContract(contract);
+            contract.getAssistants().add(assistant);
+        });
+        return contract;
     }
 
     @Override

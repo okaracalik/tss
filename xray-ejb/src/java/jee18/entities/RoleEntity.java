@@ -27,6 +27,8 @@ public class RoleEntity extends AbstractEntity {
     @JoinColumn(name = "person_id")
     private PersonEntity person;
     private String title;
+    @JoinColumn(name = "contract_id")
+    protected ContractEntity contract;
 
     public RoleEntity() {
         this(false);
@@ -54,6 +56,14 @@ public class RoleEntity extends AbstractEntity {
 
     public String getTitle() {
         return title;
+    }
+
+    public ContractEntity getContract() {
+        return contract;
+    }
+
+    public void setContract(ContractEntity contract) {
+        this.contract = contract;
     }
 
 }

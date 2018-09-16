@@ -9,6 +9,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
@@ -16,6 +18,17 @@ import javax.persistence.ManyToOne;
  */
 @Entity(name = "Assistant")
 @DiscriminatorValue("Assistant")
+@NamedQueries({
+    @NamedQuery(
+            name = "RoleEntity.getAssistantList",
+            query = "SELECT e FROM Assistant e"
+    )
+    ,
+    @NamedQuery(
+            name = "RoleEntity.getAssistantByUUID",
+            query = "SELECT e FROM Assistant e WHERE e.uuid = :uuid"
+    )
+})
 public class Assistant extends RoleEntity {
 
     @ManyToOne
