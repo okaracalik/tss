@@ -6,12 +6,15 @@
 package jee18.web;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import jee18.dto.Person;
-import jee18.logic.ICRUD;
+import jee18.logic.IPersonSystem;
 
 /**
  *
@@ -24,11 +27,12 @@ public class PersonFormMBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EJB(beanName = "PersonSystem")
-    private ICRUD personSystem;
+    private IPersonSystem personSystem;
 
     private Person person;
     private String uuid;
-
+    private String roles;
+    
     public PersonFormMBean() {
     }
 
@@ -38,7 +42,7 @@ public class PersonFormMBean implements Serializable {
             person = new Person();
         }
         else {
-            person = (Person) personSystem.getByUuid(uuid);
+            person = (Person) personSystem.get(uuid);
         }
     }
 
@@ -54,13 +58,22 @@ public class PersonFormMBean implements Serializable {
         return uuid;
     }
 
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+    
     public String save() {
         try {
+            System.out.print(roles);
             if (uuid == null) {
-                personSystem.create(person);
+                personSystem.add(person, Arrays.asList(roles.split("\\s*,\\s*")));
             }
             else {
-                personSystem.updateByUuid(uuid, person);
+                personSystem.update(uuid, person);
             }
             return "/person/person-list.xhtml?faces-redirect=true";
         }
@@ -72,7 +85,7 @@ public class PersonFormMBean implements Serializable {
 
     public String delete() {
         try {
-            personSystem.deleteByUuid(uuid);
+            personSystem.delete(uuid);
             return "/person/person-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {

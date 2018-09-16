@@ -118,6 +118,8 @@ public class TimesheetEntry implements Serializable {
         dto.setStartTime(DateTimeUtil.convertLocalTimeToDate(e.getStartTime(), e.getEntryDate()));
         dto.setEndTime(DateTimeUtil.convertLocalTimeToDate(e.getEndTime(), e.getEntryDate()));
         dto.setEntryDate(DateTimeUtil.convertLocalDateToDate(e.getEntryDate()));
+//        System.out.println(e);
+        dto.setTimesheet(Timesheet.toDTO(e.getTimesheet()));
         return dto;
     }
 

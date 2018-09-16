@@ -18,7 +18,6 @@ import javax.naming.NamingException;
 import jee18.dto.Contract;
 import jee18.dto.Timesheet;
 import jee18.entities.ContractEntity;
-import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.ContractStatus;
 import jee18.logic.AbstractTimesheetSystem;
 import jee18.logic.IContractSystem;

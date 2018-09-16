@@ -11,6 +11,7 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import jee18.dto.Person;
 import jee18.logic.ICRUD;
+import jee18.logic.IPersonSystem;
 
 /**
  *
@@ -21,7 +22,7 @@ import jee18.logic.ICRUD;
 public class PersonListMBean {
 
     @EJB(beanName = "PersonSystem")
-    private ICRUD personSystem;
+    private IPersonSystem personSystem;
 
     private List<Person> personList;
 
@@ -30,7 +31,7 @@ public class PersonListMBean {
 
     public List<Person> getPersonList() {
         if (personList == null) {
-            personList = personSystem.getList();
+            personList = personSystem.list();
         }
         return personList;
     }

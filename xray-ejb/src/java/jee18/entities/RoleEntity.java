@@ -5,21 +5,55 @@
  */
 package jee18.entities;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import jee18.entities.enums.Role;
+import javax.persistence.Table;
 
 /**
  *
  * @author okaracalik
  */
+@Entity
+@Table(name = "roles")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "title")
 public class RoleEntity extends AbstractEntity {
 
     @ManyToOne
+    @JoinColumn(name = "person_id")
     private PersonEntity person;
+    private String title;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    public RoleEntity() {
+        this(false);
+    }
+
+    RoleEntity(boolean isNew) {
+        super(isNew);
+    }
+
+    public static RoleEntity newInstance() {
+        return new RoleEntity(true);
+    }
+
+    public PersonEntity getPerson() {
+        return person;
+    }
+
+    public void setPerson(PersonEntity person) {
+        this.person = person;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 
 }

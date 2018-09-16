@@ -10,6 +10,10 @@ import javax.ejb.LocalBean;
 import jee18.entities.PersonEntity;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+import jee18.entities.Assistant;
+import jee18.entities.Employee;
+import jee18.entities.Secretary;
+import jee18.entities.Supervisor;
 
 /**
  *
@@ -21,6 +25,36 @@ public class PersonAccess extends AbstractAccess implements IAccess<PersonEntity
 
     public PersonAccess() {
         super(PersonEntity.class);
+    }
+
+    public PersonEntity createWithRoles(PersonEntity person, List<String> roles) {
+        em.persist(person);
+        roles.forEach(role -> {
+            if (role.contains("SECRETARY")) {
+                Secretary secretary = Secretary.newInstance();
+                secretary.setPerson(person);
+                person.getRoles().add(secretary);
+            }
+            else if (role.contains("EMPLOYEE")) {
+                Employee employee = Employee.newInstance();
+                employee.setPerson(person);
+                person.getRoles().add(employee);
+            }
+            else if (role.contains("SUPERVISOR")) {
+                Supervisor supervisor = Supervisor.newInstance();
+                supervisor.setPerson(person);
+                person.getRoles().add(supervisor);
+            }
+            else if (role.contains("ASSISTANT")) {
+                Assistant assistant = Assistant.newInstance();
+                assistant.setPerson(person);
+                person.getRoles().add(assistant);
+            }
+            else {
+                System.out.println("jee18.dao.PersonAccess.createWithRoles(): no role");
+            }
+        });
+        return person;
     }
 
     @Override
@@ -62,6 +96,10 @@ public class PersonAccess extends AbstractAccess implements IAccess<PersonEntity
         return em.createNamedQuery("PersonEntity.deletePersonEntityByUUID", PersonEntity.class)
                 .setParameter("uuid", uuid)
                 .executeUpdate();
+    }
+
+    private Exception EJBException(String role_does_not_exist) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

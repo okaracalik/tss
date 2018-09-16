@@ -143,7 +143,7 @@ public class Contract implements Serializable {
 
     @Override
     public String toString() {
-        return "Contract{" + "uuid=" + uuid + ", status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + ", timesheets=" + timesheets + '}';
+        return "Contract{" + "uuid=" + uuid + ", status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + '}';
     }
 
     public static ContractEntity toEntity(Contract dto) {

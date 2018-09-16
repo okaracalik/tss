@@ -6,11 +6,13 @@
 package jee18.entities;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -49,6 +51,8 @@ public class PersonEntity extends AbstractEntity {
     private String lastName;
     private LocalDate dateOfBirth;
     private String emailAddress;
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    private Set<RoleEntity> roles;
 
     public PersonEntity() {
         this(false);
@@ -56,6 +60,9 @@ public class PersonEntity extends AbstractEntity {
 
     PersonEntity(boolean isNew) {
         super(isNew);
+        if (isNew) {
+            roles = new HashSet<>();
+        }
     }
 
     public static PersonEntity newInstance() {
@@ -94,9 +101,17 @@ public class PersonEntity extends AbstractEntity {
         this.emailAddress = emailAddress;
     }
 
+    public Set<RoleEntity> getRoles() {
+        return roles;
+    }
+
     @Override
     public String toString() {
-        return "PersonEntity{" + "firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", emailAddress=" + emailAddress + '}';
+        return "PersonEntity{" + "firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", emailAddress=" + emailAddress + ", roles=" + roles + '}';
+    }
+    
+    public void addRoles(RoleEntity r) {
+        
     }
 
 }

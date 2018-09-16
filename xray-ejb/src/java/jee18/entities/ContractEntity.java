@@ -173,10 +173,11 @@ public class ContractEntity extends AbstractEntity {
         return timesheets;
     }
 
-//    @Override
-//    public String toString() {
-//        return "ContractEntity{" + "status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + ", timesheets=" + timesheets + '}';
-//    }
+    @Override
+    public String toString() {
+        return "ContractEntity{" + "status=" + status + ", name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + ", frequency=" + frequency + ", terminationDate=" + terminationDate + ", hoursPerWeek=" + hoursPerWeek + ", vacationHours=" + vacationHours + ", hoursDue=" + hoursDue + ", workingDaysPerWeek=" + workingDaysPerWeek + ", vacationDaysPerYear=" + vacationDaysPerYear + ", timesheets=" + timesheets + '}';
+    }
+
     public void addTimesheets(TimesheetEntity te) {
         System.out.print(this.getClass().toString() + " addTimesheets: " + te);
         te.setContract(this);

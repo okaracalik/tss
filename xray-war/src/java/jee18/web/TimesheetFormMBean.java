@@ -38,6 +38,7 @@ public class TimesheetFormMBean implements Serializable {
             timesheet = new Timesheet();
         }
         timesheet = (Timesheet) timesheetSystem.get(uuid);
+        System.out.print(this.getClass().toString() + ": " + timesheet);
     }
 
     public Timesheet getTimesheet() {
@@ -78,7 +79,7 @@ public class TimesheetFormMBean implements Serializable {
             return "error";
         }
     }
-    
+
     public String signAsEmployee() {
         try {
             timesheetSystem.signAsEmployee(uuid);
@@ -89,7 +90,7 @@ public class TimesheetFormMBean implements Serializable {
             return "error";
         }
     }
-    
+
     public String revokeEmployeeSignature() {
         try {
             timesheetSystem.revokeEmployeeSignature(uuid);
@@ -100,7 +101,7 @@ public class TimesheetFormMBean implements Serializable {
             return "error";
         }
     }
-    
+
     public String signAsSupervisor() {
         try {
             timesheetSystem.signAsSupervisor(uuid);
@@ -111,7 +112,7 @@ public class TimesheetFormMBean implements Serializable {
             return "error";
         }
     }
-    
+
     public String requestChanges() {
         try {
             timesheetSystem.requestChanges(uuid);
@@ -122,7 +123,7 @@ public class TimesheetFormMBean implements Serializable {
             return "error";
         }
     }
-    
+
     public String archive() {
         try {
             timesheetSystem.setStatusToArchived(uuid);

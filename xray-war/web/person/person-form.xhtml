@@ -19,6 +19,12 @@
             <b:inputText type="text" label="${msg.PERSON_FIRST_NAME}" value="#{personFormMBean.person.firstName}" />
             <b:inputText type="text" label="${msg.PERSON_LAST_NAME}" value="#{personFormMBean.person.lastName}" />
             <b:inputText type="email" label="${msg.PERSON_EMAIL_ADDRESS}" value="#{personFormMBean.person.emailAddress}" />
+            <b:selectMultiMenu label="${msg.PERSON_FORM_ROLES}" value="#{personFormMBean.roles}">
+                <f:selectItem itemValue="SECRETARY" itemLabel="${msg.PERSON_FORM_ROLE_SECRETARY}" />
+                <f:selectItem itemValue="EMPLOYEE" itemLabel="${msg.PERSON_FORM_ROLE_EMPLOYEE}" />
+                <f:selectItem itemValue="SUPERVISOR" itemLabel="${msg.PERSON_FORM_ROLE_SUPERVISOR}" />
+                <f:selectItem itemValue="ASSISTANT" itemLabel="${msg.PERSON_FORM_ROLE_ASSISTANT}" />
+            </b:selectMultiMenu><br/>
             <b:datepicker label="${msg.PERSON_DATE_OF_BIRTH}" mode="icon-popup" value="#{personFormMBean.person.dateOfBirth}" />
             <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" action="#{personFormMBean.save()}"/>
             <b:commandButton look="danger" iconAwesome="trash" value="${msg.FORM_DELETE_TITLE}" action="#{personFormMBean.delete()}" rendered="${personFormMBean.uuid != null}" class="pull-right"/>

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import jee18.entities.ContractEntity;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.TimesheetStatus;
 import jee18.utils.DateTimeUtil;
@@ -28,6 +29,7 @@ public class Timesheet implements Serializable {
     private Double hoursDue;
     private Date signedByEmployee;
     private Date signedBySupervisor;
+    private Contract contract;
     private Set<TimesheetEntry> entries = new HashSet<>();
 
     public String getUuid() {
@@ -86,6 +88,14 @@ public class Timesheet implements Serializable {
         this.signedBySupervisor = signedBySupervisor;
     }
 
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
+
     public Set<TimesheetEntry> getEntries() {
         return entries;
     }
@@ -96,8 +106,9 @@ public class Timesheet implements Serializable {
 
     @Override
     public String toString() {
-        return "Timesheet{" + "uuid=" + uuid + ", status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", hoursDue=" + hoursDue + ", signedByEmployee=" + signedByEmployee + ", signedBySupervisor=" + signedBySupervisor + '}';
+        return "Timesheet{" + "uuid=" + uuid + ", status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", hoursDue=" + hoursDue + ", signedByEmployee=" + signedByEmployee + ", signedBySupervisor=" + signedBySupervisor + ", contract=" + contract + ", entries=" + entries + '}';
     }
+
 
     public static TimesheetEntity toEntity(Timesheet dto) {
         TimesheetEntity e = TimesheetEntity.newInstance();
@@ -123,6 +134,15 @@ public class Timesheet implements Serializable {
         dto.setHoursDue(e.getHoursDue());
         dto.setSignedByEmployee(DateTimeUtil.convertLocalDateToDate(e.getSignedByEmployee()));
         dto.setSignedBySupervisor(DateTimeUtil.convertLocalDateToDate(e.getSignedBySupervisor()));
+        dto.setContract(Contract.toDTO(e.getContract()));
+        System.out.print("Timesheet toDTO: " + dto);
+        System.out.print("Timesheet toDTO: " + dto.getContract());
+        return dto;
+    }
+    
+    private static Contract toContractDTO(ContractEntity e) {
+        Contract dto = new Contract();
+        
         return dto;
     }
 
