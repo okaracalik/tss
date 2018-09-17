@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -50,7 +51,9 @@ public class PersonEntity extends AbstractEntity {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
+    @Column(unique = true)
     private String emailAddress;
+    private String password;
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private Set<RoleEntity> roles;
 
@@ -97,6 +100,14 @@ public class PersonEntity extends AbstractEntity {
         return emailAddress;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
@@ -109,9 +120,9 @@ public class PersonEntity extends AbstractEntity {
     public String toString() {
         return "PersonEntity{" + "firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", emailAddress=" + emailAddress + ", roles=" + roles + '}';
     }
-    
+
     public void addRoles(RoleEntity r) {
-        
+
     }
 
 }

@@ -28,7 +28,7 @@
                 </b:dropMenu>
             </b:navbarLinks>
             <b:navbarLinks pull="right">
-                <b:navLink value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" outcome="sign-in" onclick="#{appMBean.clickSignOut()}"></b:navLink>
+                <b:navLink value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" outcome="sign-in" onclick="#{appMBean.clickSignOut()}" rendered="${not appMBean.loggedIn}" />
                 <li>
                     <b:form styleClass="navbar-form">
                         <h:selectOneMenu class="form-control"  value="#{appMBean.currentLocale}" onchange="submit()">

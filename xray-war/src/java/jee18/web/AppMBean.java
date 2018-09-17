@@ -6,13 +6,13 @@
 package jee18.web;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 
 /**
@@ -27,10 +27,10 @@ public class AppMBean implements Serializable {
 
     private String currentLocale = Locale.ENGLISH.toString();
 
-    private static Map<String, Locale> availableLocales;
+    private static final Map<String, Locale> availableLocales;
 
     static {
-        availableLocales = new LinkedHashMap<String, Locale>();
+        availableLocales = new LinkedHashMap<>();
         availableLocales.put("English", Locale.ENGLISH);
         availableLocales.put("Deutsch", Locale.GERMAN);
     }
@@ -38,11 +38,9 @@ public class AppMBean implements Serializable {
     public void setCurrentLocale(String newLocale) {
         this.currentLocale = newLocale;
 
-        for (Entry<String, Locale> entry : availableLocales.entrySet()) {
-            if (entry.getValue().toString().equals(newLocale)) {
-                FacesContext.getCurrentInstance().getViewRoot().setLocale(entry.getValue());
-            }
-        }
+        availableLocales.entrySet().stream().filter((entry) -> (entry.getValue().toString().equals(newLocale))).forEachOrdered((entry) -> {
+            FacesContext.getCurrentInstance().getViewRoot().setLocale(entry.getValue());
+        });
     }
 
     public Map<String, Locale> getAvailableLocales() {
@@ -55,6 +53,18 @@ public class AppMBean implements Serializable {
 
     public void clickSignOut() {
         System.out.println("clickSignOut");
+    }
+
+    public String getUsername() {
+        Principal currentUser = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
+        if (currentUser == null) {
+            return null;
+        }
+        return currentUser.getName();
+    }
+
+    public boolean isLoggedIn() {
+        return getUsername() != null;
     }
 
 }

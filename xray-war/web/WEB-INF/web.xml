@@ -21,4 +21,20 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>xray-realm</realm-name>
+        <form-login-config>
+            <form-login-page>/app/sign-in.xhtml</form-login-page>
+            <form-error-page>/app/sign-in.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+    <security-role>
+        <description>All authenticated users</description>
+        <role-name>AUTHENTICATED</role-name>
+    </security-role>
+    <security-role>
+        <description>Staff members</description>
+        <role-name>STAFF</role-name>
+    </security-role>
 </web-app>

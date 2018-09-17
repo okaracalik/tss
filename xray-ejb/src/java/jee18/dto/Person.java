@@ -6,9 +6,11 @@
 package jee18.dto;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import jee18.entities.PersonEntity;
 import jee18.utils.DateTimeUtil;
+import jee18.utils.Sha;
 
 /**
  *
@@ -23,6 +25,7 @@ public class Person implements Serializable {
     private String lastName;
     private Date dateOfBirth;
     private String emailAddress;
+    private String password;
 
     public String getUuid() {
         return uuid;
@@ -64,20 +67,32 @@ public class Person implements Serializable {
         this.emailAddress = emailAddress;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "Person{" + "firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", emailAddress=" + emailAddress + '}';
     }
-    
-    public static jee18.entities.PersonEntity toEntity(Person dto) {
+
+    public static jee18.entities.PersonEntity toEntity(Person dto) throws NoSuchAlgorithmException {
         jee18.entities.PersonEntity e = jee18.entities.PersonEntity.newInstance();
         e.setFirstName(dto.getFirstName());
         e.setLastName(dto.getLastName());
         e.setEmailAddress(dto.getEmailAddress());
         e.setDateOfBirth(DateTimeUtil.convertDateToLocalDate(dto.getDateOfBirth()));
+        if (dto.getPassword() == null) {
+            dto.setPassword("admin");
+        }
+        e.setPassword(Sha.hash256(dto.getPassword()));
         return e;
     }
-    
+
     public static Person toDTO(PersonEntity e) {
         Person dto = new Person();
         dto.setUuid(e.getUuid());
