@@ -30,11 +30,19 @@
         </form-login-config>
     </login-config>
     <security-role>
-        <description>All authenticated users</description>
-        <role-name>AUTHENTICATED</role-name>
+        <description>Secretary</description>
+        <role-name>SECRETARY</role-name>
     </security-role>
     <security-role>
-        <description>Staff members</description>
-        <role-name>STAFF</role-name>
+        <description>Supervisor</description>
+        <role-name>SUPERVISOR</role-name>
+    </security-role>
+    <security-role>
+        <description>Assistant</description>
+        <role-name>ASSISTANT</role-name>
+    </security-role>
+    <security-role>
+        <description>Employee</description>
+        <role-name>EMPLOYEE</role-name>
     </security-role>
 </web-app>

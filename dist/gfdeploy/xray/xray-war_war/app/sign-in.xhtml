@@ -10,14 +10,24 @@
 
     <ui:define name="content">
         <h2>${msg.APP_SIGN_IN_TITLE}</h2>
-        <form action="j_security_check" method="post">
-            <h:outputLabel for="j_username" value="Username" />
-            <h:inputText id="j_username" />
-            <br />
-            <h:outputLabel for="j_password" value="Password" />
-            <h:inputSecret id="j_password" />
-            <br />
-            <h:commandButton value="Login" />
+        <form class="form form-horizontal" action="j_security_check" method="post">
+            <div class="form-group">
+                <h:outputLabel class="control-label col-md-2" for="j_username" value="${msg.APP_SIGN_IN_EMAIL_ADDRESS}:" />
+                <div class="col-md-4">
+                    <h:inputText class="form-control" id="j_username" />
+                </div>
+            </div>
+            <div class="form-group">
+                <h:outputLabel class="control-label col-md-2" for="j_password" value="${msg.APP_SIGN_IN_PASSWORD}:" />
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <h:inputSecret class="form-control" id="j_password" />
+                        <span class="input-group-btn">
+                            <h:commandButton class="btn btn-success" value="Login" />
+                        </span>
+                    </div>
+                </div>
+            </div>
         </form>
         <ui:fragment rendered="${request.parameterMap.containsKey('j_username')}">
             <b:alert severity="danger">

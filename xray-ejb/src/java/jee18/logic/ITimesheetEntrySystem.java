@@ -14,14 +14,28 @@ import jee18.dto.TimesheetEntry;
  */
 public interface ITimesheetEntrySystem {
 
+    // -SECRETARY
+    // -SUPERVISOR
+    // -ASSISTANT
+    // -EMPLOYEE ***
     public List<TimesheetEntry> list();
 
+    // -EMPLOYEE
+    // RULE: if timesheet in progress
     public TimesheetEntry add(TimesheetEntry te, String timesheetUuid);
 
+    // -SECRETARY
+    // -SUPERVISOR
+    // -ASSISTANT
+    // -EMPLOYEE ***
     public TimesheetEntry get(String uuid);
 
+    // -EMPLOYEE ***
+    // RULE: if timesheet in progress
     public Integer update(String uuid, TimesheetEntry t);
 
+    // -EMPLOYEE ***
+    // RULE: if timesheet in progress
     public Integer delete(String uuid);
 
 }

@@ -51,8 +51,9 @@ public class AppMBean implements Serializable {
         return currentLocale;
     }
 
-    public void clickSignOut() {
-        System.out.println("clickSignOut");
+    public String clickSignOut() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "/app/sign-in.xhtml";
     }
 
     public String getUsername() {
@@ -63,8 +64,50 @@ public class AppMBean implements Serializable {
         return currentUser.getName();
     }
 
+    public Boolean isSecretary() {
+        return FacesContext.getCurrentInstance().getExternalContext().isUserInRole("SECRETARY");
+    }
+
+    public Boolean isSupervisor() {
+        return FacesContext.getCurrentInstance().getExternalContext().isUserInRole("SUPERVISOR");
+    }
+
+    public Boolean isAssistant() {
+        return FacesContext.getCurrentInstance().getExternalContext().isUserInRole("ASSISTANT");
+    }
+
+    public Boolean isEmployee() {
+        return FacesContext.getCurrentInstance().getExternalContext().isUserInRole("EMPLOYEE");
+    }
+
+    public Boolean isStaff() {
+        return isSecretary() || isSupervisor() || isAssistant();
+    }
+
+    public Boolean isAuthenticated() {
+        return isStaff() || isEmployee();
+    }
+
     public boolean isLoggedIn() {
         return getUsername() != null;
+    }
+
+    public String getRole() {
+        if (isSecretary()) {
+            return "Secretary";
+        }
+        else if (isSupervisor()) {
+            return "Supervisor";
+        }
+        else if (isAssistant()) {
+            return "Assistant";
+        }
+        else if (isEmployee()) {
+            return "Employee";
+        }
+        else {
+            return "Undefined";
+        }
     }
 
 }

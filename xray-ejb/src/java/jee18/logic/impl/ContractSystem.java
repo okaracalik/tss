@@ -59,14 +59,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @Override
     public Contract add(Contract c, List<String> secretaryUuids, String employeeUuid, String supervisorUuid, List<String> assistantUuids) {
-        System.out.println("jee18.logic.impl.ContractSystem.add()");
-        System.out.print(secretaryUuids);
-        System.out.print(employeeUuid);
-        System.out.print(supervisorUuid);
-        System.out.print(assistantUuids);
-        Contract contract = Contract.toDTO(contractAccess.createWithPersons(Contract.toEntity(c), secretaryUuids, employeeUuid, supervisorUuid, assistantUuids));
-
-        return contract;
+        return Contract.toDTO(contractAccess.createWithPersons(Contract.toEntity(c), secretaryUuids, employeeUuid, supervisorUuid, assistantUuids));
     }
 
     @Override

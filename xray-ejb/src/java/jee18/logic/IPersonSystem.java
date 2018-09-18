@@ -14,14 +14,19 @@ import jee18.dto.Person;
  */
 public interface IPersonSystem {
 
+    // SECRETARY
     public List<Person> list();
 
+    // SECRETARY
     public Person add(Person p, List<String> roles);
 
+    // SECRETARY
     public Person get(String uuid);
 
+    // SECRETARY
     public Integer update(String uuid, Person p);
 
+    // SECRETARY
     public Integer delete(String uuid);
 
 }

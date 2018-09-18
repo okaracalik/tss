@@ -5,19 +5,19 @@
     <parameter-encoding default-charset="UTF-8"/>
   </locale-charset-info>
   <security-role-mapping>
-    <role-name>STAFF</role-name>
+    <role-name>SECRETARY</role-name>
     <group-name>Secretary</group-name>
   </security-role-mapping>
   <security-role-mapping>
-    <role-name>STAFF</role-name>
+    <role-name>SUPERVISOR</role-name>
     <group-name>Supervisor</group-name>
   </security-role-mapping>
   <security-role-mapping>
-    <role-name>STAFF</role-name>
+    <role-name>ASSISTANT</role-name>
     <group-name>Assistant</group-name>
   </security-role-mapping>
   <security-role-mapping>
-    <role-name>AUTHENTICATED</role-name>
+    <role-name>EMPLOYEE</role-name>
     <group-name>Employee</group-name>
   </security-role-mapping>
   <class-loader delegate="true"/>

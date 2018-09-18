@@ -5,7 +5,10 @@
  */
 package jee18.logic.impl;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
@@ -31,7 +34,13 @@ public class PersonSystem extends AbstractTimesheetSystem<Person, PersonEntity> 
 
     @Override
     protected PersonEntity convertToEntity(Person p) {
-        return Person.toEntity(p);
+        try {
+            return Person.toEntity(p);
+        }
+        catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(PersonSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -47,7 +56,13 @@ public class PersonSystem extends AbstractTimesheetSystem<Person, PersonEntity> 
     @Override
     public Person add(Person p, List<String> roles) {
         System.out.print(roles);
-        return Person.toDTO(personAccess.createWithRoles(Person.toEntity(p), roles));
+        try {
+            return Person.toDTO(personAccess.createWithRoles(Person.toEntity(p), roles));
+        }
+        catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(PersonSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override

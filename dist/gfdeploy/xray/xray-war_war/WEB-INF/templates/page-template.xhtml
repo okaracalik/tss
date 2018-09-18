@@ -8,7 +8,7 @@
 
     xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="navigation">
-        <b:navBar brand="TSS" brandHref="#" fluid="true">
+        <b:navBar brand="TSS" brandHref="/xray-war/faces/app/sign-in.xhtml" fluid="true">
             <b:navbarLinks>
                 <b:dropMenu value="${msg.PERSON_LIST_TITLE}" iconAwesome="fa-user">
                     <b:navLink value="${msg.PERSON_LIST_TITLE}" outcome="person-list"></b:navLink>
@@ -28,9 +28,11 @@
                 </b:dropMenu>
             </b:navbarLinks>
             <b:navbarLinks pull="right">
-                <b:navLink value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" outcome="sign-in" onclick="#{appMBean.clickSignOut()}" rendered="${not appMBean.loggedIn}" />
                 <li>
                     <b:form styleClass="navbar-form">
+                        <b:label severity="warning" value="#{appMBean.getRole()}" rendered="#{appMBean.isAuthenticated()}"/>
+                        <b:label severity="primary" value="#{appMBean.getUsername()}" rendered="#{appMBean.isAuthenticated()}" />
+                        <b:commandButton look="link" style="color:black" value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" action="#{appMBean.clickSignOut()}" rendered="#{appMBean.isAuthenticated()}" />
                         <h:selectOneMenu class="form-control"  value="#{appMBean.currentLocale}" onchange="submit()">
                             <f:selectItems value="#{appMBean.availableLocales}" /> 
                         </h:selectOneMenu> 
