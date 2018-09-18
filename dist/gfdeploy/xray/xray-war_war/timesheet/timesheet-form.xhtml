@@ -17,14 +17,14 @@
         <h2>${msg.TIMESHEET_FORM_TITLE}</h2>
         <b:buttonToolbar rendered="${timesheetFormMBean.uuid != null}">
             <b:form>
-                <b:buttonGroup class="btn-block">
+                <b:buttonGroup class="btn-block" rendered="#{appMBean.isEmployee()}">
                     <b:commandButton styleClass="col-md-6" iconAwesome="pencil" value="${msg.TIMESHEET_FORM_SIGN}" action="#{timesheetFormMBean.signAsEmployee()}"/>
                     <b:commandButton styleClass="col-md-6" iconAwesome="undo" value="${msg.TIMESHEET_FORM_REVOKE}" action="#{timesheetFormMBean.revokeEmployeeSignature()}"/>
                 </b:buttonGroup>
-                <b:buttonGroup class="btn-block">
-                    <b:commandButton styleClass="col-md-4" iconAwesome="pencil-square" value="${msg.TIMESHEET_FORM_SIGN}" action="#{timesheetFormMBean.signAsSupervisor()}"/>
-                    <b:commandButton styleClass="col-md-4" iconAwesome="backward" value="${msg.TIMESHEET_FORM_REQUEST_CHANGES}" action="#{timesheetFormMBean.requestChanges()}"/>
-                    <b:commandButton styleClass="col-md-4" iconAwesome="archive" value="${msg.TIMESHEET_FORM_ARCHIVE}" action="#{timesheetFormMBean.archive()}"/>
+                <b:buttonGroup class="btn-block" rendered="#{not appMBean.isEmployee()}">
+                    <b:commandButton styleClass="#{not appMBean.isSecretary() ? 'col-md-6' : ''}" iconAwesome="pencil-square" value="${msg.TIMESHEET_FORM_SIGN}" action="#{timesheetFormMBean.signAsSupervisor()}" rendered="#{not appMBean.isSecretary()}"/>
+                    <b:commandButton styleClass="#{not appMBean.isSecretary() ? 'col-md-6' : ''}" iconAwesome="backward" value="${msg.TIMESHEET_FORM_REQUEST_CHANGES}" action="#{timesheetFormMBean.requestChanges()}" rendered="#{not appMBean.isSecretary()}"/>
+                    <b:commandButton styleClass="#{appMBean.isSecretary() ? 'col-md-12' : ''}" iconAwesome="archive" value="${msg.TIMESHEET_FORM_ARCHIVE}" action="#{timesheetFormMBean.archive()}"  rendered="#{appMBean.isSecretary()}"/>
                 </b:buttonGroup>
             </b:form>
         </b:buttonToolbar>

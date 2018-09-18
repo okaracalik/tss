@@ -8,31 +8,34 @@
 
     xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="navigation">
-        <b:navBar brand="TSS" brandHref="/xray-war/faces/app/sign-in.xhtml" fluid="true">
-            <b:navbarLinks>
-                <b:dropMenu value="${msg.PERSON_LIST_TITLE}" iconAwesome="fa-user">
+        <b:navBar brand="TSS" brandHref="/xray-war/" fluid="true">
+            <b:navbarLinks rendered="#{appMBean.isAuthenticated()}">
+                <b:dropMenu value="${msg.PERSON_LIST_TITLE}" iconAwesome="fa-user" rendered="#{appMBean.isSecretary()}">
                     <b:navLink value="${msg.PERSON_LIST_TITLE}" outcome="person-list"></b:navLink>
                     <b:navLink value="${msg.PERSON_FORM_TITLE}" outcome="person-form"></b:navLink>
                 </b:dropMenu>
                 <b:dropMenu value="${msg.CONTRACT_LIST_TITLE}" iconAwesome="fa-book">
                     <b:navLink value="${msg.CONTRACT_LIST_TITLE}" outcome="contract-list"></b:navLink>
-                    <b:navLink value="${msg.CONTRACT_FORM_TITLE}" outcome="contract-form"></b:navLink>
+                    <!--FIXME: it could be opened by url-->
+                    <b:navLink value="${msg.CONTRACT_FORM_TITLE}" outcome="contract-form" rendered="#{appMBean.isSupervisor() || appMBean.isAssistant()}"></b:navLink> 
                 </b:dropMenu>
                 <b:dropMenu value="${msg.TIMESHEET_LIST_TITLE}" iconAwesome="fa-file-text-o">
                     <b:navLink value="${msg.TIMESHEET_LIST_TITLE}" outcome="timesheet-list"></b:navLink>
-                    <b:navLink value="${msg.TIMESHEET_FORM_TITLE}" outcome="timesheet-form"></b:navLink>
+                    <!--FIXME: it could be opened by url-->
+                    <b:navLink value="${msg.TIMESHEET_FORM_TITLE}" outcome="timesheet-form" rendered="#{not appMBean.isSecretary()}"></b:navLink>
                 </b:dropMenu>
                 <b:dropMenu value="${msg.TIMESHEET_ENTRY_LIST_TITLE}" iconAwesome="fa-tasks">
                     <b:navLink value="${msg.TIMESHEET_ENTRY_LIST_TITLE}" outcome="timesheet-entry-list"></b:navLink>
-                    <b:navLink value="${msg.TIMESHEET_ENTRY_FORM_TITLE}" outcome="timesheet-entry-form"></b:navLink>
+                    <!--FIXME: it could be opened by url-->
+                    <b:navLink value="${msg.TIMESHEET_ENTRY_FORM_TITLE}" outcome="timesheet-entry-form" rendered="#{appMBean.isEmployee()}"></b:navLink>
                 </b:dropMenu>
             </b:navbarLinks>
             <b:navbarLinks pull="right">
                 <li>
                     <b:form styleClass="navbar-form">
-                        <b:label severity="warning" value="#{appMBean.getRole()}" rendered="#{appMBean.isAuthenticated()}"/>
+                        <b:label severity="warning" value="#{appMBean.getRole()}"/>
                         <b:label severity="primary" value="#{appMBean.getUsername()}" rendered="#{appMBean.isAuthenticated()}" />
-                        <b:commandButton look="link" style="color:black" value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" action="#{appMBean.clickSignOut()}" rendered="#{appMBean.isAuthenticated()}" />
+                        <b:commandButton look="link" style="color:black" value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" action="sign-out" actionListener="#{appMBean.clickSignOut()}" rendered="#{appMBean.isAuthenticated()}" />
                         <h:selectOneMenu class="form-control"  value="#{appMBean.currentLocale}" onchange="submit()">
                             <f:selectItems value="#{appMBean.availableLocales}" /> 
                         </h:selectOneMenu> 

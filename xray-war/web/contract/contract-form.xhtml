@@ -40,7 +40,7 @@
             </b:selectMultiMenu><br/>
             <b:inputText label="${msg.CONTRACT_NAME}" value="#{contractFormMBean.contract.name}" />
             <b:dateTimePicker label="${msg.CONTRACT_START_DATE}" format="MM/YYYY" viewMode="months" value="#{contractFormMBean.contract.startDate}" />
-            <b:dateTimePicker label="${msg.CONTRACT_START_DATE}" format="MM/YYYY" viewMode="months" value="#{contractFormMBean.contract.endDate}" />
+            <b:dateTimePicker label="${msg.CONTRACT_END_DATE}" format="MM/YYYY" viewMode="months" value="#{contractFormMBean.contract.endDate}" />
             <b:selectOneMenu label="${msg.CONTRACT_FREQUENCY}" value="#{contractFormMBean.contract.frequency}">
                 <f:selectItem itemValue="WEEKLY" itemLabel="${msg.CONTRACT_FREQUENCY_WEEKLY}" />
                 <f:selectItem itemValue="MONTHLY" itemLabel="${msg.CONTRACT_FREQUENCY_MONTHLY}" />

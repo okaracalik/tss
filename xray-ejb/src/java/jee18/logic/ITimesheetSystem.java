@@ -19,6 +19,8 @@ public interface ITimesheetSystem {
     // -ASSISTANT
     // -EMPLOYEE ***
     public List<Timesheet> list();
+    
+    public List<Timesheet> listMyTimesheets();
 
     // FIXME: this is automatic process.
     public Timesheet add(Timesheet t);

@@ -17,9 +17,11 @@ public interface IContractSystem {
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
-    // -EMPLOYEE ***
     public List<Contract> list();
 
+    // -EMPLOYEE ***
+    public List<Contract> listMyContracts(String employeeUuid);
+    
     // -SUPERVISOR
     // -ASSISTANT
     public Contract add(Contract c, List<String> secretartUuids, String employeeUuid, String supervisorUuid, List<String> assistantUuids);

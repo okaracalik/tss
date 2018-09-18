@@ -4,10 +4,45 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:b="http://bootsfaces.net/ui"
     >
     <ui:param name="title" value="Home"/>
     <ui:define name="content">
-        <h1>AAA</h1>
+        <b:row styleClass="text-center">
+            <h2>${msg.APPLICATION_NAME}</h2>
+        </b:row>
+        <b:row rendered="#{appMBean.isAuthenticated()}" styleClass="text-center">
+            <b:column col-md="6" rendered="#{appMBean.isSecretary()}">
+                <h2> <b:iconAwesome ajax="false" value="fa-user"/> ${msg.PERSON_LIST_TITLE}</h2>
+                <b:formGroup>
+                    <b:button col-md="12" size="lg" outcome="person-list" iconAwesome="fa-list-ol" value="${msg.APP_LIST}" style="margin-bottom: 10px"/>
+                    <b:button col-md="12" size="lg" outcome="person-form" iconAwesome="fa-plus" value="${msg.APP_CREATE}"/>
+                </b:formGroup>
+            </b:column>
+            <b:column col-md="6" styleClass="#{appMBean.isSecretary() ? 'text-center' : 'col-md-offset-3 text-center'}">
+                <h2> <b:iconAwesome ajax="false" value="fa-book"/> ${msg.CONTRACT_LIST_TITLE}</h2>
+                <b:formGroup>
+                    <b:button col-md="12" size="lg" outcome="contract-list" iconAwesome="fa-list-ol" value="${msg.APP_LIST}" style="margin-bottom: 10px"/>
+                    <b:button col-md="12" size="lg" outcome="contract-form" iconAwesome="fa-plus" value="${msg.APP_CREATE}" rendered="#{appMBean.isSupervisor() || appMBean.isAssistant()}"/>
+                </b:formGroup>
+            </b:column>
+        </b:row>
+        <b:row rendered="#{appMBean.isAuthenticated()}">
+            <b:column col-md="6" styleClass="text-center">
+                <h2> <b:iconAwesome ajax="false" value="fa-file-text-o"/> ${msg.TIMESHEET_LIST_TITLE}</h2>
+                <b:formGroup>
+                    <b:button col-md="12" size="lg" outcome="timesheet-list" iconAwesome="fa-list-ol" value="${msg.APP_LIST}" style="margin-bottom: 10px"/>
+                    <b:button col-md="12" size="lg" outcome="timesheet-form" iconAwesome="fa-plus" value="${msg.APP_CREATE}" rendered="#{not appMBean.isSecretary()}"/>
+                </b:formGroup>
+            </b:column>
+            <b:column col-md="6" styleClass="text-center">
+                <h2> <b:iconAwesome ajax="false" value="fa-tasks"/> ${msg.TIMESHEET_ENTRY_LIST_TITLE}</h2>
+                <b:formGroup>
+                    <b:button col-md="12" size="lg" outcome="timesheet-entry-list" iconAwesome="fa-list-ol" value="${msg.APP_LIST}" style="margin-bottom: 10px"/>
+                    <b:button col-md="12" size="lg" outcome="timesheet-entry-form" iconAwesome="fa-plus" value="${msg.APP_CREATE}" rendered="#{appMBean.isEmployee()}"/>
+                </b:formGroup>
+            </b:column>
+        </b:row>
     </ui:define>
 </ui:composition>
 

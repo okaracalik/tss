@@ -9,8 +9,8 @@
     >
 
     <ui:define name="content">
-        <h2>${msg.APP_SIGN_IN_TITLE}</h2>
         <form class="form form-horizontal" action="j_security_check" method="post">
+            <legend>${msg.APP_SIGN_IN_TITLE}</legend>
             <div class="form-group">
                 <h:outputLabel class="control-label col-md-2" for="j_username" value="${msg.APP_SIGN_IN_EMAIL_ADDRESS}:" />
                 <div class="col-md-4">

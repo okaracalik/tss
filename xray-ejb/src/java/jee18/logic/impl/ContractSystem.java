@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -22,7 +23,6 @@ import jee18.entities.ContractEntity;
 import jee18.entities.enums.ContractStatus;
 import jee18.logic.AbstractTimesheetSystem;
 import jee18.logic.IContractSystem;
-import jee18.logic.ITimesheetSystem;
 import jee18.utils.DateTimeUtil;
 
 /**
@@ -34,9 +34,6 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @EJB
     private ContractAccess contractAccess;
-
-    @EJB
-    private ITimesheetSystem timesheetSystem;
 
     public ContractSystem() throws NamingException {
         super("ContractAccess");
@@ -52,21 +49,31 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         return Contract.toDTO(ce);
     }
 
+    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public List<Contract> list() {
         return super.getList();
     }
 
+    @RolesAllowed("EMPLOYEE")
+    @Override
+    public List<Contract> listMyContracts(String employeeUuid) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Contract add(Contract c, List<String> secretaryUuids, String employeeUuid, String supervisorUuid, List<String> assistantUuids) {
         return Contract.toDTO(contractAccess.createWithPersons(Contract.toEntity(c), secretaryUuids, employeeUuid, supervisorUuid, assistantUuids));
     }
 
+    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public Contract get(String uuid) {
         return super.getByUuid(uuid);
     }
 
+    @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer update(String uuid, Contract c) {
         Contract contract = super.getByUuid(uuid);
@@ -78,6 +85,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         }
     }
 
+    @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer delete(String uuid) {
         Contract contract = super.getByUuid(uuid);
@@ -89,6 +97,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         }
     }
 
+    @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer setStatusToStarted(String uuid) {
         Contract contract = super.getByUuid(uuid);
@@ -112,6 +121,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     }
 
+    @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer setStatusToTerminated(String uuid) {
         Contract contract = super.getByUuid(uuid);
@@ -125,6 +135,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         }
     }
 
+    @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer setStatusToArchived(String uuid) {
         Contract contract = super.getByUuid(uuid);
@@ -137,6 +148,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         }
     }
 
+    @RolesAllowed("SECRETARY")
     @Override
     public void print() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -6,6 +6,7 @@
 package jee18.logic.impl;
 
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -47,11 +48,19 @@ public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry
         return TimesheetEntry.toDTO(tee);
     }
 
+    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public List<TimesheetEntry> list() {
         return super.getList();
     }
+    
+    @RolesAllowed("EMPLOYEE")
+    @Override
+    public List<TimesheetEntry> listMyTimesheetEntries(String employeeUuid) {
+        return super.getList();
+    }
 
+    @RolesAllowed("EMPLOYEE")
     @Override
     public TimesheetEntry add(TimesheetEntry te, String timesheetUuid) {
         Timesheet t = timesheetSystem.get(timesheetUuid);
@@ -64,11 +73,13 @@ public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry
         }
     }
 
+    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public TimesheetEntry get(String uuid) {
         return super.getByUuid(uuid);
     }
 
+    @RolesAllowed("EMPLOYEE")
     @Override
     public Integer update(String uuid, TimesheetEntry te) {
         if (te.getTimesheet().getStatus() == TimesheetStatus.IN_PROGRESS && te.getTimesheet().getContract().getStatus() == ContractStatus.STARTED) {
@@ -79,6 +90,7 @@ public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry
         }
     }
 
+    @RolesAllowed("EMPLOYEE")
     @Override
     public Integer delete(String uuid) {
         TimesheetEntry te = super.getByUuid(uuid);

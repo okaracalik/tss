@@ -7,6 +7,7 @@ package jee18.logic.impl;
 
 import java.util.Date;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
@@ -37,16 +38,25 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         return Timesheet.toDTO(te);
     }
     
+    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public List<Timesheet> list() {
         return super.getList();
     }
     
+    @RolesAllowed("EMPLOYEE")
+    @Override
+    public List<Timesheet> listMyTimesheets() {
+        return super.getList();
+    }
+    
+    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT"})
     @Override
     public Timesheet add(Timesheet t) {
         return super.create(t);
     }
     
+    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public Timesheet get(String uuid) {
         System.out.print("Timesheet get: " + uuid);
@@ -55,6 +65,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         return t;
     }
     
+    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer update(String uuid, Timesheet t) {
         Timesheet timesheet = super.getByUuid(uuid);
@@ -66,6 +77,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         }
     }
     
+    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer delete(String uuid) {
         Timesheet timesheet = super.getByUuid(uuid);
@@ -77,6 +89,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         }
     }
     
+    @RolesAllowed("EMPLOYEE")
     @Override
     public Integer signAsEmployee(String uuid) {
         Timesheet timesheet = super.getByUuid(uuid);
@@ -90,6 +103,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         }
     }
     
+    @RolesAllowed("EMPLOYEE")
     @Override
     public Integer revokeEmployeeSignature(String uuid) {
         Timesheet timesheet = super.getByUuid(uuid);
@@ -101,6 +115,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         }
     }
     
+    @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer signAsSupervisor(String uuid) {
         Timesheet timesheet = super.getByUuid(uuid);
@@ -114,6 +129,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         }
     }
     
+    @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer requestChanges(String uuid) {
         Timesheet timesheet = super.getByUuid(uuid);
@@ -125,6 +141,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         }
     }
     
+    @RolesAllowed("SECRETARY")
     @Override
     public Integer setStatusToArchived(String uuid) {
         Timesheet timesheet = super.getByUuid(uuid);
@@ -137,6 +154,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         }
     }
     
+    @RolesAllowed("SECRETARY")
     @Override
     public void print() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -17,8 +17,10 @@ public interface ITimesheetEntrySystem {
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
-    // -EMPLOYEE ***
     public List<TimesheetEntry> list();
+    
+    // -EMPLOYEE ***
+    public List<TimesheetEntry> listMyTimesheetEntries(String employeeUuid);
 
     // -EMPLOYEE
     // RULE: if timesheet in progress
