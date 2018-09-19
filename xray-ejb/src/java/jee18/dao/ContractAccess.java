@@ -5,7 +5,9 @@
  */
 package jee18.dao;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
@@ -51,6 +53,46 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
         return contract;
     }
 
+    public Integer start(String uuid, Set<TimesheetEntity> tes) {
+        ContractEntity e = getByUuid(uuid);
+        Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
+                .setParameter("uuid", e.getUuid())
+                .setParameter("status", ContractStatus.STARTED)
+                .setParameter("terminationDate", e.getTerminationDate())
+                .executeUpdate();
+        tes.forEach(te -> {
+            te.setContract(e);
+            e.getTimesheets().add(te);
+        });
+
+        return rows;
+    }
+
+    public Integer terminate(String uuid) {
+        ContractEntity e = getByUuid(uuid);
+        Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
+                .setParameter("uuid", e.getUuid())
+                .setParameter("status", ContractStatus.TERMINATED)
+                .setParameter("terminationDate", LocalDate.now())
+                .executeUpdate();
+        em.createNamedQuery("TimesheetEntity.deleteTimesheetEntityInProgressByContractId", TimesheetEntity.class)
+                .setParameter("contract", e)
+                .setParameter("status", TimesheetStatus.IN_PROGRESS)
+                .executeUpdate();
+        return rows;
+    }
+
+    public Integer archive(String uuid) {
+        System.out.println("jee18.dao.ContractAccess.archive()");
+        ContractEntity e = getByUuid(uuid);
+        Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
+                .setParameter("uuid", e.getUuid())
+                .setParameter("status", ContractStatus.ARCHIVED)
+                .setParameter("terminationDate", e.getTerminationDate())
+                .executeUpdate();
+        return rows;
+    }
+
     @Override
     public ContractEntity create(ContractEntity contract) {
         em.persist(contract);
@@ -77,32 +119,26 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
     @Override
     public Integer updateByUuid(String uuid, ContractEntity contract) {
         ContractEntity e = getByUuid(uuid);
-        Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityByUUID", ContractEntity.class)
-                .setParameter("uuid", uuid)
-                .setParameter("status", contract.getStatus())
-                .setParameter("name", contract.getName())
-                .setParameter("startDate", contract.getStartDate())
-                .setParameter("endDate", contract.getEndDate())
-                .setParameter("frequency", contract.getFrequency())
-                .setParameter("terminationDate", contract.getTerminationDate())
-                .setParameter("hoursPerWeek", contract.getHoursPerWeek())
-                .setParameter("vacationHours", contract.getVacationHours())
-                .setParameter("hoursDue", contract.getHoursDue())
-                .setParameter("workingDaysPerWeek", contract.getWorkingDaysPerWeek())
-                .setParameter("vacationDaysPerYear", contract.getVacationDaysPerYear())
-                .executeUpdate();
-        if (contract.getStatus() == ContractStatus.STARTED) {
-            contract.getTimesheets().forEach((te) -> {
-                e.addTimesheets(te);
-            });
-        }
-        else if (contract.getStatus() == ContractStatus.TERMINATED) {
-            em.createNamedQuery("TimesheetEntity.deleteTimesheetEntityInProgressByContractId", TimesheetEntity.class)
-                    .setParameter("contract", e)
-                    .setParameter("status", TimesheetStatus.IN_PROGRESS)
+        if (e.getStatus() == ContractStatus.PREPARED) {
+            Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityByUUID", ContractEntity.class)
+                    .setParameter("uuid", uuid)
+                    .setParameter("status", contract.getStatus())
+                    .setParameter("name", contract.getName())
+                    .setParameter("startDate", contract.getStartDate())
+                    .setParameter("endDate", contract.getEndDate())
+                    .setParameter("frequency", contract.getFrequency())
+                    .setParameter("terminationDate", contract.getTerminationDate())
+                    .setParameter("hoursPerWeek", contract.getHoursPerWeek())
+                    .setParameter("vacationHours", contract.getVacationHours())
+                    .setParameter("hoursDue", contract.getHoursDue())
+                    .setParameter("workingDaysPerWeek", contract.getWorkingDaysPerWeek())
+                    .setParameter("vacationDaysPerYear", contract.getVacationDaysPerYear())
                     .executeUpdate();
+            return rows;
         }
-        return rows;
+        else {
+            return 0;
+        }
     }
 
     @Override

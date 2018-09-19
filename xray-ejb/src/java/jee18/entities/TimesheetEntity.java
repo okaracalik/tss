@@ -51,6 +51,16 @@ import jee18.entities.enums.TimesheetStatus;
             name = "TimesheetEntity.deleteTimesheetEntityInProgressByContractId",
             query = "DELETE FROM TimesheetEntity e WHERE e.contract = :contract AND e.status = :status"
     )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntity.getTimesheetEntityByContract",
+            query = "SELECT e FROM TimesheetEntity e WHERE e.contract = :contract"
+    )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntity.getTimesheetEntityByContractAndNotStatus",
+            query = "SELECT e FROM TimesheetEntity e WHERE e.contract = :contract AND e.status != :status"
+    )
 })
 public class TimesheetEntity extends AbstractEntity {
 

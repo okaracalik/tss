@@ -11,9 +11,11 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import jee18.logic.IAppSystem;
 
 /**
  *
@@ -22,6 +24,9 @@ import javax.inject.Named;
 @Named
 @SessionScoped
 public class AppMBean implements Serializable {
+
+    @EJB
+    private IAppSystem appSystem;
 
     private static final long serialVersionUID = 1523479642013931903L;
 
@@ -108,6 +113,10 @@ public class AppMBean implements Serializable {
         else {
             return "Undefined";
         }
+    }
+
+    public void generateData() {
+        appSystem.generateData();
     }
 
 }

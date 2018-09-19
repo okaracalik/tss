@@ -6,7 +6,6 @@
 package jee18.logic.impl;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -102,9 +101,6 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     public Integer setStatusToStarted(String uuid) {
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.PREPARED) {
-
-            contract.setStatus(ContractStatus.STARTED);
-
             HashMap<LocalDate, LocalDate> dates = DateTimeUtil.findTimesheetDates(DateTimeUtil.convertDateToLocalDate(contract.getStartDate()), DateTimeUtil.convertDateToLocalDate(contract.getEndDate()), contract.getFrequency());
             Set<Timesheet> ts = dates.entrySet().stream().map(x -> {
                 Timesheet t = new Timesheet();
@@ -112,8 +108,8 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
                 t.setEndDate(DateTimeUtil.convertLocalDateToDate(x.getValue()));
                 return t;
             }).collect(Collectors.toSet());
-            contract.setTimesheets(ts);
-            return super.updateByUuid(uuid, contract);
+
+            return contractAccess.start(uuid, ts.stream().map(x -> Timesheet.toEntity(x)).collect(Collectors.toSet()));
         }
         else {
             throw new EJBException("Contract must be in prepared status.");
@@ -126,9 +122,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     public Integer setStatusToTerminated(String uuid) {
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.STARTED) {
-            contract.setTerminationDate(new Date());
-            contract.setStatus(ContractStatus.TERMINATED);
-            return super.updateByUuid(uuid, contract);
+            return contractAccess.terminate(uuid);
         }
         else {
             throw new EJBException("Contract must be in started status.");
@@ -140,8 +134,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     public Integer setStatusToArchived(String uuid) {
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.STARTED || contract.getStatus() == ContractStatus.TERMINATED) {
-            contract.setStatus(ContractStatus.ARCHIVED);
-            return super.updateByUuid(uuid, contract);
+            return contractAccess.archive(uuid);
         }
         else {
             throw new EJBException("Contract must be either started or terminated.");

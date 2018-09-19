@@ -46,6 +46,11 @@ import jee18.entities.enums.TimesheetFrequency;
             name = "ContractEntity.deleteContractEntityByUUID",
             query = "DELETE FROM ContractEntity e WHERE e.uuid = :uuid"
     )
+    ,
+    @NamedQuery(
+            name = "ContractEntity.updateContractEntityStatusByUUID",
+            query = "UPDATE ContractEntity e SET e.status = :status, e.terminationDate = :terminationDate WHERE e.uuid = :uuid"
+    )
 })
 public class ContractEntity extends AbstractEntity {
 

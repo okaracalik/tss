@@ -17,9 +17,10 @@ public interface ITimesheetSystem {
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
-    // -EMPLOYEE ***
     public List<Timesheet> list();
     
+    // FIXME: employee, may be supervisor, assistant
+    // -EMPLOYEE ***
     public List<Timesheet> listMyTimesheets();
 
     // FIXME: this is automatic process.
@@ -28,8 +29,11 @@ public interface ITimesheetSystem {
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
-    // -EMPLOYEE ***
     public Timesheet get(String uuid);
+    
+    // FIXME: employee, may be supervisor, assistant
+    // -EMPLOYEE ***
+    // public Timesheet getMyTimesheet(String uuid);
 
     // FIXME: it may not be called
     // RULE: if not archived
@@ -40,17 +44,21 @@ public interface ITimesheetSystem {
     // RULE: if not archived
     public Integer delete(String uuid);
 
+    // FIXME: owner
     // -EMPLOYEE ***
     public Integer signAsEmployee(String uuid);
 
+    // FIXME: owner
     // -EMPLOYEE ***
     // TASK: setStatusToInProgress
     public Integer revokeEmployeeSignature(String uuid);
 
+    // FIXME: owner
     // -SUPERVISOR ***
     // RULE: if signed by employee
     public Integer signAsSupervisor(String uuid);
 
+    // FIXME: owner
     // -SUPERVISOR ***
     // TASK: setStatusToInProgress
     public Integer requestChanges(String uuid);

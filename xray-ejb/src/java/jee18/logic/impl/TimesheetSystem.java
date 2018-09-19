@@ -147,6 +147,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         Timesheet timesheet = super.getByUuid(uuid);
         if (timesheet.getStatus() == TimesheetStatus.SIGNED_BY_SUPERVISOR) {
             timesheet.setStatus(TimesheetStatus.ARCHIVED);
+            System.out.println("jee18.logic.impl.TimesheetSystem.setStatusToArchived()");
             return super.updateByUuid(uuid, timesheet);
         }
         else {

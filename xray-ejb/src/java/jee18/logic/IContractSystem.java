@@ -19,6 +19,7 @@ public interface IContractSystem {
     // -ASSISTANT
     public List<Contract> list();
 
+    // FIXME: employee, may be supervisor, assistant
     // -EMPLOYEE ***
     public List<Contract> listMyContracts(String employeeUuid);
     
@@ -29,26 +30,33 @@ public interface IContractSystem {
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
-    // -EMPLOYEE ***
     // TASK: stats
     public Contract get(String uuid);
+    
+    // FIXME: employee, may be supervisor, assistant
+    // -EMPLOYEE ***
+    // public Contract getMyContract(String uuid, String ownerUuid);
 
+    // FIXME: owner
     // -SUPERVISOR
     // -ASSISTANT
     // RULE: if prepared
     public Integer update(String uuid, Contract c);
 
+    // FIXME: employee, may be supervisor, assistant
     // -SUPERVISOR
     // -ASSISTANT
     // RULE: if prepared
     // TASK: delete timesheets in progress
     public Integer delete(String uuid);
 
+    // FIXME: owner
     // -SUPERVISOR
     // -ASSISTANT
     // TASK: create timesheets
     public Integer setStatusToStarted(String uuid);
 
+    // FIXME: owner
     // -SUPERVISOR
     // -ASSISTANT
     // TASK: set termination date

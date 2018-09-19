@@ -6,6 +6,7 @@
 package jee18.dto;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.Date;
 import jee18.entities.TimesheetEntryEntity;
 import jee18.entities.enums.ReportType;
@@ -101,9 +102,11 @@ public class TimesheetEntry implements Serializable {
         TimesheetEntryEntity e = TimesheetEntryEntity.newInstance();
         e.setType(dto.getType());
         e.setDescription(dto.getDescription());
-        e.setHours(dto.getHours());
         e.setStartTime(DateTimeUtil.convertDateToLocalTime(dto.getStartTime()));
         e.setEndTime(DateTimeUtil.convertDateToLocalTime(dto.getEndTime()));
+        Duration d = Duration.between(e.getStartTime(), e.getEndTime());
+        Double h = (double) d.toMinutes() / 60;
+        e.setHours(h);
         e.setEntryDate(DateTimeUtil.convertDateToLocalDate(dto.getEntryDate()));
 //        e.setTimesheet(Timesheet.toEntity(dto.getTimesheet()));
         return e;
