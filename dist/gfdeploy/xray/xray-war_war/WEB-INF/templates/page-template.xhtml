@@ -5,8 +5,8 @@
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:b="http://bootsfaces.net/ui"
-
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    >
     <ui:define name="navigation">
         <b:navBar brand="TSS" brandHref="/xray-war/" fluid="true">
             <b:navbarLinks rendered="#{appMBean.isAuthenticated()}">
@@ -26,8 +26,6 @@
                 </b:dropMenu>
                 <b:dropMenu value="${msg.TIMESHEET_ENTRY_LIST_TITLE}" iconAwesome="fa-tasks">
                     <b:navLink value="${msg.TIMESHEET_ENTRY_LIST_TITLE}" outcome="timesheet-entry-list"></b:navLink>
-                    <!--FIXME: it could be opened by url-->
-                    <b:navLink value="${msg.TIMESHEET_ENTRY_FORM_TITLE}" outcome="timesheet-entry-form" rendered="#{appMBean.isEmployee()}"></b:navLink>
                 </b:dropMenu>
             </b:navbarLinks>
             <b:navbarLinks pull="right">
@@ -36,6 +34,7 @@
                         <b:commandButton actionListener="#{appMBean.generateData()}" value="Generate" rendered="#{not appMBean.isAuthenticated()}"/>
                         <b:label severity="warning" value="#{appMBean.getRole()}"/>
                         <b:label severity="primary" value="#{appMBean.getUsername()}" rendered="#{appMBean.isAuthenticated()}" />
+                        <b:commandButton look="link" style="color:black" value="${msg.APP_SIGN_IN_TITLE}" iconAwesome="fa-sign-in" action="sign-in" rendered="#{not appMBean.isAuthenticated()}" />
                         <b:commandButton look="link" style="color:black" value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" action="sign-out" actionListener="#{appMBean.clickSignOut()}" rendered="#{appMBean.isAuthenticated()}" />
                         <h:selectOneMenu class="form-control"  value="#{appMBean.currentLocale}" onchange="submit()">
                             <f:selectItems value="#{appMBean.availableLocales}" /> 

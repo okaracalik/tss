@@ -23,9 +23,6 @@ public interface ITimesheetSystem {
     // -EMPLOYEE ***
     public List<Timesheet> listMyTimesheets();
 
-    // FIXME: this is automatic process.
-    public Timesheet add(Timesheet t);
-
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
@@ -36,31 +33,31 @@ public interface ITimesheetSystem {
     // public Timesheet getMyTimesheet(String uuid);
 
     // FIXME: it may not be called
-    // RULE: if not archived
-    public Integer update(String uuid, Timesheet t);
-
-    // FIXME: it may not be called
     // RULE: if not signed
     // RULE: if not archived
     public Integer delete(String uuid);
 
     // FIXME: owner
     // -EMPLOYEE ***
+    // RULE: if not archived
     public Integer signAsEmployee(String uuid);
 
     // FIXME: owner
     // -EMPLOYEE ***
     // TASK: setStatusToInProgress
+    // RULE: if not archived
     public Integer revokeEmployeeSignature(String uuid);
 
     // FIXME: owner
     // -SUPERVISOR ***
     // RULE: if signed by employee
+    // RULE: if not archived
     public Integer signAsSupervisor(String uuid);
 
     // FIXME: owner
     // -SUPERVISOR ***
     // TASK: setStatusToInProgress
+    // RULE: if not archived
     public Integer requestChanges(String uuid);
 
     // -SECRETARY

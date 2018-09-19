@@ -7,7 +7,9 @@ package jee18.entities;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,6 +44,11 @@ import javax.persistence.Table;
     @NamedQuery(
             name = "PersonEntity.deletePersonEntityByUUID",
             query = "DELETE FROM PersonEntity e WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "PersonEntity.getPersonEntityByEmailAddress",
+            query = "DELETE FROM PersonEntity e WHERE e.emailAddress = :emailAddress"
     )
 })
 public class PersonEntity extends AbstractEntity {
@@ -121,8 +128,8 @@ public class PersonEntity extends AbstractEntity {
         return "PersonEntity{" + "firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", emailAddress=" + emailAddress + ", roles=" + roles + '}';
     }
 
-    public void addRoles(RoleEntity r) {
-
+    public List<String> getRoleUuids() {
+        return this.roles.stream().map(x -> x.getUuid()).collect(Collectors.toList());
     }
 
 }

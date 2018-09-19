@@ -23,39 +23,33 @@ import jee18.logic.ITimesheetSystem;
  */
 @Stateless(name = "TimesheetSystem")
 public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, TimesheetEntity> implements ITimesheetSystem {
-    
+
     public TimesheetSystem() throws NamingException {
         super("TimesheetAccess");
     }
-    
+
     @Override
     protected TimesheetEntity convertToEntity(Timesheet t) {
         return Timesheet.toEntity(t);
     }
-    
+
     @Override
     protected Timesheet convertToObject(TimesheetEntity te) {
         return Timesheet.toDTO(te);
     }
-    
+
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public List<Timesheet> list() {
         return super.getList();
     }
-    
+
     @RolesAllowed("EMPLOYEE")
     @Override
     public List<Timesheet> listMyTimesheets() {
         return super.getList();
     }
-    
-    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT"})
-    @Override
-    public Timesheet add(Timesheet t) {
-        return super.create(t);
-    }
-    
+
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public Timesheet get(String uuid) {
@@ -64,19 +58,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         System.out.print("Timesheet get: " + t);
         return t;
     }
-    
-    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT"})
-    @Override
-    public Integer update(String uuid, Timesheet t) {
-        Timesheet timesheet = super.getByUuid(uuid);
-        if (timesheet.getStatus() != TimesheetStatus.ARCHIVED) {
-            return super.updateByUuid(uuid, t);
-        }
-        else {
-            throw new EJBException("Timesheet is already archived.");
-        }
-    }
-    
+
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer delete(String uuid) {
@@ -88,7 +70,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
             throw new EJBException("Timesheet must be in progess.");
         }
     }
-    
+
     @RolesAllowed("EMPLOYEE")
     @Override
     public Integer signAsEmployee(String uuid) {
@@ -102,7 +84,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
             throw new EJBException("Timesheet must be in progess.");
         }
     }
-    
+
     @RolesAllowed("EMPLOYEE")
     @Override
     public Integer revokeEmployeeSignature(String uuid) {
@@ -114,7 +96,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
             throw new EJBException("Timesheet is already archived.");
         }
     }
-    
+
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer signAsSupervisor(String uuid) {
@@ -128,7 +110,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
             throw new EJBException("Timesheet must be signed by employee.");
         }
     }
-    
+
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
     public Integer requestChanges(String uuid) {
@@ -140,7 +122,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
             throw new EJBException("Timesheet must be signed by employee.");
         }
     }
-    
+
     @RolesAllowed("SECRETARY")
     @Override
     public Integer setStatusToArchived(String uuid) {
@@ -154,13 +136,13 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
             throw new EJBException("Timesheet must be signed by supervisor.");
         }
     }
-    
+
     @RolesAllowed("SECRETARY")
     @Override
     public void print() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     private Integer setStatusToInProgress(String uuid) {
         Timesheet timesheet = super.getByUuid(uuid);
         timesheet.setSignedByEmployee(null);
@@ -168,5 +150,5 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         timesheet.setStatus(TimesheetStatus.IN_PROGRESS);
         return super.updateByUuid(uuid, timesheet);
     }
-    
+
 }

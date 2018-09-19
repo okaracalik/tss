@@ -6,6 +6,7 @@
 package jee18.dto;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import jee18.entities.RoleEntity;
 
 /**
@@ -49,7 +50,7 @@ public class Role implements Serializable {
         return "Role{" + "uuid=" + uuid + ", title=" + title + ", person=" + person + '}';
     }
 
-    public static RoleEntity toEntity(Role dto) {
+    public static RoleEntity toEntity(Role dto) throws NoSuchAlgorithmException {
         RoleEntity e = RoleEntity.newInstance();
         e.setTitle(dto.getTitle());
         e.setPerson(Person.toEntity(dto.getPerson()));

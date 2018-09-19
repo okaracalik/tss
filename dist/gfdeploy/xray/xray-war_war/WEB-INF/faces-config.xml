@@ -18,6 +18,10 @@
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
+            <from-outcome>sign-in</from-outcome>
+            <to-view-id>/app/sign-in.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>sign-out</from-outcome>
             <to-view-id>/app/sign-in.xhtml</to-view-id>
         </navigation-case>

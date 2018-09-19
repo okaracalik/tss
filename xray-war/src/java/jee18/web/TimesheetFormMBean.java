@@ -53,22 +53,6 @@ public class TimesheetFormMBean implements Serializable {
         return uuid;
     }
 
-    public String save() {
-        try {
-            if (uuid == null) {
-                timesheetSystem.add(timesheet);
-            }
-            else {
-                timesheetSystem.update(uuid, timesheet);
-            }
-            return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
-        }
-        catch (Exception e) {
-            System.out.println(e.toString());
-            return "error";
-        }
-    }
-
     public String delete() {
         try {
             timesheetSystem.delete(uuid);
