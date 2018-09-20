@@ -57,6 +57,21 @@ public class PersonAccess extends AbstractAccess implements IAccess<PersonEntity
         return person;
     }
 
+    public PersonEntity getByEmailAddress(String emailAddress) {
+        try {
+            return em.createNamedQuery("PersonEntity.getPersonEntityByEmailAddress", PersonEntity.class)
+                    .setParameter("emailAddress", emailAddress)
+                    .getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+    public Integer truncate() {
+        return em.createNamedQuery("PersonEntity.truncate", PersonEntity.class).executeUpdate();
+    }
+
     @Override
     public PersonEntity create(PersonEntity person) {
         em.persist(person);

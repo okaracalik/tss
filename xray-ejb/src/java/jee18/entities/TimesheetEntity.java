@@ -61,6 +61,11 @@ import jee18.entities.enums.TimesheetStatus;
             name = "TimesheetEntity.getTimesheetEntityByContractAndNotStatus",
             query = "SELECT e FROM TimesheetEntity e WHERE e.contract = :contract AND e.status != :status"
     )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntity.truncate",
+            query = "DELETE FROM TimesheetEntity"
+    )
 })
 public class TimesheetEntity extends AbstractEntity {
 

@@ -58,6 +58,10 @@ public class TimesheetEntryAccess extends AbstractAccess implements IAccess<Time
         }
     }
 
+    public Integer truncate() {
+        return em.createNamedQuery("TimesheetEntryEntity.truncate", TimesheetEntryEntity.class).executeUpdate();
+    }
+
     @Override
     public TimesheetEntryEntity create(TimesheetEntryEntity timesheetEntry) {
         em.persist(timesheetEntry);

@@ -11,6 +11,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -21,6 +23,12 @@ import javax.persistence.Table;
 @Table(name = "roles")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "title")
+@NamedQueries({
+    @NamedQuery(
+            name = "RoleEntity.truncate",
+            query = "DELETE FROM RoleEntity"
+    )
+})
 public class RoleEntity extends AbstractEntity {
 
     @ManyToOne

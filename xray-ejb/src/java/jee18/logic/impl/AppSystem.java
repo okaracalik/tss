@@ -12,7 +12,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import jee18.dao.ContractAccess;
 import jee18.dao.PersonAccess;
+import jee18.dao.RoleAccess;
+import jee18.dao.TimesheetAccess;
+import jee18.dao.TimesheetEntryAccess;
 import jee18.dto.Person;
 import jee18.entities.PersonEntity;
 import jee18.logic.IAppSystem;
@@ -23,6 +27,18 @@ import jee18.logic.IAppSystem;
  */
 @Stateless(name = "AppSystem")
 public class AppSystem implements IAppSystem {
+
+    @EJB
+    private RoleAccess roleAccess;
+
+    @EJB
+    private ContractAccess contractAccess;
+
+    @EJB
+    private TimesheetAccess timesheetAccess;
+
+    @EJB
+    private TimesheetEntryAccess timesheetEntryAccess;
 
     @EJB
     private PersonAccess personAccess;
@@ -58,7 +74,7 @@ public class AppSystem implements IAppSystem {
                 Person as = new Person();
                 as.setFirstName(assistant.toLowerCase() + "-" + i);
                 as.setLastName("a");
-                as.setEmailAddress(se.getFirstName() + "@" + se.getLastName());
+                as.setEmailAddress(as.getFirstName() + "@" + as.getLastName());
                 temp = personAccess.createWithRoles(Person.toEntity(as), Stream.of(assistant).collect(Collectors.toList()));
             }
             catch (NoSuchAlgorithmException ex) {
@@ -70,9 +86,11 @@ public class AppSystem implements IAppSystem {
 
     @Override
     public void truncateData() {
-        // remove roles
-        // remove persons
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        timesheetEntryAccess.truncate();
+        timesheetAccess.truncate();
+        roleAccess.truncate();
+        contractAccess.truncate();
+        personAccess.truncate();
     }
 
 }

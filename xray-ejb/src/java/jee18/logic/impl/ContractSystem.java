@@ -50,14 +50,8 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
-    public List<Contract> list() {
-        return super.getList();
-    }
-
-    @RolesAllowed("EMPLOYEE")
-    @Override
-    public List<Contract> listMyContracts(String employeeUuid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Contract> listMyContracts(String emailAddress) {
+        return contractAccess.getMyList(emailAddress).stream().map(x -> convertToObject(x)).collect(Collectors.toList());
     }
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
@@ -68,8 +62,8 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
-    public Contract get(String uuid) {
-        return super.getByUuid(uuid);
+    public Contract getMyContract(String uuid, String emailAddress) {
+        return Contract.toDTO(contractAccess.getMyContract(uuid, emailAddress));
     }
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})

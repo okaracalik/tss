@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.Contract;
@@ -52,7 +53,7 @@ public class ContractFormMBean implements Serializable {
             contract = new Contract();
         }
         else {
-            contract = (Contract) contractSystem.get(uuid);
+            contract = (Contract) contractSystem.getMyContract(uuid, FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName());
         }
         System.out.println("jee18.web.ContractFormMBean.init()");
         secretaries = roleSystem.listSecretary();

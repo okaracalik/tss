@@ -9,6 +9,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.annotation.ManagedProperty;
+import javax.faces.context.FacesContext;
 import jee18.dto.Contract;
 import jee18.logic.IContractSystem;
 
@@ -20,6 +22,9 @@ import jee18.logic.IContractSystem;
 @RequestScoped
 public class ContractListMBean {
 
+    @ManagedProperty(value = "#{appMBean}")
+    AppMBean app;
+    
     @EJB
     private IContractSystem contractSystem;
 
@@ -30,9 +35,9 @@ public class ContractListMBean {
 
     public List<Contract> getContractList() {
         if (contractList == null) {
-            contractList = contractSystem.list();
+            contractList = contractSystem.listMyContracts(FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName());
         }
         return contractList;
     }
-    
+
 }

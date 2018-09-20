@@ -6,14 +6,19 @@
 package jee18.dao;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import jee18.entities.Assistant;
 import jee18.entities.ContractEntity;
 import jee18.entities.Employee;
+import jee18.entities.PersonEntity;
 import jee18.entities.Secretary;
 import jee18.entities.Supervisor;
 import jee18.entities.TimesheetEntity;
@@ -27,6 +32,9 @@ import jee18.entities.enums.TimesheetStatus;
 @Stateless(name = "ContractAccess")
 @LocalBean
 public class ContractAccess extends AbstractAccess implements IAccess<ContractEntity> {
+
+    @EJB
+    private PersonAccess personAccess;
 
     public ContractAccess() {
         super(ContractEntity.class);
@@ -91,6 +99,32 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
                 .setParameter("terminationDate", e.getTerminationDate())
                 .executeUpdate();
         return rows;
+    }
+
+    public List<ContractEntity> getMyList(String emailAddress) {
+        System.out.println("jee18.dao.ContractAccess.getMyList()");
+        return findMyContracts(getList(), personAccess.getByEmailAddress(emailAddress));
+    }
+
+    public ContractEntity getMyContract(String uuid, String emailAddress) {
+        return findMyContracts(Arrays.asList(getByUuid(uuid)), personAccess.getByEmailAddress(emailAddress)).get(0);
+    }
+
+    public static List<ContractEntity> findMyContracts(List<ContractEntity> contracts, PersonEntity person) {
+        System.out.println("jee18.dao.ContractAccess.findMyContracts()");
+        List<String> uuids = person.getRoleUuids();
+        List<ContractEntity> employee = contracts.stream().filter(c -> uuids.contains(c.getEmployee().getUuid())).collect(Collectors.toList());
+        List<ContractEntity> supervisor = contracts.stream().filter(c -> uuids.contains(c.getSupervisor().getUuid())).collect(Collectors.toList());
+        List<ContractEntity> assistant = contracts.stream().filter(c -> c.getAssistants().stream().anyMatch(a -> uuids.contains(a.getUuid()))).collect(Collectors.toList());
+        List<ContractEntity> secretary = contracts.stream().filter(c -> c.getSecretaries().stream().anyMatch(a -> uuids.contains(a.getUuid()))).collect(Collectors.toList());
+        employee.addAll(supervisor);
+        employee.addAll(assistant);
+        employee.addAll(secretary);
+        return employee;
+    }
+
+    public Integer truncate() {
+        return em.createNamedQuery("ContractEntity.truncate", ContractEntity.class).executeUpdate();
     }
 
     @Override

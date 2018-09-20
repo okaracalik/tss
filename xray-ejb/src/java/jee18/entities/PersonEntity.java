@@ -17,6 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
@@ -24,7 +25,8 @@ import javax.persistence.Table;
  */
 @Entity
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name = "persons")
+@Table(name = "persons", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"emailAddress"})})
 @NamedQueries({
     @NamedQuery(
             name = "PersonEntity.getPersonList",
@@ -48,7 +50,12 @@ import javax.persistence.Table;
     ,
     @NamedQuery(
             name = "PersonEntity.getPersonEntityByEmailAddress",
-            query = "DELETE FROM PersonEntity e WHERE e.emailAddress = :emailAddress"
+            query = "SELECT e FROM PersonEntity e WHERE e.emailAddress = :emailAddress"
+    )
+    ,
+    @NamedQuery(
+            name = "PersonEntity.truncate",
+            query = "DELETE FROM PersonEntity"
     )
 })
 public class PersonEntity extends AbstractEntity {

@@ -38,6 +38,10 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
     public List<TimesheetEntity> getTimesheetList() {
         return em.createNamedQuery("TimesheetEntity.getTimesheetList", TimesheetEntity.class).getResultList();
     }
+    
+    public Integer truncate() {
+        return em.createNamedQuery("TimesheetEntity.truncate", TimesheetEntity.class).executeUpdate();
+    }
 
     @Override
     public TimesheetEntity create(TimesheetEntity timesheet) {

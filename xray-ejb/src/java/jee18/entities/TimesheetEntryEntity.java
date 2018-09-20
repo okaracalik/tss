@@ -43,6 +43,11 @@ import jee18.entities.enums.ReportType;
             name = "TimesheetEntryEntity.deleteTimesheetEntryEntityByUUID",
             query = "DELETE FROM TimesheetEntryEntity e WHERE e.uuid = :uuid"
     )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntryEntity.truncate",
+            query = "DELETE FROM TimesheetEntryEntity"
+    )
 })
 public class TimesheetEntryEntity extends AbstractEntity {
 
