@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition 
+    template="/WEB-INF/templates/page-template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:b="http://bootsfaces.net/ui"
+    >
+
+    <ui:define name="content">
+        <h2>${msg.TIMESHEET_LIST_TITLE}</h2>
+        <b:dataTable value="#{timesheetListMBean.timesheetList}" var="timesheet">
+
+            <b:dataTableColumn label="${msg.FORM_EDIT_TITLE}" style="width: 50px; text-align: center;">
+                <b:button look="info" iconAwesome="edit" outcome="timesheet-form">
+                    <f:param name="uuid" value="#{timesheet.uuid}" />
+                </b:button>
+            </b:dataTableColumn>
+            <b:dataTableColumn label="${msg.TIMESHEET_STATUS}" value="#{timesheet.status}"/>
+            <b:dataTableColumn label="${msg.TIMESHEET_START_DATE}" value="#{timesheet.startDate}"/>
+            <b:dataTableColumn label="${msg.TIMESHEET_END_DATE}" value="#{timesheet.endDate}"/>
+            <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_LINK}" style="width: 50px; text-align: center;">
+                <b:button look="warning" iconAwesome="plus-circle" outcome="timesheet-entry-form">
+                    <f:param name="timesheetUuid" value="#{timesheet.uuid}" />
+                </b:button>
+            </b:dataTableColumn>
+
+        </b:dataTable>
+    </ui:define>
+
+</ui:composition>
+

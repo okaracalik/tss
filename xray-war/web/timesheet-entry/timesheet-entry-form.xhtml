@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition 
+    template="/WEB-INF/templates/page-template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:b="http://bootsfaces.net/ui"
+    >
+
+    <f:metadata>
+        <f:viewParam name="uuid" value="#{timesheetEntryFormMBean.uuid}" />
+        <f:viewParam name="timesheetUuid" value="#{timesheetEntryFormMBean.timesheetUuid}" />
+        <f:viewAction action="#{timesheetEntryFormMBean.init()}" />
+    </f:metadata>
+
+    <ui:define name="content">
+        <h2>${msg.TIMESHEET_ENTRY_FORM_TITLE}</h2>
+        <b:form>
+            <b:selectOneMenu label="${msg.TIMESHEET_ENTRY_TYPE}" value="#{timesheetEntryFormMBean.timesheetEntry.type}">
+                <f:selectItem itemValue="WORK" itemLabel="${msg.TIMESHEET_ENTRY_TYPE_WORK}" />
+                <f:selectItem itemValue="VACATION" itemLabel="${msg.TIMESHEET_ENTRY_TYPE_VACATION}" />
+                <f:selectItem itemValue="SICK_LEAVE" itemLabel="${msg.TIMESHEET_ENTRY_TYPE_SICK_LEAVE}" />
+            </b:selectOneMenu>
+            <b:inputText label="${msg.TIMESHEET_ENTRY_DESCRIPTION}" value="#{timesheetEntryFormMBean.timesheetEntry.description}"/>
+            <b:datepicker label="${msg.TIMESHEET_ENTRY_DATE}" value="#{timesheetEntryFormMBean.timesheetEntry.entryDate}"/>
+            <b:dateTimePicker label="${msg.TIMESHEET_ENTRY_START_TIME}" value="#{timesheetEntryFormMBean.timesheetEntry.startTime}" />
+            <b:dateTimePicker label="${msg.TIMESHEET_ENTRY_END_TIME}" value="#{timesheetEntryFormMBean.timesheetEntry.endTime}" />
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" action="#{timesheetEntryFormMBean.save()}"/>
+            <b:commandButton look="danger" iconAwesome="trash" value="${msg.FORM_DELETE_TITLE}" action="#{timesheetEntryFormMBean.delete()}" rendered="${timesheetEntryFormMBean.uuid != null}" class="pull-right"/>
+        </b:form>
+    </ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition 
+    template="/WEB-INF/templates/page-template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:b="http://bootsfaces.net/ui"
+    >
+    
+    <f:metadata>
+        <f:viewParam name="uuid" value="#{personFormMBean.uuid}" />
+        <f:viewAction action="#{personFormMBean.init()}" />
+    </f:metadata>
+
+    <ui:define name="content">
+        <h2>${msg.PERSON_FORM_TITLE}</h2>
+        <b:form>
+            <b:inputText type="text" label="${msg.PERSON_FIRST_NAME}" value="#{personFormMBean.person.firstName}" />
+            <b:inputText type="text" label="${msg.PERSON_LAST_NAME}" value="#{personFormMBean.person.lastName}" />
+            <b:inputText type="email" label="${msg.PERSON_EMAIL_ADDRESS}" value="#{personFormMBean.person.emailAddress}" />
+            <b:inputText type="text" label="${msg.PERSON_STATE}" value="#{personFormMBean.person.state}" />
+            <b:selectMultiMenu label="${msg.PERSON_FORM_ROLES}" value="#{personFormMBean.roles}">
+                <f:selectItem itemValue="SECRETARY" itemLabel="${msg.PERSON_FORM_ROLE_SECRETARY}" />
+                <f:selectItem itemValue="EMPLOYEE" itemLabel="${msg.PERSON_FORM_ROLE_EMPLOYEE}" />
+                <f:selectItem itemValue="SUPERVISOR" itemLabel="${msg.PERSON_FORM_ROLE_SUPERVISOR}" />
+                <f:selectItem itemValue="ASSISTANT" itemLabel="${msg.PERSON_FORM_ROLE_ASSISTANT}" />
+            </b:selectMultiMenu><br/>
+            <b:datepicker label="${msg.PERSON_DATE_OF_BIRTH}" mode="icon-popup" value="#{personFormMBean.person.dateOfBirth}" />
+            <b:commandButton look="success" iconAwesome="save" value="${msg.FORM_SAVE_TITLE}" action="#{personFormMBean.save()}"/>
+            <b:commandButton look="danger" iconAwesome="trash" value="${msg.FORM_DELETE_TITLE}" action="#{personFormMBean.delete()}" rendered="${personFormMBean.uuid != null}" class="pull-right"/>
+        </b:form>
+    </ui:define>
+
+</ui:composition>
+
