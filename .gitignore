@@ -1,5 +1,7 @@
-/xrayJavaEE-ejb/build/
-/xrayJavaEE-ejb/dist/
-/xrayJavaEE-war/build/
+/xray-ejb/nbproject/private/
+/xray-war/nbproject/private/
+/xray-ejb/build/
+/xray-ejb/dist/
+/xray-war/build/
+/xray-war/dist/
 /build/
-/xrayJavaEE-war/dist/
