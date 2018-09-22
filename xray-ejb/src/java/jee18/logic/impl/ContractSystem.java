@@ -16,11 +16,13 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
 import jee18.dto.Contract;
+import jee18.dto.Holiday;
 import jee18.dto.Timesheet;
 import jee18.entities.ContractEntity;
 import jee18.entities.enums.ContractStatus;
 import jee18.logic.AbstractTimesheetSystem;
 import jee18.logic.IContractSystem;
+import jee18.logic.IHolidaySystem;
 import jee18.logic.ITimesheetSystem;
 import jee18.utils.DateTimeUtil;
 
@@ -33,6 +35,9 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @EJB
     private ITimesheetSystem timesheetSystem;
+    
+    @EJB
+    private IHolidaySystem holidaySystem;
 
     public ContractSystem() throws NamingException {
         super("ContractAccess");
@@ -53,6 +58,21 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         return (vacationDaysPerYear.doubleValue() * (durationOfContract.doubleValue() / 12)) * (hoursPerWeek / workingDaysPerWeek.doubleValue());
     }
 
+    @Override
+    public List<Holiday>  calculatePublicHolidaysInPeriod(String uuid)      
+    {
+    Contract contract = super.getByUuid(uuid);
+     
+  
+        if (contract.getStatus() == ContractStatus.PREPARED) {
+        List<Holiday> list = holidaySystem.calculatePublicHolidaysInPeriod("2");
+        System.out.println("The number of holidays are :"+list.size());
+        return list;
+        }
+        else {
+            throw new EJBException("Contract must be in prepared status.");
+        }
+    }
     // FIXME: calculateHoursDue
     private Double calculateHoursDue() {
         return 0.00;
