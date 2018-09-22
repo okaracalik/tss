@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
@@ -61,53 +62,86 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
         return contract;
     }
 
-    public Integer start(String uuid, Set<TimesheetEntity> tes) {
-        ContractEntity e = getByUuid(uuid);
-        Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
-                .setParameter("uuid", e.getUuid())
-                .setParameter("status", ContractStatus.STARTED)
-                .setParameter("terminationDate", e.getTerminationDate())
-                .executeUpdate();
-        tes.forEach(te -> {
-            te.setContract(e);
-            e.getTimesheets().add(te);
-        });
-
-        return rows;
+    public Integer start(String uuid, Set<TimesheetEntity> tes, String emailAddress) {
+        ContractEntity e = getMyContractByUuid(uuid, emailAddress);
+        if (e != null) {
+            Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
+                    .setParameter("uuid", e.getUuid())
+                    .setParameter("status", ContractStatus.STARTED)
+                    .setParameter("terminationDate", e.getTerminationDate())
+                    .executeUpdate();
+            tes.forEach(te -> {
+                te.setContract(e);
+                e.getTimesheets().add(te);
+            });
+            return rows;
+        }
+        else {
+            throw new EJBException("User is not authorized on contract.");
+        }
     }
 
-    public Integer terminate(String uuid) {
-        ContractEntity e = getByUuid(uuid);
-        Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
-                .setParameter("uuid", e.getUuid())
-                .setParameter("status", ContractStatus.TERMINATED)
-                .setParameter("terminationDate", LocalDate.now())
-                .executeUpdate();
-        em.createNamedQuery("TimesheetEntity.deleteTimesheetEntityInProgressByContractId", TimesheetEntity.class)
-                .setParameter("contract", e)
-                .setParameter("status", TimesheetStatus.IN_PROGRESS)
-                .executeUpdate();
-        return rows;
+    public Integer terminate(String uuid, String emailAddress) {
+        ContractEntity e = getMyContractByUuid(uuid, emailAddress);
+        if (e != null) {
+            Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
+                    .setParameter("uuid", e.getUuid())
+                    .setParameter("status", ContractStatus.TERMINATED)
+                    .setParameter("terminationDate", LocalDate.now())
+                    .executeUpdate();
+            em.createNamedQuery("TimesheetEntity.deleteTimesheetEntityInProgressByContractId", TimesheetEntity.class)
+                    .setParameter("contract", e)
+                    .setParameter("status", TimesheetStatus.IN_PROGRESS)
+                    .executeUpdate();
+            return rows;
+        }
+        else {
+            throw new EJBException("User is not authorized on contract.");
+        }
     }
 
-    public Integer archive(String uuid) {
-        System.out.println("jee18.dao.ContractAccess.archive()");
-        ContractEntity e = getByUuid(uuid);
-        Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
-                .setParameter("uuid", e.getUuid())
-                .setParameter("status", ContractStatus.ARCHIVED)
-                .setParameter("terminationDate", e.getTerminationDate())
-                .executeUpdate();
-        return rows;
+    public Integer archive(String uuid, String emailAddress) {
+        ContractEntity e = getMyContractByUuid(uuid, emailAddress);
+        if (e != null) {
+            Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
+                    .setParameter("uuid", e.getUuid())
+                    .setParameter("status", ContractStatus.ARCHIVED)
+                    .setParameter("terminationDate", e.getTerminationDate())
+                    .executeUpdate();
+            return rows;
+        }
+        else {
+            throw new EJBException("User is not authorized on contract.");
+        }
     }
 
-    public List<ContractEntity> getMyList(String emailAddress) {
+    public List<ContractEntity> getMyContractList(String emailAddress) {
         System.out.println("jee18.dao.ContractAccess.getMyList()");
         return findMyContracts(getList(), personAccess.getByEmailAddress(emailAddress));
     }
 
-    public ContractEntity getMyContract(String uuid, String emailAddress) {
+    public ContractEntity getMyContractByUuid(String uuid, String emailAddress) {
         return findMyContracts(Arrays.asList(getByUuid(uuid)), personAccess.getByEmailAddress(emailAddress)).get(0);
+    }
+
+    public Integer updateMyContractByUuid(String uuid, ContractEntity c, String emailAddress) {
+        ContractEntity ce = getMyContractByUuid(uuid, emailAddress);
+        if (ce != null) {
+            return updateByUuid(uuid, c);
+        }
+        else {
+            throw new EJBException("User is not authorized on contract.");
+        }
+    }
+
+    public Integer deleteMyContractByUuid(String uuid, String emailAddress) {
+        ContractEntity ce = getMyContractByUuid(uuid, emailAddress);
+        if (ce != null) {
+            return deleteByUuid(uuid);
+        }
+        else {
+            throw new EJBException("User is not authorized on contract.");
+        }
     }
 
     public static List<ContractEntity> findMyContracts(List<ContractEntity> contracts, PersonEntity person) {

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import jee18.dto.TimesheetEntry;
 import jee18.logic.ITimesheetEntrySystem;
 
@@ -24,13 +25,14 @@ public class TimesheetEntryListMBean {
     private ITimesheetEntrySystem timesheetEntrySystem;
 
     private List<TimesheetEntry> timesheetEntryList;
+    private final String emailAddress = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
 
     public TimesheetEntryListMBean() {
     }
 
     public List<TimesheetEntry> getTimesheetEntryList() {
         if (timesheetEntryList == null) {
-            timesheetEntryList = timesheetEntrySystem.list();
+            timesheetEntryList = timesheetEntrySystem.listMyTimesheetEntries(emailAddress);
         }
         return timesheetEntryList;
     }

@@ -66,6 +66,16 @@ import jee18.entities.enums.TimesheetStatus;
             name = "TimesheetEntity.truncate",
             query = "DELETE FROM TimesheetEntity"
     )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntity.getTimesheetEntityByEndDateAndStatus",
+            query = "SELECT e FROM TimesheetEntity e WHERE e.endDate = :endDate AND e.status = :status"
+    )
+    ,
+    @NamedQuery(
+            name = "TimesheetEntity.getTimesheetEntityByStatus",
+            query = "SELECT e FROM TimesheetEntity e WHERE e.status = :status"
+    )
 })
 public class TimesheetEntity extends AbstractEntity {
 

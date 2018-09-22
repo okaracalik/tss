@@ -51,7 +51,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public List<Contract> listMyContracts(String emailAddress) {
-        return contractAccess.getMyList(emailAddress).stream().map(x -> convertToObject(x)).collect(Collectors.toList());
+        return contractAccess.getMyContractList(emailAddress).stream().map(x -> convertToObject(x)).collect(Collectors.toList());
     }
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
@@ -63,12 +63,12 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public Contract getMyContract(String uuid, String emailAddress) {
-        return Contract.toDTO(contractAccess.getMyContract(uuid, emailAddress));
+        return Contract.toDTO(contractAccess.getMyContractByUuid(uuid, emailAddress));
     }
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
-    public Integer update(String uuid, Contract c) {
+    public Integer update(String uuid, Contract c, String emailAddress) {
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.PREPARED) {
             return super.updateByUuid(uuid, c);
@@ -80,7 +80,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
-    public Integer delete(String uuid) {
+    public Integer delete(String uuid, String emailAddress) {
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.PREPARED) {
             return super.deleteByUuid(uuid);
@@ -92,7 +92,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
-    public Integer setStatusToStarted(String uuid) {
+    public Integer setStatusToStarted(String uuid, String emailAddress) {
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.PREPARED) {
             HashMap<LocalDate, LocalDate> dates = DateTimeUtil.findTimesheetDates(DateTimeUtil.convertDateToLocalDate(contract.getStartDate()), DateTimeUtil.convertDateToLocalDate(contract.getEndDate()), contract.getFrequency());
@@ -103,7 +103,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
                 return t;
             }).collect(Collectors.toSet());
 
-            return contractAccess.start(uuid, ts.stream().map(x -> Timesheet.toEntity(x)).collect(Collectors.toSet()));
+            return contractAccess.start(uuid, ts.stream().map(x -> Timesheet.toEntity(x)).collect(Collectors.toSet()), emailAddress);
         }
         else {
             throw new EJBException("Contract must be in prepared status.");
@@ -113,10 +113,10 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
-    public Integer setStatusToTerminated(String uuid) {
+    public Integer setStatusToTerminated(String uuid, String emailAddress) {
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.STARTED) {
-            return contractAccess.terminate(uuid);
+            return contractAccess.terminate(uuid, emailAddress);
         }
         else {
             throw new EJBException("Contract must be in started status.");
@@ -125,10 +125,10 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
-    public Integer setStatusToArchived(String uuid) {
+    public Integer setStatusToArchived(String uuid, String emailAddress) {
         Contract contract = super.getByUuid(uuid);
         if (contract.getStatus() == ContractStatus.STARTED || contract.getStatus() == ContractStatus.TERMINATED) {
-            return contractAccess.archive(uuid);
+            return contractAccess.archive(uuid, emailAddress);
         }
         else {
             throw new EJBException("Contract must be either started or terminated.");

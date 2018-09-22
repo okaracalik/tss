@@ -8,6 +8,7 @@ package jee18.web;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.TimesheetEntry;
@@ -27,7 +28,7 @@ public class TimesheetEntryFormMBean implements Serializable {
     private ITimesheetEntrySystem timesheetEntrySystem;
     private String uuid;
     private String timesheetUuid;
-
+    private final String emailAddress = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
     private TimesheetEntry timesheetEntry;
 
     public TimesheetEntryFormMBean() {
@@ -39,7 +40,7 @@ public class TimesheetEntryFormMBean implements Serializable {
             timesheetEntry = new TimesheetEntry();
         }
         else {
-            timesheetEntry = (TimesheetEntry) timesheetEntrySystem.get(uuid);
+            timesheetEntry = (TimesheetEntry) timesheetEntrySystem.getMyTimesheetEntry(uuid, emailAddress);
         }
     }
 
@@ -66,10 +67,10 @@ public class TimesheetEntryFormMBean implements Serializable {
     public String save() {
         try {
             if (uuid == null) {
-                 timesheetEntrySystem.add(timesheetEntry, timesheetUuid);
+                timesheetEntrySystem.add(timesheetEntry, timesheetUuid, emailAddress);
             }
             else {
-                 timesheetEntrySystem.update(uuid, timesheetEntry);
+                timesheetEntrySystem.update(uuid, timesheetEntry, emailAddress);
             }
             return "/timesheet-entry/timesheet-entry-list.xhtml?faces-redirect=true";
         }
@@ -81,7 +82,7 @@ public class TimesheetEntryFormMBean implements Serializable {
 
     public String delete() {
         try {
-            timesheetEntrySystem.delete(uuid);
+            timesheetEntrySystem.delete(uuid, emailAddress);
             return "/timesheet-entry/timesheet-entry-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {

@@ -35,29 +35,29 @@ public interface IContractSystem {
     // -SUPERVISOR
     // -ASSISTANT
     // RULE: if prepared
-    public Integer update(String uuid, Contract c);
+    public Integer update(String uuid, Contract c, String emailAddress);
 
     // FIXME: employee, may be supervisor, assistant
     // -SUPERVISOR
     // -ASSISTANT
     // RULE: if prepared
     // TASK: delete timesheets in progress
-    public Integer delete(String uuid);
+    public Integer delete(String uuid, String emailAddress);
 
     // FIXME: owner
     // -SUPERVISOR
     // -ASSISTANT
     // TASK: create timesheets
-    public Integer setStatusToStarted(String uuid);
+    public Integer setStatusToStarted(String uuid, String emailAddress);
 
     // FIXME: owner
     // -SUPERVISOR
     // -ASSISTANT
     // TASK: set termination date
-    public Integer setStatusToTerminated(String uuid);
+    public Integer setStatusToTerminated(String uuid, String emailAddress);
 
     // FIXME: this is called when all timesheets are archived.
-    public Integer setStatusToArchived(String uuid);
+    public Integer setStatusToArchived(String uuid, String emailAddress);
 
     // -SECRETARY
     public void print();

@@ -5,7 +5,10 @@
  */
 package jee18.logic.impl;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -28,7 +31,13 @@ public class RoleSystem extends AbstractTimesheetSystem<Role, RoleEntity> implem
 
     @Override
     protected RoleEntity convertToEntity(Role a) {
-        return Role.toEntity(a);
+        try {
+            return Role.toEntity(a);
+        }
+        catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(RoleSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override

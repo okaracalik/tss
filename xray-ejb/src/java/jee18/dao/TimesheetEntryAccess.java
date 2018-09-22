@@ -5,12 +5,15 @@
  */
 package jee18.dao;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+import jee18.entities.ContractEntity;
 
 import jee18.entities.TimesheetEntity;
 import jee18.entities.TimesheetEntryEntity;
@@ -25,14 +28,20 @@ import jee18.entities.enums.ReportType;
 public class TimesheetEntryAccess extends AbstractAccess implements IAccess<TimesheetEntryEntity> {
 
     @EJB
+    private PersonAccess personAccess;
+
+    @EJB
+    private ContractAccess ca;
+
+    @EJB
     private TimesheetAccess timesheetAccess;
 
     public TimesheetEntryAccess() {
         super(TimesheetEntryAccess.class);
     }
 
-    public TimesheetEntryEntity createWithTimesheet(TimesheetEntryEntity te, String t) {
-        TimesheetEntity timesheet = timesheetAccess.getByUuid(t);
+    public TimesheetEntryEntity createWithTimesheet(TimesheetEntryEntity te, String timesheetUuid, String emailAddress) {
+        TimesheetEntity timesheet = timesheetAccess.getMyTimesheetByUuid(timesheetUuid, emailAddress);
         if (te.getType() == ReportType.VACATION) {
             Double vacationHours = timesheet.getContract().getVacationHours();
             Double usedVacationHours = timesheet.getEntries().stream().filter(x -> x.getType() == ReportType.VACATION).mapToDouble(TimesheetEntryEntity::getHours).sum() + te.getHours();
@@ -55,6 +64,41 @@ public class TimesheetEntryAccess extends AbstractAccess implements IAccess<Time
             te.setTimesheet(timesheet);
             timesheet.addEntry(te);
             return te;
+        }
+    }
+
+    public List<TimesheetEntryEntity> getMyTimesheetEntryList(String emailAddress) {
+        return timesheetAccess.getMyTimesheetList(emailAddress).stream().flatMap(x -> x.getEntries().stream()).collect(Collectors.toList());
+    }
+
+    public TimesheetEntryEntity getMyTimesheetEntryByUuid(String uuid, String emailAddress) {
+        TimesheetEntryEntity te = getByUuid(uuid);
+        TimesheetEntity t = timesheetAccess.getMyTimesheetByUuid(te.getTimesheet().getUuid(), emailAddress);
+        if (ContractAccess.findMyContracts(Arrays.asList(t.getContract()), personAccess.getByEmailAddress(emailAddress)).size() == 1) {
+            return te;
+        }
+        else {
+            throw new EJBException("User is not authorized on timesheet.");
+        }
+    }
+
+    public Integer updateMyTimesheetEntryByUuid(String uuid, TimesheetEntryEntity timesheetEntry, String emailAddress) {
+        TimesheetEntryEntity te = getMyTimesheetEntryByUuid(uuid, emailAddress);
+        if (te != null) {
+            return updateByUuid(uuid, timesheetEntry);
+        }
+        else {
+            throw new EJBException("User is not authorized on timesheet.");
+        }
+    }
+
+    public Integer deleteMyTimesheetEntryByUuid(String uuid, String emailAddress) {
+        TimesheetEntryEntity te = getMyTimesheetEntryByUuid(uuid, emailAddress);
+        if (te != null) {
+            return deleteByUuid(uuid);
+        }
+        else {
+            throw new EJBException("User is not authorized on timesheet.");
         }
     }
 

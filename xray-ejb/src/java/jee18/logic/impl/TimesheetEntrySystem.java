@@ -6,6 +6,7 @@
 package jee18.logic.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -50,22 +51,16 @@ public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry
 
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
-    public List<TimesheetEntry> list() {
-        return super.getList();
-    }
-    
-    @RolesAllowed("EMPLOYEE")
-    @Override
-    public List<TimesheetEntry> listMyTimesheetEntries(String employeeUuid) {
-        return super.getList();
+    public List<TimesheetEntry> listMyTimesheetEntries(String emailAddress) {
+        return timesheetEntryAccess.getMyTimesheetEntryList(emailAddress).stream().map(x -> TimesheetEntry.toDTO(x)).collect(Collectors.toList());
     }
 
     @RolesAllowed("EMPLOYEE")
     @Override
-    public TimesheetEntry add(TimesheetEntry te, String timesheetUuid) {
-        Timesheet t = timesheetSystem.get(timesheetUuid);
+    public TimesheetEntry add(TimesheetEntry te, String timesheetUuid, String emailAddress) {
+        Timesheet t = timesheetSystem.getMyTimesheet(timesheetUuid, emailAddress);
         if (t.getStatus() == TimesheetStatus.IN_PROGRESS && t.getContract().getStatus() == ContractStatus.STARTED) {
-            TimesheetEntryEntity tee = timesheetEntryAccess.createWithTimesheet(TimesheetEntry.toEntity(te), timesheetUuid);
+            TimesheetEntryEntity tee = timesheetEntryAccess.createWithTimesheet(TimesheetEntry.toEntity(te), timesheetUuid, emailAddress);
             return TimesheetEntry.toDTO(tee);
         }
         else {
@@ -75,15 +70,15 @@ public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry
 
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
-    public TimesheetEntry get(String uuid) {
-        return super.getByUuid(uuid);
+    public TimesheetEntry getMyTimesheetEntry(String uuid, String emailAddress) {
+        return TimesheetEntry.toDTO(timesheetEntryAccess.getMyTimesheetEntryByUuid(uuid, emailAddress));
     }
 
     @RolesAllowed("EMPLOYEE")
     @Override
-    public Integer update(String uuid, TimesheetEntry te) {
+    public Integer update(String uuid, TimesheetEntry te, String emailAddress) {
         if (te.getTimesheet().getStatus() == TimesheetStatus.IN_PROGRESS && te.getTimesheet().getContract().getStatus() == ContractStatus.STARTED) {
-            return super.updateByUuid(uuid, te);
+            return timesheetEntryAccess.updateMyTimesheetEntryByUuid(uuid, TimesheetEntry.toEntity(te), emailAddress);
         }
         else {
             throw new EJBException("Timesheet Entry can only be added when timesheet is in progress and contract was started.");
@@ -92,10 +87,10 @@ public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry
 
     @RolesAllowed("EMPLOYEE")
     @Override
-    public Integer delete(String uuid) {
+    public Integer delete(String uuid, String emailAddress) {
         TimesheetEntry te = super.getByUuid(uuid);
         if (te.getTimesheet().getStatus() == TimesheetStatus.IN_PROGRESS && te.getTimesheet().getContract().getStatus() == ContractStatus.STARTED) {
-            return super.deleteByUuid(uuid);
+            return timesheetEntryAccess.deleteMyTimesheetEntryByUuid(uuid, emailAddress);
         }
         else {
             throw new EJBException("Timesheet Entry can only be added when timesheet is in progress and contract was started.");

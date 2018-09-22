@@ -5,13 +5,17 @@
  */
 package jee18.dao;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+import jee18.entities.ContractEntity;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.TimesheetStatus;
 
@@ -24,21 +28,67 @@ import jee18.entities.enums.TimesheetStatus;
 public class TimesheetAccess extends AbstractAccess implements IAccess<TimesheetEntity> {
 
     @EJB
+    private PersonAccess personAccess;
+
+    @EJB
     ContractAccess ca;
 
     public TimesheetAccess() {
         super(TimesheetEntity.class);
     }
 
-    public TimesheetEntity addTimesheet(TimesheetEntity timesheet) {
-        em.persist(timesheet);
-        return timesheet;
+    public List<TimesheetEntity> getMyTimesheetList(String emailAddress) {
+        List<ContractEntity> cs = ca.getMyContractList(emailAddress);
+        return cs.stream().flatMap(x -> x.getTimesheets().stream()).collect(Collectors.toList());
     }
 
-    public List<TimesheetEntity> getTimesheetList() {
-        return em.createNamedQuery("TimesheetEntity.getTimesheetList", TimesheetEntity.class).getResultList();
+    public TimesheetEntity getMyTimesheetByUuid(String uuid, String emailAddress) {
+        TimesheetEntity t = getByUuid(uuid);
+        // if timesheet's contract exists
+        if (ContractAccess.findMyContracts(Arrays.asList(t.getContract()), personAccess.getByEmailAddress(emailAddress)).size() == 1) {
+            return t;
+        }
+        else {
+            throw new EJBException("User is not authorized on timesheet.");
+        }
     }
-    
+
+    public Integer updateMyTimesheetByUuid(String uuid, TimesheetEntity timesheet, String emailAddress) {
+        TimesheetEntity t = getMyTimesheetByUuid(uuid, emailAddress);
+        if (t != null) {
+            Integer rows = updateByUuid(uuid, timesheet);
+            if (timesheet.getStatus() == TimesheetStatus.ARCHIVED) {
+                Set<TimesheetEntity> ts = t.getContract().getTimesheets().stream().filter(x -> x.getStatus() != TimesheetStatus.ARCHIVED).collect(Collectors.toSet());
+                String firstUuid = ts.iterator().next().getUuid();
+                if (ts.size() == 1 && firstUuid.equals(uuid)) {
+                    ca.archive(t.getContract().getUuid(), emailAddress);
+                }
+            }
+            return rows;
+        }
+        else {
+            throw new EJBException("User is not authorized on timesheet.");
+        }
+    }
+
+    public Integer deleteMyTimesheetByUuid(String uuid, String emailAddress) {
+        TimesheetEntity t = getMyTimesheetByUuid(uuid, emailAddress);
+        if (t != null) {
+            return deleteByUuid(uuid);
+        }
+        else {
+            throw new EJBException("User is not authorized on timesheet.");
+        }
+    }
+
+    public List<TimesheetEntity> getTimesheetListByEndDateAndStatus(LocalDate endDate, TimesheetStatus timesheetStatus) {
+        return em.createNamedQuery("TimesheetEntity.getTimesheetEntityByEndDateAndStatus", TimesheetEntity.class).setParameter("endDate", endDate).setParameter("status", timesheetStatus).getResultList();
+    }
+
+    public List<TimesheetEntity> getTimesheetListByStatus(TimesheetStatus timesheetStatus) {
+        return em.createNamedQuery("TimesheetEntity.getTimesheetEntityByStatus", TimesheetEntity.class).setParameter("timesheetStatus", timesheetStatus).getResultList();
+    }
+
     public Integer truncate() {
         return em.createNamedQuery("TimesheetEntity.truncate", TimesheetEntity.class).executeUpdate();
     }
@@ -68,9 +118,6 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
 
     @Override
     public Integer updateByUuid(String uuid, TimesheetEntity timesheet) {
-        TimesheetEntity te = em.createNamedQuery("TimesheetEntity.getTimesheetEntityByUUID", TimesheetEntity.class)
-                .setParameter("uuid", uuid)
-                .getSingleResult();
 
         Integer rows = em.createNamedQuery("TimesheetEntity.updateTimesheetEntityByUUID", TimesheetEntity.class)
                 .setParameter("uuid", uuid)
@@ -82,13 +129,6 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
                 .setParameter("signedBySupervisor", timesheet.getSignedBySupervisor())
                 .executeUpdate();
 
-        if (timesheet.getStatus() == TimesheetStatus.ARCHIVED) {
-            Set<TimesheetEntity> ts = te.getContract().getTimesheets().stream().filter(t -> t.getStatus() != TimesheetStatus.ARCHIVED).collect(Collectors.toSet());
-            String firstUuid = ts.iterator().next().getUuid();
-            if (ts.size() == 1 && firstUuid.equals(uuid)) {
-                ca.archive(te.getContract().getUuid());
-            }
-        }
         return rows;
     }
 

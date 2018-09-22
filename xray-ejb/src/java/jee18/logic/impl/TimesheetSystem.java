@@ -7,10 +7,13 @@ package jee18.logic.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
+import jee18.dao.TimesheetAccess;
 import jee18.dto.Timesheet;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.TimesheetStatus;
@@ -23,6 +26,9 @@ import jee18.logic.ITimesheetSystem;
  */
 @Stateless(name = "TimesheetSystem")
 public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, TimesheetEntity> implements ITimesheetSystem {
+
+    @EJB
+    private TimesheetAccess timesheetAccess;
 
     public TimesheetSystem() throws NamingException {
         super("TimesheetAccess");
@@ -40,40 +46,19 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
 
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
-    public List<Timesheet> list() {
-        return super.getList();
-    }
-
-    @RolesAllowed("EMPLOYEE")
-    @Override
-    public List<Timesheet> listMyTimesheets() {
-        return super.getList();
+    public List<Timesheet> listMyTimesheets(String emailAddress) {
+        return timesheetAccess.getMyTimesheetList(emailAddress).stream().map(x -> Timesheet.toDTO(x)).collect(Collectors.toList());
     }
 
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
-    public Timesheet get(String uuid) {
-        System.out.print("Timesheet get: " + uuid);
-        Timesheet t = super.getByUuid(uuid);
-        System.out.print("Timesheet get: " + t);
-        return t;
-    }
-
-    @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT"})
-    @Override
-    public Integer delete(String uuid) {
-        Timesheet timesheet = super.getByUuid(uuid);
-        if (timesheet.getStatus() == TimesheetStatus.IN_PROGRESS) {
-            return super.deleteByUuid(uuid);
-        }
-        else {
-            throw new EJBException("Timesheet must be in progess.");
-        }
+    public Timesheet getMyTimesheet(String uuid, String emailAddress) {
+        return Timesheet.toDTO(timesheetAccess.getMyTimesheetByUuid(uuid, emailAddress));
     }
 
     @RolesAllowed("EMPLOYEE")
     @Override
-    public Integer signAsEmployee(String uuid) {
+    public Integer signAsEmployee(String uuid, String emailAddress) {
         Timesheet timesheet = super.getByUuid(uuid);
         if (timesheet.getStatus() == TimesheetStatus.IN_PROGRESS) {
             timesheet.setSignedByEmployee(new Date());
@@ -87,10 +72,10 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
 
     @RolesAllowed("EMPLOYEE")
     @Override
-    public Integer revokeEmployeeSignature(String uuid) {
+    public Integer revokeEmployeeSignature(String uuid, String emailAddress) {
         Timesheet timesheet = super.getByUuid(uuid);
         if (timesheet.getStatus() != TimesheetStatus.ARCHIVED) {
-            return setStatusToInProgress(uuid);
+            return setStatusToInProgress(uuid, emailAddress);
         }
         else {
             throw new EJBException("Timesheet is already archived.");
@@ -99,7 +84,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
-    public Integer signAsSupervisor(String uuid) {
+    public Integer signAsSupervisor(String uuid, String emailAddress) {
         Timesheet timesheet = super.getByUuid(uuid);
         if (timesheet.getStatus() == TimesheetStatus.SIGNED_BY_EMPLOYEE) {
             timesheet.setSignedBySupervisor(new Date());
@@ -113,10 +98,10 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
     @Override
-    public Integer requestChanges(String uuid) {
+    public Integer requestChanges(String uuid, String emailAddress) {
         Timesheet timesheet = super.getByUuid(uuid);
         if (timesheet.getStatus() == TimesheetStatus.SIGNED_BY_EMPLOYEE) {
-            return setStatusToInProgress(uuid);
+            return setStatusToInProgress(uuid, emailAddress);
         }
         else {
             throw new EJBException("Timesheet must be signed by employee.");
@@ -125,11 +110,10 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
 
     @RolesAllowed("SECRETARY")
     @Override
-    public Integer setStatusToArchived(String uuid) {
+    public Integer setStatusToArchived(String uuid, String emailAddress) {
         Timesheet timesheet = super.getByUuid(uuid);
         if (timesheet.getStatus() == TimesheetStatus.SIGNED_BY_SUPERVISOR) {
             timesheet.setStatus(TimesheetStatus.ARCHIVED);
-            System.out.println("jee18.logic.impl.TimesheetSystem.setStatusToArchived()");
             return super.updateByUuid(uuid, timesheet);
         }
         else {
@@ -143,7 +127,7 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private Integer setStatusToInProgress(String uuid) {
+    private Integer setStatusToInProgress(String uuid, String emailAddress) {
         Timesheet timesheet = super.getByUuid(uuid);
         timesheet.setSignedByEmployee(null);
         timesheet.setSignedBySupervisor(null);

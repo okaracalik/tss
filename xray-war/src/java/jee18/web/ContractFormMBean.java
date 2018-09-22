@@ -43,7 +43,7 @@ public class ContractFormMBean implements Serializable {
     private String employeeUuid;
     private String supervisorUuid;
     private String assistantUuids;
-
+    private final String emailAddress = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
     public ContractFormMBean() {
     }
 
@@ -53,17 +53,12 @@ public class ContractFormMBean implements Serializable {
             contract = new Contract();
         }
         else {
-            contract = (Contract) contractSystem.getMyContract(uuid, FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName());
+            contract = (Contract) contractSystem.getMyContract(uuid, emailAddress);
         }
-        System.out.println("jee18.web.ContractFormMBean.init()");
         secretaries = roleSystem.listSecretary();
         employees = roleSystem.listEmployee();
         supervisors = roleSystem.listSupervisor();
         assistants = roleSystem.listAssistant();
-        System.out.println(secretaries);
-        System.out.println(employees);
-        System.out.println(supervisors);
-        System.out.println(assistants);
     }
 
     public Contract getContract() {
@@ -136,7 +131,7 @@ public class ContractFormMBean implements Serializable {
                 contractSystem.add(contract, Arrays.asList(secretaryUuids.split("\\s*,\\s*")), employeeUuid, supervisorUuid, Arrays.asList(assistantUuids.split("\\s*,\\s*")));
             }
             else {
-                contractSystem.update(uuid, contract);
+                contractSystem.update(uuid, contract, emailAddress);
             }
             return "/contract/contract-list.xhtml?faces-redirect=true";
         }
@@ -148,7 +143,7 @@ public class ContractFormMBean implements Serializable {
 
     public String delete() {
         try {
-            contractSystem.delete(uuid);
+            contractSystem.delete(uuid, emailAddress);
             return "/contract/contract-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
@@ -159,7 +154,7 @@ public class ContractFormMBean implements Serializable {
 
     public String start() {
         try {
-            contractSystem.setStatusToStarted(uuid);
+            contractSystem.setStatusToStarted(uuid, emailAddress);
             return "/contract/contract-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
@@ -170,7 +165,7 @@ public class ContractFormMBean implements Serializable {
 
     public String terminate() {
         try {
-            contractSystem.setStatusToTerminated(uuid);
+            contractSystem.setStatusToTerminated(uuid, emailAddress);
             return "/contract/contract-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
@@ -181,7 +176,7 @@ public class ContractFormMBean implements Serializable {
 
     public String archive() {
         try {
-            contractSystem.setStatusToArchived(uuid);
+            contractSystem.setStatusToArchived(uuid, emailAddress);
             return "/contract/contract-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {

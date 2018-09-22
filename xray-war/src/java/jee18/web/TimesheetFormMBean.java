@@ -8,6 +8,7 @@ package jee18.web;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import jee18.dto.Timesheet;
@@ -28,6 +29,7 @@ public class TimesheetFormMBean implements Serializable {
 
     private Timesheet timesheet;
     private String uuid;
+    private final String emailAddress = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
 
     public TimesheetFormMBean() {
     }
@@ -37,7 +39,7 @@ public class TimesheetFormMBean implements Serializable {
         if (uuid == null) {
             timesheet = new Timesheet();
         }
-        timesheet = (Timesheet) timesheetSystem.get(uuid);
+        timesheet = (Timesheet) timesheetSystem.getMyTimesheet(uuid, emailAddress);
         System.out.print(this.getClass().toString() + ": " + timesheet);
     }
 
@@ -53,20 +55,9 @@ public class TimesheetFormMBean implements Serializable {
         return uuid;
     }
 
-    public String delete() {
-        try {
-            timesheetSystem.delete(uuid);
-            return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
-        }
-        catch (Exception e) {
-            System.out.println(e.toString());
-            return "error";
-        }
-    }
-
     public String signAsEmployee() {
         try {
-            timesheetSystem.signAsEmployee(uuid);
+            timesheetSystem.signAsEmployee(uuid, emailAddress);
             return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
@@ -77,7 +68,7 @@ public class TimesheetFormMBean implements Serializable {
 
     public String revokeEmployeeSignature() {
         try {
-            timesheetSystem.revokeEmployeeSignature(uuid);
+            timesheetSystem.revokeEmployeeSignature(uuid, emailAddress);
             return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
@@ -88,7 +79,7 @@ public class TimesheetFormMBean implements Serializable {
 
     public String signAsSupervisor() {
         try {
-            timesheetSystem.signAsSupervisor(uuid);
+            timesheetSystem.signAsSupervisor(uuid, emailAddress);
             return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
@@ -99,7 +90,7 @@ public class TimesheetFormMBean implements Serializable {
 
     public String requestChanges() {
         try {
-            timesheetSystem.requestChanges(uuid);
+            timesheetSystem.requestChanges(uuid, emailAddress);
             return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {
@@ -110,7 +101,7 @@ public class TimesheetFormMBean implements Serializable {
 
     public String archive() {
         try {
-            timesheetSystem.setStatusToArchived(uuid);
+            timesheetSystem.setStatusToArchived(uuid, emailAddress);
             return "/timesheet/timesheet-list.xhtml?faces-redirect=true";
         }
         catch (Exception e) {

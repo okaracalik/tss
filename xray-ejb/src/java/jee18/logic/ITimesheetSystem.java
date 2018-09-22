@@ -14,55 +14,41 @@ import jee18.dto.Timesheet;
  */
 public interface ITimesheetSystem {
 
+    // FIXME: employee, may be supervisor, assistant
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
-    public List<Timesheet> list();
-    
-    // FIXME: employee, may be supervisor, assistant
     // -EMPLOYEE ***
-    public List<Timesheet> listMyTimesheets();
+    public List<Timesheet> listMyTimesheets(String emailAddress);
 
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
-    public Timesheet get(String uuid);
-    
-    // FIXME: employee, may be supervisor, assistant
     // -EMPLOYEE ***
-    // public Timesheet getMyTimesheet(String uuid);
+     public Timesheet getMyTimesheet(String uuid, String emailAddress);
 
-    // FIXME: it may not be called
-    // RULE: if not signed
-    // RULE: if not archived
-    public Integer delete(String uuid);
-
-    // FIXME: owner
     // -EMPLOYEE ***
     // RULE: if not archived
-    public Integer signAsEmployee(String uuid);
+    public Integer signAsEmployee(String uuid, String emailAddress);
 
-    // FIXME: owner
     // -EMPLOYEE ***
     // TASK: setStatusToInProgress
     // RULE: if not archived
-    public Integer revokeEmployeeSignature(String uuid);
+    public Integer revokeEmployeeSignature(String uuid, String emailAddress);
 
-    // FIXME: owner
     // -SUPERVISOR ***
     // RULE: if signed by employee
     // RULE: if not archived
-    public Integer signAsSupervisor(String uuid);
+    public Integer signAsSupervisor(String uuid, String emailAddress);
 
-    // FIXME: owner
     // -SUPERVISOR ***
     // TASK: setStatusToInProgress
     // RULE: if not archived
-    public Integer requestChanges(String uuid);
+    public Integer requestChanges(String uuid, String emailAddress);
 
     // -SECRETARY
     // RULE: if signed by supervisor
-    public Integer setStatusToArchived(String uuid);
+    public Integer setStatusToArchived(String uuid, String emailAddress);
 
     // -SECRETARY
     public void print();

@@ -17,34 +17,27 @@ public interface ITimesheetEntrySystem {
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
-    public List<TimesheetEntry> list();
-    
-    // FIXME: employee, may be supervisor, assistant
     // -EMPLOYEE ***
-    public List<TimesheetEntry> listMyTimesheetEntries(String employeeUuid);
+    public List<TimesheetEntry> listMyTimesheetEntries(String emailAddress);
 
-    // FIXME: employee, may be supervisor, assistant
     // -EMPLOYEE
     // RULE: if timesheet in progress
-    public TimesheetEntry add(TimesheetEntry te, String timesheetUuid);
+    public TimesheetEntry add(TimesheetEntry te, String timesheetUuid, String emailAddress);
 
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT
-    public TimesheetEntry get(String uuid);
-
-    // FIXME: employee, may be supervisor, assistant
     // -EMPLOYEE ***
-    // public TimesheetEntry getMyTimesheetEntry(String uuid);
-    
-    // FIXME: owner
-    // -EMPLOYEE ***
-    // RULE: if timesheet in progress
-    public Integer update(String uuid, TimesheetEntry t);
+    public TimesheetEntry getMyTimesheetEntry(String uuid, String emailAddress);
 
     // FIXME: owner
     // -EMPLOYEE ***
     // RULE: if timesheet in progress
-    public Integer delete(String uuid);
+    public Integer update(String uuid, TimesheetEntry t, String emailAddress);
+
+    // FIXME: owner
+    // -EMPLOYEE ***
+    // RULE: if timesheet in progress
+    public Integer delete(String uuid, String emailAddress);
 
 }
