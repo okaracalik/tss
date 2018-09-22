@@ -60,5 +60,7 @@ abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> imple
     abstract protected B convertToEntity(A a);
 
     abstract protected A convertToObject(B b);
-
+ public List<A> convertEntityListToObjectList(List<B> entityList) {
+       return entityList.stream().map(x -> convertToObject(x)).collect(Collectors.toList());
+    }
 }

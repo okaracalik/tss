@@ -4,10 +4,15 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:b="http://bootsfaces.net/ui"
     >
     <ui:param name="title" value="Home"/>
     <ui:define name="content">
-        <h1>AAA</h1>
+        <h1>AAABBCC</h1>
+         <h:form>
+                        <h:commandButton type="submit" id="update" value="test" action="#{holidayMBean.getHolidaysList()}"/>
+                        </h:form>s
     </ui:define>
+    
 </ui:composition>
 

@@ -7,6 +7,7 @@ package jee18.logic;
 
 import java.util.List;
 import jee18.dto.Contract;
+import jee18.dto.Holiday;
 
 /**
  *
@@ -37,5 +38,6 @@ public interface IContractSystem {
     public Integer setStatusToArchived(String uuid);
     
     public void print();
-    
+      
+    public List<Holiday> calculatePublicHolidaysInPeriod(String uuid) ; 
 }

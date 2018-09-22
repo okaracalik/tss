@@ -59,7 +59,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     }
 
     @Override
-    public List<Holiday>  calculatePublicHolidaysInPeriod(String uuid)      
+    public List<Holiday> calculatePublicHolidaysInPeriod(String uuid)      
     {
     Contract contract = super.getByUuid(uuid);
      
