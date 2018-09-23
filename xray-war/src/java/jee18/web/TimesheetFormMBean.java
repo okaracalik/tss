@@ -39,7 +39,10 @@ public class TimesheetFormMBean implements Serializable {
         if (uuid == null) {
             timesheet = new Timesheet();
         }
-        timesheet = (Timesheet) timesheetSystem.getMyTimesheet(uuid, emailAddress);
+        else {
+
+            timesheet = (Timesheet) timesheetSystem.getMyTimesheet(uuid, emailAddress);
+        }
         System.out.print(this.getClass().toString() + ": " + timesheet);
     }
 

@@ -16,6 +16,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import jee18.entities.ContractEntity;
+import jee18.entities.PersonEntity;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.TimesheetStatus;
 
@@ -43,9 +44,17 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
     }
 
     public TimesheetEntity getMyTimesheetByUuid(String uuid, String emailAddress) {
-        TimesheetEntity t = getByUuid(uuid);
+        System.out.println("jee18.dao.TimesheetAccess.getMyTimesheetByUuid()");
+        System.out.println(uuid);
+        TimesheetEntity t = em.createNamedQuery("TimesheetEntity.getTimesheetEntityByUUID", TimesheetEntity.class)
+                .setParameter("uuid", uuid)
+                .getSingleResult();
+        System.out.println(t);
         // if timesheet's contract exists
-        if (ContractAccess.findMyContracts(Arrays.asList(t.getContract()), personAccess.getByEmailAddress(emailAddress)).size() == 1) {
+        List<ContractEntity> c = Arrays.asList(t.getContract());
+        PersonEntity p = personAccess.getByEmailAddress(emailAddress);
+        List<ContractEntity> ce = ContractAccess.findMyContracts(c, p);
+        if (ce != null && ce.size() == 1) {
             return t;
         }
         else {
@@ -118,7 +127,6 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
 
     @Override
     public Integer updateByUuid(String uuid, TimesheetEntity timesheet) {
-
         Integer rows = em.createNamedQuery("TimesheetEntity.updateTimesheetEntityByUUID", TimesheetEntity.class)
                 .setParameter("uuid", uuid)
                 .setParameter("status", timesheet.getStatus())

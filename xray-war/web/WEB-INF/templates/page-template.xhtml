@@ -35,7 +35,7 @@
                         <b:label severity="warning" value="#{appMBean.getRole()}"/>
                         <b:label severity="primary" value="#{appMBean.getUsername()}" rendered="#{appMBean.isAuthenticated()}" />
                         <b:commandButton look="link" style="color:black" value="${msg.APP_SIGN_IN_TITLE}" iconAwesome="fa-sign-in" action="sign-in" rendered="#{not appMBean.isAuthenticated()}" />
-                        <b:commandButton look="link" style="color:black" value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" action="sign-out" actionListener="#{appMBean.clickSignOut()}" rendered="#{appMBean.isAuthenticated()}" />
+                        <b:commandButton look="link" style="color:black" value="${msg.APP_SIGN_OUT_TITLE}" iconAwesome="fa-sign-out" action="#{appMBean.clickSignOut()}" rendered="#{appMBean.isAuthenticated()}" />
                         <h:selectOneMenu class="form-control"  value="#{appMBean.currentLocale}" onchange="submit()">
                             <f:selectItems value="#{appMBean.availableLocales}" /> 
                         </h:selectOneMenu> 

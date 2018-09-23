@@ -35,7 +35,6 @@ import jee18.entities.enums.TimesheetStatus;
  * @author okaracalik
  */
 @Startup
-@Singleton
 public class TaskManager {
 
     @EJB
@@ -43,6 +42,14 @@ public class TaskManager {
 
     @Resource(lookup = "mail/uniko-mail")
     private Session mailSession;
+
+    public Session getMailSession() {
+        return mailSession;
+    }
+
+    public void setMailSession(Session mailSession) {
+        this.mailSession = mailSession;
+    }
 
     private Map<String, List<String>> reminders = new HashMap<>();
 

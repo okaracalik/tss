@@ -58,7 +58,7 @@ public class AppMBean implements Serializable {
 
     public String clickSignOut() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "/app/sign-in.xhtml";
+        return "/app/sign-in.xhtml?faces-redirect=true";
     }
 
     public String getUsername() {

@@ -154,6 +154,7 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
         employee.addAll(supervisor);
         employee.addAll(assistant);
         employee.addAll(secretary);
+        System.out.println(employee);
         return employee;
     }
 
