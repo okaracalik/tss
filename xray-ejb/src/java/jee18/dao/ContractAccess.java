@@ -43,6 +43,7 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
             return em.createNamedQuery("ContractEntity.getContractEntityByUUID", ContractEntity.class)
                     .setParameter("uuid", uuid)
                     .getSingleResult();
+          
         }
         catch (NoResultException e) {
             return null;

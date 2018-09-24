@@ -73,5 +73,11 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
         return em.createNamedQuery("TimesheetEntity.deleteTimesheetEntityByUUID", TimesheetEntity.class)
                 .setParameter("uuid", uuid).executeUpdate();
     }
-
+    
+ public List<TimesheetEntity>  getByContractId(long id)
+ {
+ return em.createNamedQuery("TimesheetEntity.getTimesheetListByContractId", TimesheetEntity.class)
+         .setParameter("contract_id", id)
+         .getResultList();
+ }
 }

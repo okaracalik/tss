@@ -16,7 +16,7 @@ import jee18.utils.DateTimeUtil;
 public class Person implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830833L;
-
+    
     private String uuid;
     private String firstName;
     private String lastName;

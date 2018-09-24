@@ -7,6 +7,7 @@ package jee18.dao;
 
 import java.util.List;
 import jee18.entities.AbstractEntity;
+import jee18.entities.TimesheetEntity;
 
 /**
  *
@@ -24,5 +25,7 @@ public interface IAccess<A extends AbstractEntity> {
     public Integer updateByUuid(String uuid, A a);
     
     public Integer deleteByUuid(String uuid);
+
+
 
 }

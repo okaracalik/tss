@@ -30,11 +30,14 @@ public class HolidayMBean {
 
     @PostConstruct
     public void getHolidayList() {
-        if (holidayList == null) {
-            holidayList = contractSystem.calculatePublicHolidaysInPeriod("2");
-        }        
+//        if (holidayList == null) {
+//            holidayList = contractSystem.calculatePublicHolidaysInPeriod("2");
+//        }        
     }
-    
+    public void calculateHoursDue(String uuid)
+    {
+    contractSystem.calculateHoursDue(uuid);
+    }
     public List<Holiday> getHolidaysList() {
         return holidayList;
     }

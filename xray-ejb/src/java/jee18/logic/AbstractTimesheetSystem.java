@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import jee18.dao.IAccess;
+import jee18.dto.Timesheet;
 import jee18.entities.AbstractEntity;
 
 /**
@@ -63,4 +64,7 @@ abstract public class AbstractTimesheetSystem<A, B extends AbstractEntity> imple
  public List<A> convertEntityListToObjectList(List<B> entityList) {
        return entityList.stream().map(x -> convertToObject(x)).collect(Collectors.toList());
     }
+
+ 
+   
 }

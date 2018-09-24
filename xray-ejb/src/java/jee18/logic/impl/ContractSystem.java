@@ -6,10 +6,12 @@
 package jee18.logic.impl;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -20,6 +22,7 @@ import jee18.dto.Holiday;
 import jee18.dto.Timesheet;
 import jee18.entities.ContractEntity;
 import jee18.entities.enums.ContractStatus;
+import jee18.entities.enums.Day;
 import jee18.logic.AbstractTimesheetSystem;
 import jee18.logic.IContractSystem;
 import jee18.logic.IHolidaySystem;
@@ -59,23 +62,63 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     }
 
     @Override
-    public List<Holiday> calculatePublicHolidaysInPeriod(String uuid)      
+    public List<Holiday> calculatePublicHolidaysInPeriod(String uuid,Date startDate,Date endDate)      
     {
     Contract contract = super.getByUuid(uuid);
      
   
         if (contract.getStatus() == ContractStatus.PREPARED) {
-        List<Holiday> list = holidaySystem.calculatePublicHolidaysInPeriod("2");
-        System.out.println("The number of holidays are :"+list.size());
-        return list;
+        List<Holiday> holidayList = holidaySystem.calculatePublicHolidaysInPeriod("2");
+        Holiday publicHoliday;
+        
+        //Excluding public holidays on Saturday and Sunday
+        for (int i=0;i<holidayList.size();i++)
+        {
+          publicHoliday  = holidayList.get(i);
+        if(publicHoliday.getDayOfWeek()==Day.SATURDAY || publicHoliday.getDayOfWeek()== Day.SUNDAY)
+        {
+        holidayList.remove(i);
+        }
+        if(!(publicHoliday.getHolidayDate().before(endDate) && publicHoliday.getHolidayDate().after(startDate)))
+        {
+        holidayList.remove(i);
+        }
+        }
+        System.out.println("The number of holidays are :"+holidayList.size());
+        
+        return holidayList;
         }
         else {
             throw new EJBException("Contract must be in prepared status.");
         }
     }
     // FIXME: calculateHoursDue
-    private Double calculateHoursDue() {
-        return 0.00;
+    @Override
+    public Double calculateHoursDue(String uuid) {
+        Contract contract = super.getByUuid(uuid);
+        double totalHoursDue=0;
+        Timesheet timesheet;
+        //get all timesheets for this contractID
+         List<Timesheet> timesheets= timesheetSystem.getByContractId(contract.getId());
+        for(int i=0;i<timesheets.size();i++)
+        {
+             timesheet = timesheets.get(i);
+        //call gethoursdue for each time sheet
+        Double hoursPerWeek = contract.getHoursPerWeek();
+        Integer workingDaysPerWeek = contract.getWorkingDaysPerWeek();
+        Date startDate = timesheet.getStartDate();
+        Date endDate= timesheet.getEndDate();
+        long diff = endDate.getTime() - startDate.getTime();
+        long daysInPeriod = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)+1;
+        long nonWorkingDaysInPeriod=calculateNonWorkingDaysBetweenDates(startDate,endDate);
+        int numberOfPublicHolidays = calculatePublicHolidaysInPeriod(uuid,startDate,endDate).size();
+        long workingDaysInPeriod = daysInPeriod-nonWorkingDaysInPeriod;
+        System.out.println("working Days In Period"+workingDaysInPeriod);
+        double hoursDue = ((workingDaysInPeriod - numberOfPublicHolidays )* hoursPerWeek) /(workingDaysPerWeek);
+        System.out.println("Hours Due"+hoursDue);
+        totalHoursDue+=hoursDue;
+        }
+        return totalHoursDue;
     }
 
     @Override
@@ -168,6 +211,32 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     @Override
     public void print() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private long calculateNonWorkingDaysBetweenDates(Date startDate, Date endDate) {
+      Calendar c1 = Calendar.getInstance();
+        c1.setTime(startDate);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(endDate);
+
+        int sundays = 0;
+        int saturday = 0;
+
+        while (! c1.after(c2)) {
+            if (c1.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ){
+                saturday++; 
+            }
+            if(c1.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+                sundays++;
+            }
+
+            c1.add(Calendar.DATE, 1);
+        }
+
+        System.out.println("Saturday Count = "+saturday);
+        System.out.println("Sunday Count = "+sundays);
+        return saturday + sundays;
     }
 
 }

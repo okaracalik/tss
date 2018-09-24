@@ -7,9 +7,11 @@ package jee18.logic.impl;
 
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.naming.NamingException;
+import jee18.dao.TimesheetAccess;
 import jee18.dto.Timesheet;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.TimesheetStatus;
@@ -22,7 +24,8 @@ import jee18.logic.ITimesheetSystem;
  */
 @Stateless(name = "TimesheetSystem")
 public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, TimesheetEntity> implements ITimesheetSystem {
-    
+      @EJB
+    private TimesheetAccess timesheetAccess;
     public TimesheetSystem() throws NamingException {
         super("TimesheetAccess");
     }
@@ -148,6 +151,13 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         timesheet.setSignedBySupervisor(null);
         timesheet.setStatus(TimesheetStatus.IN_PROGRESS);
         return super.updateByUuid(uuid, timesheet);
+    }
+
+    @Override
+    public List<Timesheet> getByContractId(long id) {
+          List<TimesheetEntity> timesheetList = timesheetAccess.getByContractId(id);
+          return super.convertEntityListToObjectList(timesheetList);
+          //   throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

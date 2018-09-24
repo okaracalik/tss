@@ -42,5 +42,7 @@ public interface ITimesheetSystem {
     public Integer setStatusToArchived(String uuid);
     
     public void print();
+
+    public List<Timesheet>  getByContractId(long id);
     
 }
