@@ -118,7 +118,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         System.out.println("Hours Due"+hoursDue);
         totalHoursDue+=hoursDue;
         }
-        return totalHoursDue;
+        return totalHoursDue; 
     }
 
     @Override
