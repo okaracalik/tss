@@ -6,6 +6,7 @@
 package jee18.logic;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import jee18.dto.Contract;
 import jee18.dto.Holiday;
@@ -41,6 +42,6 @@ public interface IContractSystem {
     public void print();
       
     public List<Holiday> calculatePublicHolidaysInPeriod(String uuid,Date startDate,Date endDate) ; 
-    
-    public Double calculateHoursDue(String uuid);
+    public HashMap<String,Double> calculateStatistics(String uuid);
+  
 }

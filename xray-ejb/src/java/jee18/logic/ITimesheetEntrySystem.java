@@ -6,7 +6,9 @@
 package jee18.logic;
 
 import java.util.List;
+import jee18.dto.Timesheet;
 import jee18.dto.TimesheetEntry;
+import jee18.entities.TimesheetEntity;
 
 /**
  *
@@ -23,5 +25,7 @@ public interface ITimesheetEntrySystem {
     public Integer update(String uuid, TimesheetEntry t);
 
     public Integer delete(String uuid);
+
+public List<TimesheetEntry> getByTimesheetList(List<Timesheet> timesheets) ;
 
 }

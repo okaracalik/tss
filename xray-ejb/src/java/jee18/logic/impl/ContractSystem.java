@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -20,12 +21,14 @@ import javax.naming.NamingException;
 import jee18.dto.Contract;
 import jee18.dto.Holiday;
 import jee18.dto.Timesheet;
+import jee18.dto.TimesheetEntry;
 import jee18.entities.ContractEntity;
 import jee18.entities.enums.ContractStatus;
 import jee18.entities.enums.Day;
 import jee18.logic.AbstractTimesheetSystem;
 import jee18.logic.IContractSystem;
 import jee18.logic.IHolidaySystem;
+import jee18.logic.ITimesheetEntrySystem;
 import jee18.logic.ITimesheetSystem;
 import jee18.utils.DateTimeUtil;
 
@@ -38,6 +41,8 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @EJB
     private ITimesheetSystem timesheetSystem;
+     @EJB
+    private ITimesheetEntrySystem timesheetEntrySystem;
     
     @EJB
     private IHolidaySystem holidaySystem;
@@ -69,19 +74,19 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
   
         if (contract.getStatus() == ContractStatus.PREPARED) {
         List<Holiday> holidayList = holidaySystem.calculatePublicHolidaysInPeriod("2");
-        Holiday publicHoliday;
-        
+    endDate=new Date(endDate.getTime()+(24*60*60*1000));
+    startDate=new Date(startDate.getTime()-(24*60*60*1000));
+    //    int numberOfHolidays=holidayList.size();
         //Excluding public holidays on Saturday and Sunday
-        for (int i=0;i<holidayList.size();i++)
-        {
-          publicHoliday  = holidayList.get(i);
+       for (Iterator<Holiday> it = holidayList.iterator(); it.hasNext(); ) {
+    Holiday publicHoliday = it.next();
         if(publicHoliday.getDayOfWeek()==Day.SATURDAY || publicHoliday.getDayOfWeek()== Day.SUNDAY)
         {
-        holidayList.remove(i);
+        it.remove();    
         }
         if(!(publicHoliday.getHolidayDate().before(endDate) && publicHoliday.getHolidayDate().after(startDate)))
         {
-        holidayList.remove(i);
+        it.remove();
         }
         }
         System.out.println("The number of holidays are :"+holidayList.size());
@@ -92,14 +97,21 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
             throw new EJBException("Contract must be in prepared status.");
         }
     }
-    // FIXME: calculateHoursDue
+
+    
+ 
+    
+
     @Override
-    public Double calculateHoursDue(String uuid) {
+    public HashMap<String,Double> calculateStatistics(String uuid)
+    {
         Contract contract = super.getByUuid(uuid);
+        HashMap<String,Double> statistics= new HashMap<String,Double>();
         double totalHoursDue=0;
         Timesheet timesheet;
         //get all timesheets for this contractID
          List<Timesheet> timesheets= timesheetSystem.getByContractId(contract.getId());
+        
         for(int i=0;i<timesheets.size();i++)
         {
              timesheet = timesheets.get(i);
@@ -117,8 +129,19 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         double hoursDue = ((workingDaysInPeriod - numberOfPublicHolidays )* hoursPerWeek) /(workingDaysPerWeek);
         System.out.println("Hours Due"+hoursDue);
         totalHoursDue+=hoursDue;
+        numberOfPublicHolidays=0;
+        nonWorkingDaysInPeriod=0;
         }
-        return totalHoursDue; 
+        statistics.put("TotalHoursDue", totalHoursDue);
+         List<TimesheetEntry> timesheetEntryList= timesheetEntrySystem.getByTimesheetList(timesheets); 
+         double hoursWorked=0;
+        for (TimesheetEntry timesheetEntry : timesheetEntryList) {
+            hoursWorked+= timesheetEntry.getHours();
+        }
+        double balance= totalHoursDue-hoursWorked;
+         statistics.put("Balance", balance);
+          System.out.println("Balance"+balance);
+         return statistics;
     }
 
     @Override
@@ -238,5 +261,7 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         System.out.println("Sunday Count = "+sundays);
         return saturday + sundays;
     }
+
+    
 
 }

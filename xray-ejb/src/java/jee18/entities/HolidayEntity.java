@@ -30,7 +30,7 @@ import jee18.entities.enums.Day;
     ),
         @NamedQuery(
         name="HolidayEntity.getHolidayByPeriod",
-        query = "SELECT e FROM HolidayEntity e WHERE e.holidayDate BETWEEN :startDate AND :endDate"
+        query = "SELECT e FROM HolidayEntity e WHERE e.holidayDate >= :startDate and e.holidayDate <= :endDate"
         )
 })
 public class HolidayEntity extends AbstractEntity {
