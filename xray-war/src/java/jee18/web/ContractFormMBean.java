@@ -6,6 +6,7 @@
 package jee18.web;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -28,7 +29,7 @@ public class ContractFormMBean implements Serializable {
 
     private Contract contract;
     private String uuid;
-
+private  HashMap<String, Double> statistics;
     public ContractFormMBean() {
     }
 
@@ -39,8 +40,13 @@ public class ContractFormMBean implements Serializable {
         }
         else {
             contract = (Contract) contractSystem.get(uuid);
+            statistics=contractSystem.calculateStatistics(uuid);
         }
         System.out.print(contract);
+    }
+
+    public HashMap<String, Double> getStatistics() {
+        return statistics;
     }
 
     public Contract getContract() {

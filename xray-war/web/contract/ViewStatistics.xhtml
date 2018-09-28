@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition 
+    template="/WEB-INF/templates/page-template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:b="http://bootsfaces.net/ui"
+        
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+       <f:metadata>
+        <f:viewParam name="uuid" value="#{contractFormMBean.uuid}" />
+        <f:viewAction action="#{contractFormMBean.init()}" />
+    </f:metadata>
+        <ui:define name="content">
+<!--        <h2>${msg.PERSON_LIST_TITLE}</h2>-->
+            <c:forEach items="#{contractFormMBean.statistics}" var ="stat">
+                <p> <h:outputText value="#{stat.key}" /></p>
+<h:dataTable border="1" value="#{stat.value}" var="statValue">
+    <h:column id="column1">
+      
+            <h:outputText value="#{statValue}"></h:outputText>
+        
+       
+    </h:column>
+
+</h:dataTable>
+            </c:forEach>
+    </ui:define>
+
+</ui:composition>

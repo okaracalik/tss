@@ -5,7 +5,10 @@
  */
 package jee18.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -24,7 +27,7 @@ public class ContractListMBean {
     private IContractSystem contractSystem;
 
     private List<Contract> contractList;
-
+  
     public ContractListMBean() {
     }
 
@@ -34,5 +37,5 @@ public class ContractListMBean {
         }
         return contractList;
     }
-    
+   
 }

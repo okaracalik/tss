@@ -12,11 +12,7 @@
         <h2>${msg.CONTRACT_LIST_TITLE}</h2>
         <b:dataTable value="#{contractListMBean.contractList}" var="contract">
 
-            <b:dataTableColumn label="${msg.FORM_EDIT_TITLE}" style="width: 50px; text-align: center;">
-                <b:button look="info" iconAwesome="edit" outcome="contract-form">
-                    <f:param name="uuid" value="#{contract.uuid}" />
-                </b:button>
-            </b:dataTableColumn>
+           
             <b:dataTableColumn label="${msg.CONTRACT_STATUS}" value="#{contract.status}" />
             <b:dataTableColumn label="${msg.CONTRACT_NAME}" value="#{contract.name}" />
             <b:dataTableColumn label="${msg.CONTRACT_START_DATE}" value="#{contract.startDate}" />
@@ -25,7 +21,18 @@
             <b:dataTableColumn label="${msg.CONTRACT_HOURS_PER_WEEK}" value="#{contract.hoursPerWeek}" />
             <b:dataTableColumn label="${msg.CONTRACT_VACATION_HOURS}" value="#{contract.vacationHours}" />
             <b:dataTableColumn label="${msg.CONTRACT_TERMINATION_DATE}" value="#{contract.terminationDate}" />
-
+ <b:dataTableColumn label="${msg.FORM_EDIT_TITLE}" style="width: 50px; text-align: center;">
+                <b:button look="info" iconAwesome="edit" outcome="contract-form">
+                    <f:param name="uuid" value="#{contract.uuid}" />
+                </b:button>
+              
+            </b:dataTableColumn>
+            <b:dataTableColumn label="${msg.FORM_VIEW_STATICSTICS_TITLE}" style="width: 50px; text-align: center;">
+               <b:button look="info" iconAwesome="statistics" outcome="contract-statistics">
+                    <f:param name="uuid" value="#{contract.uuid}" />
+                </b:button>
+                     
+            </b:dataTableColumn>
         </b:dataTable>
     </ui:define>
     

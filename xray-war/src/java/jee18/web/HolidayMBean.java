@@ -36,7 +36,7 @@ public class HolidayMBean {
     }
     public void calculateHoursDue(String uuid)
     {
-    contractSystem.calculateHoursDue(uuid);
+    contractSystem.calculateStatistics(uuid);
     }
     public List<Holiday> getHolidaysList() {
         return holidayList;
