@@ -31,24 +31,24 @@ public class PersonAccess extends AbstractAccess implements IAccess<PersonEntity
         em.persist(person);
         roles.forEach(role -> {
             if (role.contains("SECRETARY")) {
-                Secretary secretary = Secretary.newInstance();
-                secretary.setPerson(person);
-                person.getRoles().add(secretary);
+                Secretary defaultSecretary = Secretary.newInstance();
+                defaultSecretary.setPerson(person);
+                person.getRoles().add(defaultSecretary);
             }
             else if (role.contains("EMPLOYEE")) {
-                Employee employee = Employee.newInstance();
-                employee.setPerson(person);
-                person.getRoles().add(employee);
+                Employee defaultEmployee = Employee.newInstance();
+                defaultEmployee.setPerson(person);
+                person.getRoles().add(defaultEmployee);
             }
             else if (role.contains("SUPERVISOR")) {
-                Supervisor supervisor = Supervisor.newInstance();
-                supervisor.setPerson(person);
-                person.getRoles().add(supervisor);
+                Supervisor defaultSupervisor = Supervisor.newInstance();
+                defaultSupervisor.setPerson(person);
+                person.getRoles().add(defaultSupervisor);
             }
             else if (role.contains("ASSISTANT")) {
-                Assistant assistant = Assistant.newInstance();
-                assistant.setPerson(person);
-                person.getRoles().add(assistant);
+                Assistant defaultAssistant = Assistant.newInstance();
+                defaultAssistant.setPerson(person);
+                person.getRoles().add(defaultAssistant);
             }
             else {
                 System.out.println("jee18.dao.PersonAccess.createWithRoles(): no role");

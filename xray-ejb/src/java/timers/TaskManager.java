@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.jms.Session;
 import javax.mail.Message;
@@ -42,14 +41,6 @@ public class TaskManager {
 
     @Resource(lookup = "mail/uniko-mail")
     private Session mailSession;
-
-    public Session getMailSession() {
-        return mailSession;
-    }
-
-    public void setMailSession(Session mailSession) {
-        this.mailSession = mailSession;
-    }
 
     private Map<String, List<String>> reminders = new HashMap<>();
 

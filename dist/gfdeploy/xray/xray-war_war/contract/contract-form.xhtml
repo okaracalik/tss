@@ -26,16 +26,16 @@
             </b:form>
         </b:buttonToolbar>
         <b:form>
-            <b:selectMultiMenu label="${msg.PERSON_FORM_ROLE_SECRETARY}" value="#{contractFormMBean.secretaryUuids}" >
+            <b:selectMultiMenu label="${msg.PERSON_FORM_ROLE_SECRETARY}" value="#{contractFormMBean.secretaryUuids}" rendered="${contractFormMBean.uuid == null}">
                 <f:selectItems value="#{contractFormMBean.secretaries}" var="r" itemValue="#{r.uuid}" itemLabel="#{r.person.firstName}" />
             </b:selectMultiMenu><br/>
-            <b:selectOneMenu label="${msg.PERSON_FORM_ROLE_EMPLOYEE}" value="#{contractFormMBean.employeeUuid}" >
+            <b:selectOneMenu label="${msg.PERSON_FORM_ROLE_EMPLOYEE}" value="#{contractFormMBean.employeeUuid}" rendered="${contractFormMBean.uuid == null}" >
                 <f:selectItems value="#{contractFormMBean.employees}" var="r" itemValue="#{r.uuid}" itemLabel="#{r.person.firstName}" />
             </b:selectOneMenu>
-            <b:selectOneMenu label="${msg.PERSON_FORM_ROLE_SUPERVISOR}" value="#{contractFormMBean.supervisorUuid}" >
+            <b:selectOneMenu label="${msg.PERSON_FORM_ROLE_SUPERVISOR}" value="#{contractFormMBean.supervisorUuid}" rendered="${contractFormMBean.uuid == null}" >
                 <f:selectItems value="#{contractFormMBean.supervisors}" var="r" itemValue="#{r.uuid}" itemLabel="#{r.person.firstName}" />
             </b:selectOneMenu>
-            <b:selectMultiMenu label="${msg.PERSON_FORM_ROLE_ASSISTANT}" value="#{contractFormMBean.assistantUuids}" >
+            <b:selectMultiMenu label="${msg.PERSON_FORM_ROLE_ASSISTANT}" value="#{contractFormMBean.assistantUuids}" rendered="${contractFormMBean.uuid == null}" >
                 <f:selectItems value="#{contractFormMBean.assistants}" var="r" itemValue="#{r.uuid}" itemLabel="#{r.person.firstName}" />
             </b:selectMultiMenu><br/>
             <b:inputText label="${msg.CONTRACT_NAME}" value="#{contractFormMBean.contract.name}" />

@@ -21,7 +21,7 @@ import javax.persistence.OneToOne;
 @NamedQueries({
     @NamedQuery(
             name = "RoleEntity.getSupervisorList",
-            query = "SELECT e FROM Supervisor e"
+            query = "SELECT e FROM Supervisor e WHERE e.contract IS NULL"
     )
     ,
     @NamedQuery(

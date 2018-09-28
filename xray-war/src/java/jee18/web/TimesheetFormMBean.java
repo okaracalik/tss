@@ -40,7 +40,6 @@ public class TimesheetFormMBean implements Serializable {
             timesheet = new Timesheet();
         }
         else {
-
             timesheet = (Timesheet) timesheetSystem.getMyTimesheet(uuid, emailAddress);
         }
         System.out.print(this.getClass().toString() + ": " + timesheet);

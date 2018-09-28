@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
@@ -43,19 +42,35 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
 
     public ContractEntity createWithPersons(ContractEntity contract, List<String> secretaryUuids, String employeeUuid, String supervisorUuid, List<String> assistantUuids) {
         em.persist(contract);
+        // set secretary
         secretaryUuids.forEach(uuid -> {
-            Secretary secretary = em.createNamedQuery("RoleEntity.getSecretaryByUUID", Secretary.class).setParameter("uuid", uuid).getSingleResult();
+            Secretary defaultSecretary = em.createNamedQuery("RoleEntity.getSecretaryByUUID", Secretary.class).setParameter("uuid", uuid).getSingleResult();
+            Secretary secretary = Secretary.newInstance();
+            secretary.setPerson(defaultSecretary.getPerson());
+            defaultSecretary.getPerson().getRoles().add(secretary);
             secretary.setContract(contract);
             contract.getSecretaries().add(secretary);
         });
-        Employee employee = em.createNamedQuery("RoleEntity.getEmployeeByUUID", Employee.class).setParameter("uuid", employeeUuid).getSingleResult();
+        // set employee
+        Employee defaultEmployee = em.createNamedQuery("RoleEntity.getEmployeeByUUID", Employee.class).setParameter("uuid", employeeUuid).getSingleResult();
+        Employee employee = Employee.newInstance();
+        employee.setPerson(defaultEmployee.getPerson());
+        defaultEmployee.getPerson().getRoles().add(employee);
         employee.setContract(contract);
         contract.setEmployee(employee);
-        Supervisor supervisor = em.createNamedQuery("RoleEntity.getSupervisorByUUID", Supervisor.class).setParameter("uuid", supervisorUuid).getSingleResult();
+        // set supervisor
+        Supervisor defaultSupervisor = em.createNamedQuery("RoleEntity.getSupervisorByUUID", Supervisor.class).setParameter("uuid", supervisorUuid).getSingleResult();
+        Supervisor supervisor = Supervisor.newInstance();
+        supervisor.setPerson(defaultSupervisor.getPerson());
+        defaultSupervisor.getPerson().getRoles().add(supervisor);
         supervisor.setContract(contract);
         contract.setSupervisor(supervisor);
+        // set assistant
         assistantUuids.forEach(uuid -> {
-            Assistant assistant = em.createNamedQuery("RoleEntity.getAssistantByUUID", Assistant.class).setParameter("uuid", uuid).getSingleResult();
+            Assistant defaultAssistant = em.createNamedQuery("RoleEntity.getAssistantByUUID", Assistant.class).setParameter("uuid", uuid).getSingleResult();
+            Assistant assistant = Assistant.newInstance();
+            assistant.setPerson(defaultAssistant.getPerson());
+            defaultAssistant.getPerson().getRoles().add(assistant);
             assistant.setContract(contract);
             contract.getAssistants().add(assistant);
         });
