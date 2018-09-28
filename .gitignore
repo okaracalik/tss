@@ -5,3 +5,8 @@
 /xray-war/build/
 /xray-war/dist/
 /build/
+/xrayJavaEE-ejb/build/
+/xrayJavaEE-ejb/dist/
+/xrayJavaEE-war/build/
+/build/
+/xrayJavaEE-war/dist/
