@@ -135,4 +135,17 @@ public class TimesheetSystem extends AbstractTimesheetSystem<Timesheet, Timeshee
         return super.updateByUuid(uuid, timesheet);
     }
 
+    @Override
+    public List<Timesheet> getByContractId(long id) {
+          List<TimesheetEntity> timesheetList = timesheetAccess.getByContractId(id);
+          return super.convertEntityListToObjectList(timesheetList);
+          //   throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+   
+    public List<TimesheetEntity> convertObjListToEntityList(List<Timesheet> objectList) {
+        return super.convertObjectListToEntityList(objectList); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

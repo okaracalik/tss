@@ -6,7 +6,9 @@
 package jee18.logic;
 
 import java.util.List;
+import jee18.dto.Timesheet;
 import jee18.dto.TimesheetEntry;
+import jee18.entities.TimesheetEntity;
 
 /**
  *
@@ -39,5 +41,7 @@ public interface ITimesheetEntrySystem {
     // -EMPLOYEE ***
     // RULE: if timesheet in progress
     public Integer delete(String uuid, String emailAddress);
+
+public List<TimesheetEntry> getByTimesheetList(List<Timesheet> timesheets) ;
 
 }

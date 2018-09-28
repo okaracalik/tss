@@ -21,7 +21,17 @@ import jee18.utils.DateTimeUtil;
 public class Timesheet implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830831L;
+    private long id;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+   
     private String uuid;
     private TimesheetStatus status = TimesheetStatus.IN_PROGRESS;
     private Date startDate;
@@ -112,6 +122,7 @@ public class Timesheet implements Serializable {
 
     public static TimesheetEntity toEntity(Timesheet dto) {
         TimesheetEntity e = TimesheetEntity.newInstance();
+        e.setId(dto.getId());
         e.setStatus(dto.getStatus());
         e.setStartDate(DateTimeUtil.convertDateToLocalDate(dto.getStartDate()));
         e.setEndDate(DateTimeUtil.convertDateToLocalDate(dto.getEndDate()));
@@ -127,6 +138,7 @@ public class Timesheet implements Serializable {
     // TODO: does not convert entries
     public static Timesheet toDTO(TimesheetEntity e) {
         Timesheet dto = new Timesheet();
+        dto.setId(e.getId());
         dto.setUuid(e.getUuid());
         dto.setStatus(e.getStatus());
         dto.setStartDate(DateTimeUtil.convertLocalDateToDate(e.getStartDate()));

@@ -50,6 +50,10 @@ import jee18.entities.enums.TimesheetStatus;
     @NamedQuery(
             name = "TimesheetEntity.deleteTimesheetEntityInProgressByContractId",
             query = "DELETE FROM TimesheetEntity e WHERE e.contract = :contract AND e.status = :status"
+    ) ,
+    @NamedQuery(
+            name = "TimesheetEntity.getTimesheetListByContractId",
+            query = "Select e FROM TimesheetEntity e WHERE e.contract.id = :contract_id"
     )
     ,
     @NamedQuery(

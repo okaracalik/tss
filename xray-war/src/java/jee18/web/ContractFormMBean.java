@@ -8,6 +8,7 @@ package jee18.web;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -44,6 +45,7 @@ public class ContractFormMBean implements Serializable {
     private String supervisorUuid;
     private String assistantUuids;
     private final String emailAddress = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
+private  HashMap<String, Double> statistics;
     public ContractFormMBean() {
     }
 
@@ -55,11 +57,17 @@ public class ContractFormMBean implements Serializable {
         else {
             contract = (Contract) contractSystem.getMyContract(uuid, emailAddress);
             System.out.println(contract);
+            contract = (Contract) contractSystem.get(uuid);
+            statistics=contractSystem.calculateStatistics(uuid);
         }
         secretaries = roleSystem.listSecretary();
         employees = roleSystem.listEmployee();
         supervisors = roleSystem.listSupervisor();
         assistants = roleSystem.listAssistant();
+    }
+
+    public HashMap<String, Double> getStatistics() {
+        return statistics;
     }
 
     public Contract getContract() {

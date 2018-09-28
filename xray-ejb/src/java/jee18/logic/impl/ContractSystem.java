@@ -6,9 +6,13 @@
 package jee18.logic.impl;
 
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
@@ -17,11 +21,17 @@ import javax.ejb.Stateless;
 import javax.naming.NamingException;
 import jee18.dao.ContractAccess;
 import jee18.dto.Contract;
+import jee18.dto.Holiday;
 import jee18.dto.Timesheet;
+import jee18.dto.TimesheetEntry;
 import jee18.entities.ContractEntity;
 import jee18.entities.enums.ContractStatus;
+import jee18.entities.enums.Day;
 import jee18.logic.AbstractTimesheetSystem;
 import jee18.logic.IContractSystem;
+import jee18.logic.IHolidaySystem;
+import jee18.logic.ITimesheetEntrySystem;
+import jee18.logic.ITimesheetSystem;
 import jee18.utils.DateTimeUtil;
 
 /**
@@ -33,6 +43,12 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
     @EJB
     private ContractAccess contractAccess;
+    private ITimesheetSystem timesheetSystem;
+     @EJB
+    private ITimesheetEntrySystem timesheetEntrySystem;
+    
+    @EJB
+    private IHolidaySystem holidaySystem;
 
     public ContractSystem() throws NamingException {
         super("ContractAccess");
@@ -49,9 +65,94 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     }
 
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
+    // vacationHours = vacationDaysPerYear * durationOfContract / 12 * hoursPerWeek / workingDaysPerWeek  (The duration of the contract is counted in months.)
+    private Double calculateVacationHours(Integer vacationDaysPerYear, Integer durationOfContract, Double hoursPerWeek, Integer workingDaysPerWeek) {
+        return (vacationDaysPerYear.doubleValue() * (durationOfContract.doubleValue() / 12)) * (hoursPerWeek / workingDaysPerWeek.doubleValue());
+    }
+
+    @Override
+    public List<Holiday> calculatePublicHolidaysInPeriod(String uuid,Date startDate,Date endDate)      
+    {
+    Contract contract = super.getByUuid(uuid);
+     
+  
+        if (contract.getStatus() == ContractStatus.PREPARED) {
+        List<Holiday> holidayList = holidaySystem.calculatePublicHolidaysInPeriod("2");
+    endDate=new Date(endDate.getTime()+(24*60*60*1000));
+    startDate=new Date(startDate.getTime()-(24*60*60*1000));
+    //    int numberOfHolidays=holidayList.size();
+        //Excluding public holidays on Saturday and Sunday
+       for (Iterator<Holiday> it = holidayList.iterator(); it.hasNext(); ) {
+    Holiday publicHoliday = it.next();
+        if(publicHoliday.getDayOfWeek()==Day.SATURDAY || publicHoliday.getDayOfWeek()== Day.SUNDAY)
+        {
+        it.remove();    
+        }
+        if(!(publicHoliday.getHolidayDate().before(endDate) && publicHoliday.getHolidayDate().after(startDate)))
+        {
+        it.remove();
+        }
+        }
+        System.out.println("The number of holidays are :"+holidayList.size());
+        
+        return holidayList;
+        }
+        else {
+            throw new EJBException("Contract must be in prepared status.");
+        }
+    }
+
+    
+ 
+    
+
     @Override
     public List<Contract> listMyContracts(String emailAddress) {
         return contractAccess.getMyContractList(emailAddress).stream().map(x -> convertToObject(x)).collect(Collectors.toList());
+    public HashMap<String,Double> calculateStatistics(String uuid)
+    {
+        Contract contract = super.getByUuid(uuid);
+        HashMap<String,Double> statistics= new HashMap<String,Double>();
+        double totalHoursDue=0;
+        Timesheet timesheet;
+        //get all timesheets for this contractID
+         List<Timesheet> timesheets= timesheetSystem.getByContractId(contract.getId());
+        
+        for(int i=0;i<timesheets.size();i++)
+        {
+             timesheet = timesheets.get(i);
+        //call gethoursdue for each time sheet
+        Double hoursPerWeek = contract.getHoursPerWeek();
+        Integer workingDaysPerWeek = contract.getWorkingDaysPerWeek();
+        Date startDate = timesheet.getStartDate();
+        Date endDate= timesheet.getEndDate();
+        long diff = endDate.getTime() - startDate.getTime();
+        long daysInPeriod = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)+1;
+        long nonWorkingDaysInPeriod=calculateNonWorkingDaysBetweenDates(startDate,endDate);
+        int numberOfPublicHolidays = calculatePublicHolidaysInPeriod(uuid,startDate,endDate).size();
+        long workingDaysInPeriod = daysInPeriod-nonWorkingDaysInPeriod;
+        System.out.println("working Days In Period"+workingDaysInPeriod);
+        double hoursDue = ((workingDaysInPeriod - numberOfPublicHolidays )* hoursPerWeek) /(workingDaysPerWeek);
+        System.out.println("Hours Due"+hoursDue);
+        totalHoursDue+=hoursDue;
+        numberOfPublicHolidays=0;
+        nonWorkingDaysInPeriod=0;
+        }
+        statistics.put("TotalHoursDue", totalHoursDue);
+         List<TimesheetEntry> timesheetEntryList= timesheetEntrySystem.getByTimesheetList(timesheets); 
+         double hoursWorked=0;
+        for (TimesheetEntry timesheetEntry : timesheetEntryList) {
+            hoursWorked+= timesheetEntry.getHours();
+        }
+        double balance= totalHoursDue-hoursWorked;
+         statistics.put("Balance", balance);
+          System.out.println("Balance"+balance);
+         return statistics;
+    }
+
+    @Override
+    public List<Contract> list() {
+        return super.getList();
     }
 
     @RolesAllowed({"SUPERVISOR", "ASSISTANT"})
@@ -140,5 +241,33 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
     public void print() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    private long calculateNonWorkingDaysBetweenDates(Date startDate, Date endDate) {
+      Calendar c1 = Calendar.getInstance();
+        c1.setTime(startDate);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(endDate);
+
+        int sundays = 0;
+        int saturday = 0;
+
+        while (! c1.after(c2)) {
+            if (c1.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ){
+                saturday++; 
+            }
+            if(c1.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+                sundays++;
+            }
+
+            c1.add(Calendar.DATE, 1);
+        }
+
+        System.out.println("Saturday Count = "+saturday);
+        System.out.println("Sunday Count = "+sundays);
+        return saturday + sundays;
+    }
+
+    
 
 }

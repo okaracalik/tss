@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -84,7 +85,9 @@ public class ContractEntity extends AbstractEntity {
     private Supervisor supervisor;
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
     private Set<Assistant> assistants;
-
+    
+    
+    
     public ContractEntity() {
         this(false);
     }

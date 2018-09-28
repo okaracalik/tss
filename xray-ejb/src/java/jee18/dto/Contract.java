@@ -22,7 +22,16 @@ import jee18.utils.DateTimeUtil;
 public class Contract implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830832L;
+    private long id;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+    
     private String uuid;
     private ContractStatus status = ContractStatus.PREPARED;
     private String name;
@@ -168,6 +177,7 @@ public class Contract implements Serializable {
     // TODO: doesnot convert timesheets
     public static Contract toDTO(ContractEntity e) {
         Contract dto = new Contract();
+        dto.setId(e.getId());
         dto.setUuid(e.getUuid());
         dto.setStatus(e.getStatus());
         dto.setName(e.getName());

@@ -15,6 +15,7 @@ import javax.naming.NamingException;
 import jee18.dao.TimesheetEntryAccess;
 import jee18.dto.Timesheet;
 import jee18.dto.TimesheetEntry;
+import jee18.entities.TimesheetEntity;
 import jee18.entities.TimesheetEntryEntity;
 import jee18.entities.enums.ContractStatus;
 import jee18.entities.enums.TimesheetStatus;
@@ -95,6 +96,13 @@ public class TimesheetEntrySystem extends AbstractTimesheetSystem<TimesheetEntry
         else {
             throw new EJBException("Timesheet Entry can only be added when timesheet is in progress and contract was started.");
         }
+    }
+
+    @Override
+    public List<TimesheetEntry> getByTimesheetList(List<Timesheet> timesheets) {
+     List<TimesheetEntryEntity>  timesheetentriesList=timesheetEntryAccess.getByTimesheetList(timesheetSystem.convertObjListToEntityList(timesheets)) ;
+     return super.convertEntityListToObjectList(timesheetentriesList);
+       
     }
 
 }

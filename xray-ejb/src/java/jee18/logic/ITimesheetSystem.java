@@ -7,6 +7,8 @@ package jee18.logic;
 
 import java.util.List;
 import jee18.dto.Timesheet;
+import jee18.entities.TimesheetEntity;
+
 
 /**
  *
@@ -53,4 +55,8 @@ public interface ITimesheetSystem {
     // -SECRETARY
     public void print();
 
+    public List<Timesheet>  getByContractId(long id);
+public List<TimesheetEntity> convertObjListToEntityList(List<Timesheet> objectList);
+    
+    
 }
