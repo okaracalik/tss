@@ -15,19 +15,19 @@
 
             <b:dataTableColumn label="${msg.CONTRACT_STATUS}" value="#{contract.status}" />
             <b:dataTableColumn label="${msg.CONTRACT_NAME}" value="#{contract.name}" />
-            <b:dataTableColumn label="${msg.CONTRACT_START_DATE}" value="#{contract.startDate}" />
-            <b:dataTableColumn label="${msg.CONTRACT_END_DATE}" value="#{contract.endDate}" />
+            <b:dataTableColumn label="${msg.CONTRACT_START_DATE}" value="#{contractListMBean.formatDate(contract.startDate)}" />
+            <b:dataTableColumn label="${msg.CONTRACT_END_DATE}" value="#{contractListMBean.formatDate(contract.endDate)}" />
             <b:dataTableColumn label="${msg.CONTRACT_FREQUENCY}" value="#{contract.frequency}" />
             <b:dataTableColumn label="${msg.CONTRACT_HOURS_PER_WEEK}" value="#{contract.hoursPerWeek}" />
             <b:dataTableColumn label="${msg.CONTRACT_VACATION_HOURS}" value="#{contract.vacationHours}" />
-            <b:dataTableColumn label="${msg.CONTRACT_TERMINATION_DATE}" value="#{contract.terminationDate}" />
+            <b:dataTableColumn label="${msg.CONTRACT_TERMINATION_DATE}" value="#{contractListMBean.formatDate(contract.terminationDate)}" />
             <b:dataTableColumn label="${msg.FORM_EDIT_TITLE}" style="width: 50px; text-align: center;">
                 <b:button look="info" iconAwesome="edit" outcome="contract-form">
                     <f:param name="uuid" value="#{contract.uuid}" />
                 </b:button>
             </b:dataTableColumn>
             <b:dataTableColumn label="${msg.FORM_VIEW_STATICSTICS_TITLE}" style="width: 50px; text-align: center;">
-                <b:button look="info" iconAwesome="pie-chart" outcome="contract-stats">
+                <b:button look="primary" iconAwesome="pie-chart" outcome="contract-stats">
                     <f:param name="uuid" value="#{contract.uuid}" />
                 </b:button>
             </b:dataTableColumn>

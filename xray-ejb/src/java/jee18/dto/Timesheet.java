@@ -121,7 +121,6 @@ public class Timesheet implements Serializable {
         return e;
     }
 
-    // TODO: does not convert entries
     public static Timesheet toDTO(TimesheetEntity e) {
         Timesheet dto = new Timesheet();
         dto.setUuid(e.getUuid());

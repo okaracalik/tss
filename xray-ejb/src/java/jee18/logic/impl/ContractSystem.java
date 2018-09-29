@@ -121,8 +121,16 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
             HashMap<LocalDate, LocalDate> dates = DateTimeUtil.findTimesheetDates(DateTimeUtil.convertDateToLocalDate(contract.getStartDate()), DateTimeUtil.convertDateToLocalDate(contract.getEndDate()), contract.getFrequency());
             Set<Timesheet> ts = dates.entrySet().stream().map(x -> {
                 Timesheet t = new Timesheet();
-                t.setStartDate(DateTimeUtil.convertLocalDateToDate(x.getKey()));
-                t.setEndDate(DateTimeUtil.convertLocalDateToDate(x.getValue()));
+                Date startDate = DateTimeUtil.convertLocalDateToDate(x.getKey());
+                Date endDate = DateTimeUtil.convertLocalDateToDate(x.getValue());
+                t.setStartDate(startDate);
+                t.setEndDate(endDate);
+                long duration = endDate.getTime() - startDate.getTime();
+                long daysInPeriod = TimeUnit.DAYS.convert(duration, TimeUnit.MILLISECONDS) + 1;
+                long nonWorkingDaysInPeriod = calculateNonWorkingDaysBetweenDates(startDate, endDate);
+                int numberOfPublicHolidays = holidaySystem.calculatePublicHolidaysInPeriod(startDate, endDate).stream().filter(a -> a.getDayOfWeek() != Day.SATURDAY && a.getDayOfWeek() != Day.SUNDAY).collect(Collectors.toList()).size();
+                long workingDaysInPeriod = daysInPeriod - nonWorkingDaysInPeriod;
+                t.setHoursDue(calculateHoursDue(workingDaysInPeriod, numberOfPublicHolidays, contract.getHoursPerWeek(), contract.getWorkingDaysPerWeek()));
                 return t;
             }).collect(Collectors.toSet());
 
@@ -164,7 +172,6 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    // FIXME: update contract, timesheet: hoursDue
     @RolesAllowed({"SECRETARY", "SUPERVISOR", "ASSISTANT", "EMPLOYEE"})
     @Override
     public HashMap<String, Double> calculateStatistics(String uuid, String emailAddress) {
@@ -173,50 +180,17 @@ public class ContractSystem extends AbstractTimesheetSystem<Contract, ContractEn
 
         HashMap<String, Double> statistics = new HashMap<>();
 
-        double totalHoursDue = tes.stream().map(te -> {
-            Date startDate = DateTimeUtil.convertLocalDateToDate(te.getStartDate());
-            Date endDate = DateTimeUtil.convertLocalDateToDate(te.getEndDate());
-            long duration = endDate.getTime() - startDate.getTime();
-            long daysInPeriod = TimeUnit.DAYS.convert(duration, TimeUnit.MILLISECONDS) + 1;
-            long nonWorkingDaysInPeriod = calculateNonWorkingDaysBetweenDates(startDate, endDate);
-            int numberOfPublicHolidays = calculatePublicHolidaysInPeriod(Contract.toDTO(ce), startDate, endDate).size();
-            long workingDaysInPeriod = daysInPeriod - nonWorkingDaysInPeriod;
-            return ((workingDaysInPeriod - numberOfPublicHolidays) * ce.getHoursPerWeek()) / (ce.getWorkingDaysPerWeek());
-        }).reduce(0.00, (y, z) -> y + z);
-
         double hoursWorked = tes.stream().map(te -> te.getEntries().stream().map(tee -> tee.getHours()).reduce(0.00, (x, y) -> x + y)).reduce(0.00, (a, b) -> a + b);
 
-        double balance = hoursWorked - totalHoursDue;
-        statistics.put("TotalHoursDue", totalHoursDue);
+        double balance = hoursWorked - ce.getHoursDue();
+        statistics.put("TotalHoursDue", ce.getHoursDue());
         statistics.put("Balance", balance);
 
         return statistics;
     }
 
-    private List<Holiday> calculatePublicHolidaysInPeriod(Contract contract, Date startDate, Date endDate) {
-
-        if (contract.getStatus() != ContractStatus.PREPARED) {
-            List<Holiday> holidayList = holidaySystem.calculatePublicHolidaysInPeriod(contract.getStartDate(), contract.getEndDate());
-            endDate = new Date(endDate.getTime() + (24 * 60 * 60 * 1000));
-            startDate = new Date(startDate.getTime() - (24 * 60 * 60 * 1000));
-            //    int numberOfHolidays=holidayList.size();
-            //Excluding public holidays on Saturday and Sunday
-            for (Iterator<Holiday> it = holidayList.iterator(); it.hasNext();) {
-                Holiday publicHoliday = it.next();
-                if (publicHoliday.getDayOfWeek() == Day.SATURDAY || publicHoliday.getDayOfWeek() == Day.SUNDAY) {
-                    it.remove();
-                }
-                if (!(publicHoliday.getHolidayDate().before(endDate) && publicHoliday.getHolidayDate().after(startDate))) {
-                    it.remove();
-                }
-            }
-            System.out.println("The number of holidays are :" + holidayList.size());
-
-            return holidayList;
-        }
-        else {
-            throw new EJBException("Contract must be in started status at least.");
-        }
+    private Double calculateHoursDue(Long workingDaysInPeriod, Integer numberOfPublicHolidays, Double contractHoursPerWeek, Integer contractWorkingDaysPerWeek) {
+        return ((workingDaysInPeriod.doubleValue() - numberOfPublicHolidays.doubleValue()) * contractHoursPerWeek) / (contractWorkingDaysPerWeek.doubleValue());
     }
 
     private long calculateNonWorkingDaysBetweenDates(Date startDate, Date endDate) {

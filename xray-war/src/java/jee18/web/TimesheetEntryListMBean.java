@@ -5,6 +5,9 @@
  */
 package jee18.web;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -25,6 +28,8 @@ public class TimesheetEntryListMBean {
     private ITimesheetEntrySystem timesheetEntrySystem;
 
     private List<TimesheetEntry> timesheetEntryList;
+    private final SimpleDateFormat df = new SimpleDateFormat("d MMM ''yy");
+    private final SimpleDateFormat tf = new SimpleDateFormat("HH:mm");
     private final String emailAddress = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
 
     public TimesheetEntryListMBean() {
@@ -35,6 +40,14 @@ public class TimesheetEntryListMBean {
             timesheetEntryList = timesheetEntrySystem.listMyTimesheetEntries(emailAddress);
         }
         return timesheetEntryList;
+    }
+
+    public String formatDate(Date date) throws ParseException {
+        return df.format(date);
+    }
+
+    public String formatTime(Date date) throws ParseException {
+        return tf.format(date);
     }
 
 }

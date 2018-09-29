@@ -121,7 +121,7 @@ public class AppMBean implements Serializable {
     public void generateData() {
         appSystem.generateData();
     }
-    
+
     public void resetData() {
         appSystem.truncateData();
     }

@@ -12,6 +12,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import static java.time.temporal.TemporalAdjusters.next;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import jee18.entities.enums.TimesheetFrequency;
@@ -101,6 +102,32 @@ public class DateTimeUtil {
 
         }
         return dates;
+    }
+
+    private long calculateNonWorkingDaysBetweenDates(Date startDate, Date endDate) {
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(startDate);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(endDate);
+
+        int sundays = 0;
+        int saturday = 0;
+
+        while (!c1.after(c2)) {
+            if (c1.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                saturday++;
+            }
+            if (c1.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                sundays++;
+            }
+
+            c1.add(Calendar.DATE, 1);
+        }
+
+        System.out.println("Saturday Count = " + saturday);
+        System.out.println("Sunday Count = " + sundays);
+        return saturday + sundays;
     }
 
 }

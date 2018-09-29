@@ -19,9 +19,9 @@
             </b:dataTableColumn>
             <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_TYPE}" value="#{timesheetEntry.type}"/>
             <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_DESCRIPTION}" value="#{timesheetEntry.description}"/>
-            <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_DATE}" value="#{timesheetEntry.entryDate}"/>
-            <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_START_TIME}" value="#{timesheetEntry.startTime}"/>
-            <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_END_TIME}" value="#{timesheetEntry.endTime}"/>
+            <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_DATE}" value="#{timesheetEntryListMBean.formatDate(timesheetEntry.entryDate)}"/>
+            <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_START_TIME}" value="#{timesheetEntryListMBean.formatTime(timesheetEntry.startTime)}"/>
+            <b:dataTableColumn label="${msg.TIMESHEET_ENTRY_END_TIME}" value="#{timesheetEntryListMBean.formatTime(timesheetEntry.endTime)}"/>
 
         </b:dataTable>
     </ui:define>

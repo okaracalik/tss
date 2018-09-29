@@ -50,7 +50,7 @@ import jee18.entities.enums.TimesheetFrequency;
     ,
     @NamedQuery(
             name = "ContractEntity.updateContractEntityStatusByUUID",
-            query = "UPDATE ContractEntity e SET e.status = :status, e.terminationDate = :terminationDate WHERE e.uuid = :uuid"
+            query = "UPDATE ContractEntity e SET e.status = :status, e.terminationDate = :terminationDate, e.hoursDue = :hoursDue WHERE e.uuid = :uuid"
     )
     ,
     @NamedQuery(

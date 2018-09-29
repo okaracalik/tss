@@ -15,18 +15,18 @@ import javax.persistence.PersistenceContext;
  * @param <A>
  */
 public class AbstractAccess<A extends AbstractEntity> {
-    
+
     protected Class<A> entityClass;
-    
+
     @PersistenceContext(unitName = "xray-ejbPU")
     protected EntityManager em;
-    
+
     public AbstractAccess(Class<A> entityClass) {
         this.entityClass = entityClass;
     }
-    
+
     protected A getAbstractEntityById(long id) {
         return em.find(entityClass, id);
     }
-    
+
 }

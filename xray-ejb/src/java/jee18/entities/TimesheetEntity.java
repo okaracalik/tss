@@ -50,7 +50,8 @@ import jee18.entities.enums.TimesheetStatus;
     @NamedQuery(
             name = "TimesheetEntity.deleteTimesheetEntityInProgressByContractId",
             query = "DELETE FROM TimesheetEntity e WHERE e.contract = :contract AND e.status = :status"
-    ) ,
+    )
+    ,
     @NamedQuery(
             name = "TimesheetEntity.getTimesheetListByContractId",
             query = "Select e FROM TimesheetEntity e WHERE e.contract.id = :contract_id"
@@ -177,7 +178,7 @@ public class TimesheetEntity extends AbstractEntity {
     public String toString() {
         return "TimesheetEntity{" + "status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", hoursDue=" + hoursDue + ", signedByEmployee=" + signedByEmployee + ", signedBySupervisor=" + signedBySupervisor + ", contract=" + contract + '}';
     }
-    
+
     public void addEntry(TimesheetEntryEntity e) {
         System.out.print(this.getClass().toString() + " addEntry: " + e);
         e.setTimesheet(this);

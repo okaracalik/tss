@@ -8,7 +8,6 @@ package jee18.logic.impl;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -92,9 +91,9 @@ public class AppSystem implements IAppSystem {
                 Logger.getLogger(AppSystem.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         try {
             List<Holiday> holidays = new ArrayList();
             holidays.add(new Holiday("New Year´s Day", formatter.parse("2018-01-01"), Day.MONDAY));
@@ -228,7 +227,7 @@ public class AppSystem implements IAppSystem {
             holidays.add(new Holiday("All Saints'' Day", formatter.parse("2028-11-01"), Day.WEDNESDAY));
             holidays.add(new Holiday("Christmas", formatter.parse("2028-12-25"), Day.MONDAY));
             holidays.add(new Holiday("Second Day of Christmas", formatter.parse("2028-12-26"), Day.TUESDAY));
-            
+
             holidays.forEach(h -> {
                 holidayAccess.create(Holiday.toEntity(h));
             });

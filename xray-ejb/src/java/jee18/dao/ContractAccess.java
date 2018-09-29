@@ -83,6 +83,7 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
             Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
                     .setParameter("uuid", e.getUuid())
                     .setParameter("status", ContractStatus.STARTED)
+                    .setParameter("hoursDue", tes.stream().map(te -> te.getHoursDue()).reduce(0.0, (a, b) -> a + b))
                     .setParameter("terminationDate", e.getTerminationDate())
                     .executeUpdate();
             tes.forEach(te -> {
@@ -102,6 +103,7 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
             Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
                     .setParameter("uuid", e.getUuid())
                     .setParameter("status", ContractStatus.TERMINATED)
+                    .setParameter("hoursDue", e.getHoursDue()) // must be fixed
                     .setParameter("terminationDate", LocalDate.now())
                     .executeUpdate();
             em.createNamedQuery("TimesheetEntity.deleteTimesheetEntityInProgressByContractId", TimesheetEntity.class)
@@ -121,6 +123,7 @@ public class ContractAccess extends AbstractAccess implements IAccess<ContractEn
             Integer rows = em.createNamedQuery("ContractEntity.updateContractEntityStatusByUUID", ContractEntity.class)
                     .setParameter("uuid", e.getUuid())
                     .setParameter("status", ContractStatus.ARCHIVED)
+                    .setParameter("hoursDue", e.getHoursDue()) // must be fixed
                     .setParameter("terminationDate", e.getTerminationDate())
                     .executeUpdate();
             return rows;

@@ -41,7 +41,7 @@ public class RoleAccess extends AbstractAccess implements IAccess<RoleEntity> {
     public List<Assistant> getAssistantList() {
         return em.createNamedQuery("RoleEntity.getAssistantList", Assistant.class).getResultList();
     }
-    
+
     public Integer truncate() {
         return em.createNamedQuery("RoleEntity.truncate", RoleEntity.class).executeUpdate();
     }

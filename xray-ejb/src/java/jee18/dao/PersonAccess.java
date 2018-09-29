@@ -10,7 +10,6 @@ import javax.ejb.LocalBean;
 import jee18.entities.PersonEntity;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import jee18.entities.Assistant;
 import jee18.entities.Employee;
 import jee18.entities.Secretary;
@@ -72,7 +71,7 @@ public class PersonAccess extends AbstractAccess implements IAccess<PersonEntity
     public Integer truncate() {
         return em.createNamedQuery("PersonEntity.truncate", PersonEntity.class).executeUpdate();
     }
-    
+
     @Override
     public PersonEntity create(PersonEntity person) {
         em.persist(person);

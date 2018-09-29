@@ -5,7 +5,12 @@
  */
 package jee18.web;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -24,12 +29,14 @@ public class ContractListMBean {
 
     @ManagedProperty(value = "#{appMBean}")
     AppMBean app;
-    
+
     @EJB
     private IContractSystem contractSystem;
 
     private List<Contract> contractList;
-  
+
+    private final SimpleDateFormat df = new SimpleDateFormat("d MMM ''yy");
+
     public ContractListMBean() {
     }
 
@@ -38,6 +45,13 @@ public class ContractListMBean {
             contractList = contractSystem.listMyContracts(FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName());
         }
         return contractList;
+    }
+
+    public String formatDate(Date date) throws ParseException {
+        if (date == null) {
+            return "-";
+        }
+        return df.format(date);
     }
 
 }

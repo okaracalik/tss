@@ -104,7 +104,7 @@ public class TimesheetEntryAccess extends AbstractAccess implements IAccess<Time
     public Integer truncate() {
         return em.createNamedQuery("TimesheetEntryEntity.truncate", TimesheetEntryEntity.class).executeUpdate();
     }
-    
+
     @Override
     public TimesheetEntryEntity create(TimesheetEntryEntity timesheetEntry) {
         em.persist(timesheetEntry);
@@ -127,18 +127,18 @@ public class TimesheetEntryAccess extends AbstractAccess implements IAccess<Time
             return null;
         }
     }
-     public List<TimesheetEntryEntity> getByTimesheetList(List<TimesheetEntity> timesheets) {
+
+    public List<TimesheetEntryEntity> getByTimesheetList(List<TimesheetEntity> timesheets) {
         try {
             return em.createNamedQuery("TimesheetEntryEntity.getTimesheetEntryEntityByTimesheetList", TimesheetEntryEntity.class)
                     .setParameter("timesheets", timesheets)
                     .getResultList();
-    
+
         }
         catch (NoResultException e) {
             return null;
         }
     }
-    
 
     @Override
     public Integer updateByUuid(String uuid, TimesheetEntryEntity timesheetEntry) {

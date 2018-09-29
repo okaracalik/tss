@@ -34,7 +34,7 @@ public class Assistant extends RoleEntity {
     @ManyToOne
     @JoinColumn(name = "contract_id")
     private ContractEntity contract;
-    
+
     public Assistant() {
         this(false);
     }
@@ -54,7 +54,5 @@ public class Assistant extends RoleEntity {
     public void setContract(ContractEntity contract) {
         this.contract = contract;
     }
-    
-    
 
 }
