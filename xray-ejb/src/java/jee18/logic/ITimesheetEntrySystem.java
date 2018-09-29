@@ -32,12 +32,10 @@ public interface ITimesheetEntrySystem {
     // -EMPLOYEE ***
     public TimesheetEntry getMyTimesheetEntry(String uuid, String emailAddress);
 
-    // FIXME: owner
     // -EMPLOYEE ***
     // RULE: if timesheet in progress
     public Integer update(String uuid, TimesheetEntry t, String emailAddress);
 
-    // FIXME: owner
     // -EMPLOYEE ***
     // RULE: if timesheet in progress
     public Integer delete(String uuid, String emailAddress);

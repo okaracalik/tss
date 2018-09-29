@@ -44,12 +44,9 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
     }
 
     public TimesheetEntity getMyTimesheetByUuid(String uuid, String emailAddress) {
-        System.out.println("jee18.dao.TimesheetAccess.getMyTimesheetByUuid()");
-        System.out.println(uuid);
         TimesheetEntity t = em.createNamedQuery("TimesheetEntity.getTimesheetEntityByUUID", TimesheetEntity.class)
                 .setParameter("uuid", uuid)
                 .getSingleResult();
-        System.out.println(t);
         // if timesheet's contract exists
         List<ContractEntity> c = Arrays.asList(t.getContract());
         PersonEntity p = personAccess.getByEmailAddress(emailAddress);
@@ -96,6 +93,11 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
 
     public List<TimesheetEntity> getTimesheetListByStatus(TimesheetStatus timesheetStatus) {
         return em.createNamedQuery("TimesheetEntity.getTimesheetEntityByStatus", TimesheetEntity.class).setParameter("timesheetStatus", timesheetStatus).getResultList();
+    }
+
+    public List<TimesheetEntity> getTimesheetListByContract(String contractUuid, String emailAddress) {
+        ContractEntity contract = ca.getMyContractByUuid(contractUuid, emailAddress);
+        return em.createNamedQuery("TimesheetEntity.getTimesheetEntityByContract", TimesheetEntity.class).setParameter("contract", contract).getResultList();
     }
 
     public Integer truncate() {
@@ -145,11 +147,11 @@ public class TimesheetAccess extends AbstractAccess implements IAccess<Timesheet
         return em.createNamedQuery("TimesheetEntity.deleteTimesheetEntityByUUID", TimesheetEntity.class)
                 .setParameter("uuid", uuid).executeUpdate();
     }
-    
- public List<TimesheetEntity>  getByContractId(long id)
- {
- return em.createNamedQuery("TimesheetEntity.getTimesheetListByContractId", TimesheetEntity.class)
-         .setParameter("contract_id", id)
-         .getResultList();
- }
+
+    public List<TimesheetEntity> getByContractId(long id) {
+        return em.createNamedQuery("TimesheetEntity.getTimesheetListByContractId", TimesheetEntity.class)
+                .setParameter("contract_id", id)
+                .getResultList();
+    }
+
 }

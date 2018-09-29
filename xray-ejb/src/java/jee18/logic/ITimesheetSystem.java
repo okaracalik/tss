@@ -16,7 +16,6 @@ import jee18.entities.TimesheetEntity;
  */
 public interface ITimesheetSystem {
 
-    // FIXME: employee, may be supervisor, assistant
     // -SECRETARY
     // -SUPERVISOR
     // -ASSISTANT

@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import jee18.entities.ContractEntity;
 import jee18.entities.TimesheetEntity;
 import jee18.entities.enums.TimesheetStatus;
 import jee18.utils.DateTimeUtil;
@@ -21,22 +20,11 @@ import jee18.utils.DateTimeUtil;
 public class Timesheet implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830831L;
-    private long id;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-   
     private String uuid;
     private TimesheetStatus status = TimesheetStatus.IN_PROGRESS;
     private Date startDate;
     private Date endDate;
-    private Double hoursDue;
+    private Double hoursDue = 0.00;
     private Date signedByEmployee;
     private Date signedBySupervisor;
     private Contract contract;
@@ -119,14 +107,12 @@ public class Timesheet implements Serializable {
         return "Timesheet{" + "uuid=" + uuid + ", status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", hoursDue=" + hoursDue + ", signedByEmployee=" + signedByEmployee + ", signedBySupervisor=" + signedBySupervisor + ", contract=" + contract + ", entries=" + entries + '}';
     }
 
-
     public static TimesheetEntity toEntity(Timesheet dto) {
         TimesheetEntity e = TimesheetEntity.newInstance();
-        e.setId(dto.getId());
         e.setStatus(dto.getStatus());
         e.setStartDate(DateTimeUtil.convertDateToLocalDate(dto.getStartDate()));
         e.setEndDate(DateTimeUtil.convertDateToLocalDate(dto.getEndDate()));
-        e.setHoursDue(calculateTimesheetHoursDue());
+        e.setHoursDue(dto.getHoursDue());
         e.setSignedByEmployee(DateTimeUtil.convertDateToLocalDate(dto.getSignedByEmployee()));
         e.setSignedBySupervisor(DateTimeUtil.convertDateToLocalDate(dto.getSignedBySupervisor()));
         // dto.getEntries().stream().map(x -> TimesheetEntry.toEntity(x)).collect(Collectors.toList()).forEach(t -> {
@@ -138,7 +124,6 @@ public class Timesheet implements Serializable {
     // TODO: does not convert entries
     public static Timesheet toDTO(TimesheetEntity e) {
         Timesheet dto = new Timesheet();
-        dto.setId(e.getId());
         dto.setUuid(e.getUuid());
         dto.setStatus(e.getStatus());
         dto.setStartDate(DateTimeUtil.convertLocalDateToDate(e.getStartDate()));
@@ -150,17 +135,6 @@ public class Timesheet implements Serializable {
         System.out.print("Timesheet toDTO: " + dto);
         System.out.print("Timesheet toDTO: " + dto.getContract());
         return dto;
-    }
-    
-    private static Contract toContractDTO(ContractEntity e) {
-        Contract dto = new Contract();
-        
-        return dto;
-    }
-
-    // FIXME: calculateTimesheetHoursDue
-    private static Double calculateTimesheetHoursDue() {
-        return 0.00;
     }
 
 }

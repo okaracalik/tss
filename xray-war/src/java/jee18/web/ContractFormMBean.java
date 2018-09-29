@@ -58,7 +58,7 @@ public class ContractFormMBean implements Serializable {
         else {
             contract = (Contract) contractSystem.getMyContract(uuid, emailAddress);
             System.out.println(contract);
-            statistics = contractSystem.calculateStatistics(uuid);
+            statistics = contractSystem.calculateStatistics(uuid, emailAddress);
         }
         secretaries = roleSystem.listSecretary();
         employees = roleSystem.listEmployee();

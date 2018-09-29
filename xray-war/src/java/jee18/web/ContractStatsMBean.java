@@ -38,7 +38,8 @@ public class ContractStatsMBean implements Serializable {
     public void init() {
         if (uuid != null) {
             contract = (Contract) contractSystem.getMyContract(uuid, emailAddress);
-//            statistics = contractSystem.calculateStatistics(uuid);
+            statistics = contractSystem.calculateStatistics(uuid, emailAddress);
+            System.out.println(statistics);
         }
     }
 

@@ -31,7 +31,8 @@
             <b:navbarLinks pull="right">
                 <li>
                     <b:form styleClass="navbar-form">
-                        <b:commandButton actionListener="#{appMBean.generateData()}" value="Generate" rendered="#{not appMBean.isAuthenticated()}"/>
+                        <b:commandButton actionListener="#{appMBean.generateData()}" value="Generate" rendered="#{not appMBean.isAuthenticated() and not appMBean.isThereData()}"/>
+                        <b:commandButton actionListener="#{appMBean.resetData()}" value="Reset" rendered="#{not appMBean.isAuthenticated() and appMBean.isThereData()}"/>
                         <b:label severity="warning" value="#{appMBean.getRole()}"/>
                         <b:label severity="primary" value="#{appMBean.getUsername()}" rendered="#{appMBean.isAuthenticated()}" />
                         <b:commandButton look="link" style="color:black" value="${msg.APP_SIGN_IN_TITLE}" iconAwesome="fa-sign-in" action="sign-in" rendered="#{not appMBean.isAuthenticated()}" />

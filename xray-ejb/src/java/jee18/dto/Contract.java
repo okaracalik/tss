@@ -22,15 +22,6 @@ import jee18.utils.DateTimeUtil;
 public class Contract implements Serializable {
 
     private static final long serialVersionUID = 3419675164523830832L;
-    private long id;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
     
     private String uuid;
     private ContractStatus status = ContractStatus.PREPARED;
@@ -41,7 +32,7 @@ public class Contract implements Serializable {
     private Date terminationDate; // onUpdate
     private Double hoursPerWeek;
     private Double vacationHours; // auto
-    private Double hoursDue; // auto
+    private Double hoursDue = 0.0; // auto
     private Integer workingDaysPerWeek = 5; // default
     private Integer vacationDaysPerYear = 20; // default
     private Set<Timesheet> timesheets = new HashSet<>(); // default
@@ -167,7 +158,7 @@ public class Contract implements Serializable {
         e.setWorkingDaysPerWeek(dto.getWorkingDaysPerWeek());
         e.setVacationDaysPerYear(dto.getVacationDaysPerYear());
         e.setVacationHours(calculateVacationHours(e.getVacationDaysPerYear(), DateTimeUtil.calculateDurationOfContract(e.getStartDate(), e.getEndDate()), e.getHoursPerWeek(), e.getWorkingDaysPerWeek()));
-        e.setHoursDue(calculateHoursDue());
+        e.setHoursDue(dto.getHoursDue());
         dto.getTimesheets().stream().map(x -> Timesheet.toEntity(x)).collect(Collectors.toList()).forEach(t -> {
             e.addTimesheets(t);
         });
@@ -196,11 +187,6 @@ public class Contract implements Serializable {
     // vacationHours = vacationDaysPerYear * durationOfContract / 12 * hoursPerWeek / workingDaysPerWeek  (The duration of the contract is counted in months.)
     private static Double calculateVacationHours(Integer vacationDaysPerYear, Integer durationOfContract, Double hoursPerWeek, Integer workingDaysPerWeek) {
         return (vacationDaysPerYear.doubleValue() * (durationOfContract.doubleValue() / 12)) * (hoursPerWeek / workingDaysPerWeek.doubleValue());
-    }
-
-    // FIXME: calculateHoursDue
-    private static Double calculateHoursDue() {
-        return 0.00;
     }
 
 }

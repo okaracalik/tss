@@ -27,6 +27,26 @@ import jee18.entities.enums.Day;
     )
     ,
     @NamedQuery(
+            name = "HolidayEntity.getHolidayEntityByUUID",
+            query = "SELECT e FROM HolidayEntity e WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "HolidayEntity.updateHolidayEntityByUUID",
+            query = "UPDATE HolidayEntity e SET e.name = :name, e.dayOfWeek = :dayOfWeek, e.holidayDate = :holidayDate WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "HolidayEntity.deleteHolidayEntityByUUID",
+            query = "DELETE FROM HolidayEntity e WHERE e.uuid = :uuid"
+    )
+    ,
+    @NamedQuery(
+            name = "HolidayEntity.truncate",
+            query = "DELETE FROM HolidayEntity"
+    )
+    ,
+    @NamedQuery(
             name = "HolidayEntity.getHolidayByPeriod",
             query = "SELECT e FROM HolidayEntity e WHERE e.holidayDate >= :startDate and e.holidayDate <= :endDate"
     )

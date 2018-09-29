@@ -34,38 +34,32 @@ public interface IContractSystem {
     // TASK: stats
     public Contract getMyContract(String uuid, String emailAddress);
 
-    // FIXME: owner
     // -SUPERVISOR
     // -ASSISTANT
     // RULE: if prepared
     public Integer update(String uuid, Contract c, String emailAddress);
 
-    // FIXME: employee, may be supervisor, assistant
     // -SUPERVISOR
     // -ASSISTANT
     // RULE: if prepared
     // TASK: delete timesheets in progress
     public Integer delete(String uuid, String emailAddress);
 
-    // FIXME: owner
     // -SUPERVISOR
     // -ASSISTANT
     // TASK: create timesheets
     public Integer setStatusToStarted(String uuid, String emailAddress);
 
-    // FIXME: owner
     // -SUPERVISOR
     // -ASSISTANT
     // TASK: set termination date
     public Integer setStatusToTerminated(String uuid, String emailAddress);
 
-    // FIXME: this is called when all timesheets are archived.
     public Integer setStatusToArchived(String uuid, String emailAddress);
 
     // -SECRETARY
     public void print();
-      
-    public List<Holiday> calculatePublicHolidaysInPeriod(String uuid,Date startDate,Date endDate) ; 
-    public HashMap<String,Double> calculateStatistics(String uuid);
-  
+
+    public HashMap<String, Double> calculateStatistics(String uuid, String emailAddress);
+
 }

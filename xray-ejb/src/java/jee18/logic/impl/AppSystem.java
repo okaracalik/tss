@@ -241,6 +241,7 @@ public class AppSystem implements IAppSystem {
 
     @Override
     public void truncateData() {
+        holidayAccess.truncate();
         timesheetEntryAccess.truncate();
         timesheetAccess.truncate();
         roleAccess.truncate();

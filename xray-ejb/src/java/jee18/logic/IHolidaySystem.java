@@ -5,6 +5,7 @@
  */
 package jee18.logic;
 
+import java.util.Date;
 import java.util.List;
 import jee18.dto.Holiday;
 
@@ -24,6 +25,6 @@ public interface IHolidaySystem {
 
     public Integer delete(String uuid);
 
-    public List<Holiday> calculatePublicHolidaysInPeriod(String uuid);
+    public List<Holiday> calculatePublicHolidaysInPeriod(Date startDate, Date endDate);
 
 }

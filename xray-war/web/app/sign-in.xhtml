@@ -31,7 +31,7 @@
         </form>
         <ui:fragment rendered="${request.parameterMap.containsKey('j_username')}">
             <b:alert severity="danger">
-                ${request.parameterMap}
+                ${msg.APP_SIGN_IN_ERROR}
             </b:alert>
         </ui:fragment>
     </ui:define>

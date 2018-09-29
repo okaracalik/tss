@@ -10,12 +10,12 @@ import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import jee18.logic.IAppSystem;
+import jee18.logic.IHolidaySystem;
 
 /**
  *
@@ -24,6 +24,9 @@ import jee18.logic.IAppSystem;
 @Named
 @SessionScoped
 public class AppMBean implements Serializable {
+
+    @EJB
+    private IHolidaySystem holidaySystem;
 
     @EJB
     private IAppSystem appSystem;
@@ -117,6 +120,14 @@ public class AppMBean implements Serializable {
 
     public void generateData() {
         appSystem.generateData();
+    }
+    
+    public void resetData() {
+        appSystem.truncateData();
+    }
+
+    public boolean isThereData() {
+        return holidaySystem.list().size() > 0;
     }
 
 }

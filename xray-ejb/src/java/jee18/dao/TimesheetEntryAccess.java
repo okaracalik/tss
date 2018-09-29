@@ -13,7 +13,6 @@ import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-import jee18.entities.ContractEntity;
 
 import jee18.entities.TimesheetEntity;
 import jee18.entities.TimesheetEntryEntity;
@@ -105,7 +104,7 @@ public class TimesheetEntryAccess extends AbstractAccess implements IAccess<Time
     public Integer truncate() {
         return em.createNamedQuery("TimesheetEntryEntity.truncate", TimesheetEntryEntity.class).executeUpdate();
     }
-
+    
     @Override
     public TimesheetEntryEntity create(TimesheetEntryEntity timesheetEntry) {
         em.persist(timesheetEntry);

@@ -11,17 +11,17 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import jee18.entities.HolidayEntity;
 
 /**
  *
  * @author esha
  */
-@Stateless(name="HolidayAccess")
+@Stateless(name = "HolidayAccess")
 @LocalBean
 public class HolidayAccess extends AbstractAccess implements IAccess<HolidayEntity> {
 
-  
     public HolidayAccess() {
         super(HolidayEntity.class);
     }
@@ -30,35 +30,51 @@ public class HolidayAccess extends AbstractAccess implements IAccess<HolidayEnti
     public List<HolidayEntity> getList() {
         return em.createNamedQuery("HolidayEntity.getHolidayList", HolidayEntity.class).getResultList();
     }
-    
-   
-    public List<HolidayEntity> getListByContractPeriod(Date startDate,Date endDate) {
-    return em.createNamedQuery("HolidayEntity.getHolidayByPeriod", HolidayEntity.class)
-            .setParameter("startDate",LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(startDate) ) )
-            .setParameter("endDate",LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(endDate) ) )
-            .getResultList();
+
+    public List<HolidayEntity> getListByContractPeriod(Date startDate, Date endDate) {
+        return em.createNamedQuery("HolidayEntity.getHolidayByPeriod", HolidayEntity.class)
+                .setParameter("startDate", LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(startDate)))
+                .setParameter("endDate", LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(endDate)))
+                .getResultList();
     }
+
     @Override
     public HolidayEntity create(HolidayEntity a) {
-          em.persist(a);
+        em.persist(a);
         return a;
     }
 
     @Override
     public HolidayEntity getByUuid(String uuid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return em.createNamedQuery("HolidayEntity.getHolidayEntityByUUID", HolidayEntity.class)
+                    .setParameter("uuid", uuid)
+                    .getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     public Integer updateByUuid(String uuid, HolidayEntity a) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createNamedQuery("HolidayEntity.updateHolidayEntityByUUID", HolidayEntity.class)
+                .setParameter("uuid", uuid)
+                .setParameter("name", a.getName())
+                .setParameter("dayOfWeek", a.getDayOfWeek())
+                .setParameter("holidayDate", a.getHolidayDate())
+                .executeUpdate();
     }
 
     @Override
     public Integer deleteByUuid(String uuid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createNamedQuery("HolidayEntity.deleteHolidayEntityByUUID", HolidayEntity.class)
+                .setParameter("uuid", uuid)
+                .executeUpdate();
     }
-    
-    
-    
+
+    public Integer truncate() {
+        return em.createNamedQuery("HolidayEntity.truncate", HolidayEntity.class).executeUpdate();
+    }
+
 }

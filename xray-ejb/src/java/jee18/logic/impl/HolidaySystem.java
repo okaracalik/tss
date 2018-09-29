@@ -12,7 +12,6 @@ import javax.ejb.Stateless;
 import javax.naming.NamingException;
 import jee18.dao.ContractAccess;
 import jee18.dao.HolidayAccess;
-import jee18.dto.Contract;
 import jee18.dto.Holiday;
 import jee18.entities.HolidayEntity;
 import jee18.logic.AbstractTimesheetSystem;
@@ -46,10 +45,7 @@ public class HolidaySystem extends AbstractTimesheetSystem<Holiday, HolidayEntit
     }
 
     @Override
-    public List<Holiday> calculatePublicHolidaysInPeriod(String uuid) {
-        Contract contract = Contract.toDTO(contractAccess.getByUuid(uuid));
-        Date startDate = contract.getStartDate();
-        Date endDate = contract.getEndDate();
+    public List<Holiday> calculatePublicHolidaysInPeriod(Date startDate, Date endDate) {
         List<HolidayEntity> holidayEntitylist;
         holidayEntitylist = holidayAccess.getListByContractPeriod(startDate, endDate);
         List<Holiday> holidayList = super.convertEntityListToObjectList(holidayEntitylist);
