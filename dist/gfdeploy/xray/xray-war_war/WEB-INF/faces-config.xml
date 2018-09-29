@@ -45,6 +45,11 @@
             <from-outcome>contract-form</from-outcome>
             <to-view-id>/contract/contract-form.xhtml</to-view-id>
         </navigation-case>
+            <navigation-case>
+            <from-outcome>contract-stats</from-outcome>
+            <to-view-id>/contract/contract-stats.xhtml</to-view-id>
+        </navigation-case>
+        
         <navigation-case>
             <from-outcome>timesheet-list</from-outcome>
             <to-view-id>/timesheet/timesheet-list.xhtml</to-view-id>
@@ -53,6 +58,8 @@
             <from-outcome>timesheet-form</from-outcome>
             <to-view-id>/timesheet/timesheet-form.xhtml</to-view-id>
         </navigation-case>
+    
+        
         <navigation-case>
             <from-outcome>timesheet-entry-list</from-outcome>
             <to-view-id>/timesheet-entry/timesheet-entry-list.xhtml</to-view-id>

@@ -85,9 +85,7 @@ public class ContractEntity extends AbstractEntity {
     private Supervisor supervisor;
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
     private Set<Assistant> assistants;
-    
-    
-    
+
     public ContractEntity() {
         this(false);
     }

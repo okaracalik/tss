@@ -9,9 +9,6 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -21,27 +18,34 @@ import jee18.entities.enums.Day;
  *
  * @author esha
  */
-@Table(name= "Holidays")
+@Table(name = "Holidays")
 @Entity
 @NamedQueries({
     @NamedQuery(
             name = "HolidayEntity.getHolidayList",
             query = "SELECT e FROM HolidayEntity e"
-    ),
-        @NamedQuery(
-        name="HolidayEntity.getHolidayByPeriod",
-        query = "SELECT e FROM HolidayEntity e WHERE e.holidayDate >= :startDate and e.holidayDate <= :endDate"
-        )
+    )
+    ,
+    @NamedQuery(
+            name = "HolidayEntity.getHolidayByPeriod",
+            query = "SELECT e FROM HolidayEntity e WHERE e.holidayDate >= :startDate and e.holidayDate <= :endDate"
+    )
 })
 public class HolidayEntity extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    private Long id;
     private String name;
-     @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Day dayOfWeek;
     private LocalDate holidayDate;
+
+    public HolidayEntity() {
+        this(false);
+    }
+
+    private HolidayEntity(boolean isNew) {
+        super(isNew);
+    }
 
     public Day getDayOfWeek() {
         return dayOfWeek;
@@ -51,12 +55,10 @@ public class HolidayEntity extends AbstractEntity {
         this.dayOfWeek = dayOfWeek;
     }
 
-     
-     public static HolidayEntity newInstance() {
-        return new HolidayEntity();
+    public static HolidayEntity newInstance() {
+        return new HolidayEntity(true);
     }
 
-    
     public String getName() {
         return name;
     }
@@ -72,22 +74,10 @@ public class HolidayEntity extends AbstractEntity {
     public void setHolidayDate(LocalDate holidayDate) {
         this.holidayDate = holidayDate;
     }
-    
-    
-    
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    
 
     @Override
     public String toString() {
         return "ok";
     }
-    
+
 }

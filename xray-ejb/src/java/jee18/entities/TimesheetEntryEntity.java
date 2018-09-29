@@ -42,12 +42,11 @@ import jee18.entities.enums.ReportType;
     @NamedQuery(
             name = "TimesheetEntryEntity.deleteTimesheetEntryEntityByUUID",
             query = "DELETE FROM TimesheetEntryEntity e WHERE e.uuid = :uuid"
-    ),
-    @NamedQuery(name="TimesheetEntryEntity.getTimesheetEntryEntityByTimesheetList" ,
-            query=" SELECT e FROM TimesheetEntryEntity e WHERE e.timesheet IN :timesheets")
-
-
     )
+    ,
+    @NamedQuery(name = "TimesheetEntryEntity.getTimesheetEntryEntityByTimesheetList",
+                query = " SELECT e FROM TimesheetEntryEntity e WHERE e.timesheet IN :timesheets")
+
     ,
     @NamedQuery(
             name = "TimesheetEntryEntity.truncate",

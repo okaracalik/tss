@@ -10,9 +10,7 @@ import java.util.stream.Collectors;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import jee18.dao.IAccess;
-import jee18.dto.Timesheet;
 import jee18.entities.AbstractEntity;
-import jee18.entities.TimesheetEntity;
 
 /**
  *

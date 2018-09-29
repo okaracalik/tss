@@ -45,7 +45,8 @@ public class ContractFormMBean implements Serializable {
     private String supervisorUuid;
     private String assistantUuids;
     private final String emailAddress = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal().getName();
-private  HashMap<String, Double> statistics;
+    private HashMap<String, Double> statistics;
+
     public ContractFormMBean() {
     }
 
@@ -57,8 +58,7 @@ private  HashMap<String, Double> statistics;
         else {
             contract = (Contract) contractSystem.getMyContract(uuid, emailAddress);
             System.out.println(contract);
-            contract = (Contract) contractSystem.get(uuid);
-            statistics=contractSystem.calculateStatistics(uuid);
+            statistics = contractSystem.calculateStatistics(uuid);
         }
         secretaries = roleSystem.listSecretary();
         employees = roleSystem.listEmployee();
